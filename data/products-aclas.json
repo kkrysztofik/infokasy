@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "name": "INFOKASY - katalog produktów",
+    "category": "kasy-fiskalne",
+    "brand": "Aclas",
+    "sourceFile": "aclas_kasy_fiskalne_ceny_2026-05-24(1).xlsx",
+    "generatedAt": "2026-05-29",
+    "notes": "Plik JSON przygotowany do zasilania okna modalnego z modelami ACLAS. Użyto cen sugerowanych netto z arkusza, a warianty pogrupowano pod rodzinami modeli."
+  },
+  "products": [
+    {
+      "id": "aclas-kos-ol",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Aclas",
+      "model": "ACLAS KOS_OL",
+      "name": "ACLAS Kos_OL",
+      "image": "pic/modele/aclas-kos-ol.webp",
+      "priceFrom": 1449,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 449 zł netto",
+      "features": [
+        "LAN",
+        "WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://www.aclas-polska.pl/produkty/kasa-fiskalna-aclas-kos_ol-lan-wifi/",
+      "updatedOnSource": "2026-08-31",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "LAN + WiFi",
+          "price": 1449,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 449 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/produkty/kasa-fiskalna-aclas-kos_ol-lan-wifi/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi + 4G zew.",
+          "price": 1549,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 549 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/produkty/kasa-fiskalna-aclas-kos_ol-lan-wifi-4g-zew/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi + 4G wew.",
+          "price": 1599,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 599 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/produkty/kasa-fiskalna-aclas-kos_ol-lan-wifi-4g-wew/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi + 4G zew. + SIM 2 lata",
+          "price": 1669,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 669 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi + 4G wew. + SIM 2 lata",
+          "price": 1719,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 719 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "aclas-kobra-on",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Aclas",
+      "model": "ACLAS KOBRA_ON",
+      "name": "ACLAS Kobra_ON",
+      "image": "pic/modele/aclas-kobra-on.webp",
+      "priceFrom": 1349,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 349 zł netto",
+      "features": [
+        "LAN",
+        "Kasa fiskalna online",
+        "Dostępne w INFOKASY"
+      ],
+      "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+      "updatedOnSource": "2026-08-31",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "LAN",
+          "price": 1349,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 349 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi",
+          "price": 1449,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 449 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        },
+        {
+          "version": "LAN + GSM",
+          "price": 1449,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 449 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        },
+        {
+          "version": "LAN + GSM z SIM 2 lata",
+          "price": 1569,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 569 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "kasa-gastronomiczna-p9",
+      "category": "kasy-gastronomiczne",
+      "type": "kasa-gastronomiczna",
+      "brand": "Aclas",
+      "model": "KASA GASTRONOMICZNA P9",
+      "name": "Kasa Gastronomiczna P9",
+      "image": "pic/modele/kasa-gastronomiczna-p9.webp",
+      "priceFrom": 1699,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 699 zł netto",
+      "features": [
+        "Kasa gastronomiczna",
+        "Sprzedaż mobilna",
+        "Online"
+      ],
+      "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasa-gastro/",
+      "updatedOnSource": "2026-08-31",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1699,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 699 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasa-gastro/",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "kasa-gastronomiczna-aow",
+      "category": "kasy-gastronomiczne",
+      "type": "kasa-gastronomiczna",
+      "brand": "Aclas",
+      "model": "KASA GASTRONOMICZNA AOW",
+      "name": "Kasa Gastronomiczna AOW",
+      "image": "pic/modele/kasa-gastronomiczna-aow.webp",
+      "priceFrom": 1699,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 699 zł netto",
+      "features": [
+        "Kasa gastronomiczna",
+        "Sprzedaż mobilna",
+        "Online"
+      ],
+      "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasa-gastro/",
+      "updatedOnSource": "2026-08-31",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1699,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 699 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasa-gastro/",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

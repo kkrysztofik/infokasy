@@ -1,0 +1,246 @@
+{
+  "meta": {
+    "name": "INFOKASY - katalog produktów",
+    "category": "kasy-fiskalne",
+    "sourceFile": "datecs_wp_plus_ceny_warianty_2026-05-24(1).xlsx",
+    "generatedAt": "2026-05-24",
+    "notes": "Plik JSON przygotowany do zasilania okna modalnego z modelami kas. Zdjęcia powinny znajdować się pod ścieżkami z pola image."
+  },
+  "products": [
+    {
+      "id": "wp-25-plus",
+      "category": "kasy-fiskalne",
+      "brand": "Datecs",
+      "model": "DATECS WP-25 PLUS",
+      "name": "Datecs WP-25 Plus",
+      "image": "pic/modele/wp-25-plus.webp",
+      "priceFrom": 1349,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 349 zł netto",
+      "features": [
+        "Niewielkie rozmiary",
+        "Kolorowy wyświetlacz",
+        "Mobilna praca"
+      ],
+      "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+      "updatedOnSource": "2026-04-14",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "WP-25 LAN",
+          "price": 1349,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 349 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        },
+        {
+          "version": "WP-25 WIFI",
+          "price": 1439,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 439 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        },
+        {
+          "version": "WP-25 GPRS3",
+          "price": 1499,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 499 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        },
+        {
+          "version": "WP-25 LAN I GPRS3",
+          "price": 1549,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 549 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        },
+        {
+          "version": "WP-25 WIFI I GPRS3",
+          "price": 1639,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 639 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "wp-50-plus",
+      "category": "kasy-fiskalne",
+      "brand": "Datecs",
+      "model": "DATECS WP-50 PLUS",
+      "name": "Datecs WP-50 Plus",
+      "image": "pic/modele/wp-50-plus.webp",
+      "priceFrom": 1399,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 399 zł netto",
+      "features": [
+        "Większa klawiatura",
+        "Wersje z WiFi/GPRS",
+        "Do handlu i usług"
+      ],
+      "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+      "updatedOnSource": "2026-04-14",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "WP-50 PLUS GPRS",
+          "price": 1399,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 399 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+          "active": true
+        },
+        {
+          "version": "WP-50 PLUS WIFI",
+          "price": 1449,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 449 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+          "active": true
+        },
+        {
+          "version": "WP-50 PLUS GPRS 3",
+          "price": 1519,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 519 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+          "active": true
+        },
+        {
+          "version": "WP-50 WIFI i GPRS 3",
+          "price": 1639,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 639 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "wp-500-plus",
+      "category": "kasy-fiskalne",
+      "brand": "Datecs",
+      "model": "DATECS WP-500 PLUS",
+      "name": "Datecs WP-500 Plus",
+      "image": "pic/modele/wp-500-plus.webp",
+      "priceFrom": 1499,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 499 zł netto",
+      "features": [
+        "Stabilna konstrukcja",
+        "Warianty LAN/WiFi/GPRS",
+        "Do pracy stacjonarnej"
+      ],
+      "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+      "updatedOnSource": "2026-04-14",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "WP-500 LAN",
+          "price": 1499,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 499 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+          "active": true
+        },
+        {
+          "version": "WP-500 WIFI",
+          "price": 1549,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 549 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+          "active": true
+        },
+        {
+          "version": "WP-500 LAN I GPRS3",
+          "price": 1629,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 629 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+          "active": true
+        },
+        {
+          "version": "WP-500 WIFI I GPRS3",
+          "price": 1679,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 679 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "hiopos-sun-ii",
+      "category": "systemy-pos",
+      "type": "pos",
+      "brand": "Datecs",
+      "model": "HIOPOS SUN II",
+      "name": "HioPOS SUN II",
+      "image": "pic/modele/hiopos-sun-ii.webp",
+      "priceFrom": 1490,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 490 zł netto",
+      "features": [
+        "System Android 11",
+        "Ekran dotykowy 15.6 cala",
+        "RAM 4 GB"
+      ],
+      "description": "Nowoczesny terminal POS pracujący pod kontrolą systemu Android 11.",
+      "specifications": {
+        "system": "Android 11",
+        "processor": "RK3568 Quad-Core",
+        "ram": "4 GB",
+        "storage": "64 GB",
+        "screen": "15.6 cala",
+        "warranty": "12 miesięcy"
+      },
+      "gallery": [
+        "pic/modele/hiopos-sun-ii.webp",
+        "pic/modele/hiopos-sun-ii-2.webp",
+        "pic/modele/hiopos-sun-ii-3.webp",
+        "pic/modele/hiopos-sun-ii-4.webp"
+      ],
+      "downloads": [],
+      "sourceUrl": "https://www.datecs-polska.pl/oferta/systemy-pos/pos-hiopos/639-hiopos-sun-ii",
+      "updatedOnSource": "2024-10-28",
+      "scrapedAt": "2026-05-30",
+      "active": true,
+      "variants": [
+        {
+          "version": "Wersja podstawowa",
+          "price": 1490,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 490 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/systemy-pos/pos-hiopos/639-hiopos-sun-ii",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

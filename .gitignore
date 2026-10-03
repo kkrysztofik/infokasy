@@ -1,0 +1,16 @@
+# Kopie zapasowe i raporty z kontroli cen (tylko lokalnie)
+data/kopie/
+raporty/
+
+# Arkusze źródłowe z cenami (archiwum)
+data/*.xlsx
+
+# Notatki z testów (zawierają prywatny e-mail i dane testowe)
+test-strony-checklista.md
+
+# Python
+__pycache__/
+*.pyc
+
+# Pliki blokady LibreOffice
+.~lock.*

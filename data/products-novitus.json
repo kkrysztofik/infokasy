@@ -1,0 +1,408 @@
+{
+  "meta": {
+    "name": "INFOKASY - katalog produktów",
+    "category": "kasy-i-drukarki-fiskalne",
+    "brand": "Novitus",
+    "sourceFile": "novitus_kasy_fiskalne_ceny_2026-05-24(5).xlsx",
+    "generatedAt": "2026-10-03",
+    "notes": "Plik JSON przygotowany do zasilania okna modalnego z modelami Novitus. Zawiera 11 kas fiskalnych oraz 2 drukarki fiskalne POINT, bez wersji POINT APTEKA."
+  },
+  "products": [
+    {
+      "id": "next-pro-online-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NEXT PRO ONLINE GSM24",
+      "name": "NEXT PRO ONLINE GSM24",
+      "image": "pic/modele/next-pro-online-gsm24.webp",
+      "priceFrom": 3090,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 3 090 zł netto",
+      "features": [
+        "Wbudowany LAN",
+        "WiFi",
+        "modem GSM z kartą SIM"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 3090,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "3 090 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "next-pro-online",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NEXT PRO ONLINE",
+      "name": "NEXT PRO ONLINE",
+      "image": "pic/modele/next-pro-online.webp",
+      "priceFrom": 2890,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 890 zł netto",
+      "features": [
+        "Wbudowane LAN",
+        "WiFi",
+        "opcja GSM"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2890,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 890 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "nano-online",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NANO ONLINE",
+      "name": "NANO ONLINE",
+      "image": "pic/modele/nano-online.webp",
+      "priceFrom": 1690,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 690 zł netto",
+      "features": [
+        "Wbudowane LAN",
+        "opcjonalne WiFi i GSM",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1690,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 690 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "nano-online-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NANO ONLINE GSM24",
+      "name": "NANO ONLINE GSM24",
+      "image": "pic/modele/nano-online-gsm24.webp",
+      "priceFrom": 1890,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 890 zł netto",
+      "features": [
+        "Wbudowane LAN oraz GSM",
+        "opcjonalne WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1890,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 890 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "nano-ii-online",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NANO II ONLINE",
+      "name": "NANO II ONLINE",
+      "image": "pic/modele/nano-ii-online.webp",
+      "priceFrom": 1750,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 750 zł netto",
+      "features": [
+        "Wbudowane LAN oraz WiFi",
+        "opcjonalne GSM",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1750,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 750 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "nano-ii-online-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NANO II ONLINE GSM24",
+      "name": "NANO II ONLINE GSM24",
+      "image": "pic/modele/nano-ii-online-gsm24.webp",
+      "priceFrom": 1950,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 950 zł netto",
+      "features": [
+        "Wbudowany modem GSM",
+        "opcjonalne WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1950,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 950 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "one-pro",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "ONE PRO",
+      "name": "ONE PRO",
+      "image": "pic/modele/one-pro.webp",
+      "priceFrom": 2090,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 090 zł netto",
+      "features": [
+        "Wbudowane LAN oraz WiFi",
+        "opcjonalne GSM",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2090,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 090 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "one-pro-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "ONE PRO GSM24",
+      "name": "ONE PRO GSM24",
+      "image": "pic/modele/one-pro-gsm24.webp",
+      "priceFrom": 2290,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 290 zł netto",
+      "features": [
+        "Wbudowane LAN oraz modem GSM",
+        "opcjonalne WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2290,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 290 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "link-online",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "LINK ONLINE",
+      "name": "LINK ONLINE",
+      "image": "pic/modele/link-online.webp",
+      "priceFrom": 1690,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 690 zł netto",
+      "features": [
+        "Wbudowane LAN",
+        "opcjonalne WiFi i GSM",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1690,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 690 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "link-online-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "LINK ONLINE GSM24",
+      "name": "LINK ONLINE GSM24",
+      "image": "pic/modele/link-online-gsm24.webp",
+      "priceFrom": 1890,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 890 zł netto",
+      "features": [
+        "Wbudowane LAN oraz modem GSM",
+        "opcjonalne WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1890,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 890 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "point-2",
+      "category": "drukarki-fiskalne",
+      "type": "drukarka",
+      "brand": "Novitus",
+      "model": "POINT 2",
+      "name": "POINT 2",
+      "image": "pic/modele/point-2.webp",
+      "priceFrom": 2790,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 790 zł netto",
+      "features": [
+        "Drukarka fiskalna 2 cale",
+        "LAN",
+        "USB"
+      ],
+      "sourceUrl": "https://novitus.pl/drukarki-fiskalne",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2790,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 790 zł netto",
+          "sourceUrl": "https://novitus.pl/drukarki-fiskalne",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "point-3",
+      "category": "drukarki-fiskalne",
+      "type": "drukarka",
+      "brand": "Novitus",
+      "model": "POINT 3",
+      "name": "POINT 3",
+      "image": "pic/modele/point-3.webp",
+      "priceFrom": 2990,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 990 zł netto",
+      "features": [
+        "Drukarka fiskalna 3 cale",
+        "LAN",
+        "USB"
+      ],
+      "sourceUrl": "https://novitus.pl/drukarki-fiskalne",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2990,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 990 zł netto",
+          "sourceUrl": "https://novitus.pl/drukarki-fiskalne",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

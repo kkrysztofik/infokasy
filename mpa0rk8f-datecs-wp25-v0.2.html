@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Datecs WP-25 — Symulator Kasy Fiskalnej</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 460px at 22% 0%, rgba(221,236,255,0.95) 0%, rgba(236,245,255,0.72) 48%, transparent 74%),
+    radial-gradient(760px 420px at 82% 8%, rgba(202,225,255,0.62) 0%, transparent 68%),
+    linear-gradient(180deg, #f4f8ff 0%, #ffffff 44%, #eef6ff 100%);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  overflow-x: auto;
+}
+#app {
+  display: grid;
+  grid-template-columns: minmax(620px, 1fr) 320px;
+  gap: 28px;
+  padding: 28px;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
+  position: relative;
+}
+#app::before {
+  content: 'INFOKASY';
+  position: fixed;
+  top: 14px;
+  left: 28px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  color: #0f62fe;
+  font-size: 16px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* ============== CASH REGISTER CHASSIS ============== */
+#register-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  perspective: 1800px;
+  perspective-origin: 50% 0%;
+}
+/* Wedge / trapezoid silhouette — front lower, back higher, ~22° tilt */
+#register {
+  position: relative;
+  width: 587px;                /* -1/3 from previous 880px */
+  margin-top: 280px;            /* push device lower so paper has room to rise */
+  background:
+    linear-gradient(180deg,
+      #fbfbfb 0%,
+      #f0f0f0 30%,
+      #d8d8d8 75%,
+      #b0b0b0 100%);
+  border-radius: 22px 22px 36px 36px;
+  padding: 10px 14px 0 14px;
+  transform: rotateX(22deg);
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  box-shadow:
+    0 50px 90px -15px rgba(0,0,0,0.8),
+    0 18px 32px -10px rgba(0,0,0,0.55),
+    inset 0 2px 0 rgba(255,255,255,0.95),
+    inset 0 -2px 0 rgba(0,0,0,0.18);
+  filter: contrast(1.03);
+}
+/* Matte sheen on top-front lip */
+#register::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 22px 22px 36px 36px;
+  background:
+    radial-gradient(ellipse 110% 30% at 50% 0%, rgba(255,255,255,0.45), transparent 70%),
+    radial-gradient(ellipse 80% 20% at 50% 100%, rgba(0,0,0,0.06), transparent 70%);
+  pointer-events: none;
+}
+#register-top {
+  position: relative;
+  background:
+    linear-gradient(180deg, #fafafa 0%, #ececec 50%, #dcdcdc 100%);
+  border-radius: 12px 12px 4px 4px;
+  padding: 70px 18px 14px 18px;
+  margin: 4px 6px 0 6px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    inset 0 -1px 0 rgba(0,0,0,0.1),
+    0 2px 0 rgba(0,0,0,0.15);
+}
+/* Sensor / IR module between printer and display panel — right of printer */
+#sensor-module {
+  position: absolute;
+  top: 14px;
+  left: 278px;
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(180deg, #2a2a2a, #0e0e0e);
+  border-radius: 4px;
+  border: 1px solid #050505;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#sensor-module::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(140,180,255,0.6), rgba(20,40,80,0.85) 60%, #050a14 100%);
+  box-shadow: 0 0 4px rgba(80,140,255,0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+}
+/* Three LED indicator windows on the right edge of the display panel */
+#led-stack {
+  position: absolute;
+  top: 76px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+#led-stack .led {
+  width: 8px;
+  height: 4px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, #1a1a1a, #050505);
+  border: 1px solid #2a2a2a;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.8);
+}
+#led-stack .led.on-red    { background: radial-gradient(circle at 50% 50%, #ff5a5a, #6a0000); box-shadow: 0 0 4px rgba(255,90,90,0.7); }
+#led-stack .led.on-yellow { background: radial-gradient(circle at 50% 50%, #ffe066, #6a4a00); box-shadow: 0 0 4px rgba(255,224,102,0.6); }
+#led-stack .led.on-green  { background: radial-gradient(circle at 50% 50%, #6effa9, #0a5a2a); box-shadow: 0 0 4px rgba(110,255,169,0.7); }
+#register-top::after {
+  /* subtle matte texture */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px 12px 4px 4px;
+  background-image:
+    radial-gradient(circle at 10% 0%, rgba(255,255,255,0.04), transparent 30%),
+    radial-gradient(circle at 90% 0%, rgba(255,255,255,0.03), transparent 35%);
+  pointer-events: none;
+}
+
+/* Customer display strip on a raised pedestal at back-LEFT (paper rises on right) */
+#customer-display-mount {
+  position: absolute;
+  top: -22px;
+  left: 20px;
+  width: 230px;
+  height: 26px;
+  background:
+    linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 70%, #111 100%);
+  border-radius: 6px 6px 2px 2px;
+  border: 1px solid #050505;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 4px 8px rgba(0,0,0,0.5);
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  z-index: 3;
+}
+#customer-display {
+  flex: 1;
+  background: linear-gradient(180deg, #030303, #0a0a0a);
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: #e8e8e8;
+  letter-spacing: 1.6px;
+  transform: rotate(180deg);
+  text-shadow: 0 0 3px rgba(220,220,220,0.45);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.9);
+  overflow: hidden;
+}
+
+/* Printer dome — paper rises UPWARD from slot at top of cover */
+#printer {
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  width: 250px;
+  height: 50px;
+  background:
+    linear-gradient(180deg, #fffefb 0%, #f4f1e9 55%, #dfd9cc 100%);
+  border-radius: 8px 8px 3px 3px;
+  border: 1px solid #d1cbbb;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    inset 0 -1px 0 rgba(0,0,0,0.6),
+    inset 0 0 0 1px rgba(0,0,0,0.4);
+}
+/* Central indent / finger pull on cover */
+#printer::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 122px;
+  height: 30px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f3ea 62%, #e4ddd0 100%);
+  border: 1px solid #d9d2c4;
+  border-radius: 7px 7px 3px 3px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 3px 5px rgba(0,0,0,0.12);
+}
+/* Slot on TOP of cover — paper exits here going UPWARD */
+#printer-slot {
+  position: absolute;
+  top: -2px;
+  left: 8%;
+  right: 8%;
+  height: 5px;
+  background: linear-gradient(90deg, #d9d1c2, #9b927f 8%, #9b927f 92%, #d9d1c2);
+  border-radius: 2px;
+  overflow: visible;
+}
+#printer-cutter {
+  position: absolute;
+  top: -3px;
+  left: 4px;
+  right: 4px;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, #b0b0b0 0 2px, #5a5a5a 2px 4px);
+  border-radius: 1px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
+/* Round silver release button — front-right of printer */
+#printer-button {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #ffffff 0%, #d4d4d4 25%, #8a8a8a 70%, #4a4a4a 100%);
+  border: 1px solid #1a1a1a;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,0.8),
+    inset 0 -2px 3px rgba(0,0,0,0.4),
+    0 2px 4px rgba(0,0,0,0.6);
+  cursor: pointer;
+  z-index: 4;
+}
+#printer-button::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #f5f5f5, #888);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.7), inset 0 -1px 2px rgba(0,0,0,0.3);
+}
+#printer-button:active { transform: scale(0.95); filter: brightness(1.1); }
+
+/* Paper rises UPWARD from slot — anchored bottom, max-height grows up */
+#paper-out {
+  position: absolute;
+  bottom: 100%;          /* bottom edge sits at top of printer-slot */
+  left: -8px;
+  width: 240px;
+  background: #fafaf6;
+  color: #111;
+  font-family: 'Courier New', monospace;
+  font-size: 9.5px;
+  line-height: 1.3;
+  padding: 14px 10px 8px 10px;
+  white-space: pre;
+  box-shadow: 0 -6px 14px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(0,0,0,0.1);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1.6s ease-out;
+  border-radius: 4px 4px 0 0;
+  background-image:
+    linear-gradient(0deg, transparent calc(100% - 14px), rgba(0,0,0,0.06) 100%),
+    repeating-linear-gradient(0deg, transparent 0 16px, rgba(0,0,0,0.02) 16px 17px);
+  z-index: 5;
+  text-align: left;
+}
+#paper-out.printing {
+  max-height: 700px;
+}
+/* Torn/perforated top edge of the paper */
+#paper-out::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(90deg, #fafaf6 0 4px, transparent 4px 7px);
+}
+
+/* Main face — brand row on white chassis */
+.brand-row {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  margin-bottom: 8px;
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #1a1a1a;
+}
+.brand-logo {
+  display: inline-block;
+  width: 8px;
+  height: 11px;
+  background: #d3262e;
+  margin-right: 1px;
+  box-shadow: 11px 0 0 #d3262e;
+  position: relative;
+  transform: translateY(1px);
+}
+.brand-logo::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  width: 3px;
+  height: 11px;
+  background: #f4f4f4;
+}
+.brand-text { font-size: 12px; }
+.model-text { font-size: 9px; opacity: 0.55; margin-left: 4px; letter-spacing: 1px; color: #555; }
+
+/* LCD — 30% smaller, centered, bold BLACK frame, white pixel text */
+#display-frame {
+  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  min-height: 72px;
+  padding: 8px 72px 8px 150px;
+  position: relative;
+  background: #0a0a0a;
+  border: 2px solid #000;
+  border-radius: 2px;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+#display-frame::before {
+  content: 'Datecs\A WP-25 Plus';
+  white-space: pre;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.05;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.75);
+}
+
+#main-display {
+  background: linear-gradient(180deg, #050505 0%, #0d0d0d 100%);
+  border: 1px solid #2a2a2a;
+  border-radius: 3px;
+  padding: 4px 8px 5px 8px;
+  color: #f0f4f0;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 2px rgba(220,230,220,0.4);
+  min-height: 44px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.9);
+}
+#main-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,0.18) 2px 3px),
+    radial-gradient(ellipse 80% 60% at 50% 50%, transparent 60%, rgba(0,0,0,0.3) 100%);
+  pointer-events: none;
+}
+#display-status {
+  display: flex;
+  gap: 6px;
+  font-size: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+  color: #d8e0d8;
+}
+#display-status .badge {
+  background: rgba(240,244,240,0.12);
+  padding: 0 3px;
+  border-radius: 2px;
+  font-size: 7px;
+}
+#display-line1, #display-line2 {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  min-height: 14px;
+  align-items: center;
+  gap: 8px;
+}
+#display-line2 { font-size: 14px; font-weight: 800; color: #ffffff; min-height: 16px; }
+#display-line1 > span, #display-line2 > span { white-space: nowrap; }
+
+/* ============== KEYBOARD — white panel, keys smaller 30% ============== */
+#keyboard {
+  display: grid;
+  grid-template-columns: 1.05fr repeat(3, 0.92fr) 1.15fr repeat(2, 1fr);
+  grid-template-rows: 25px repeat(4, 40px);
+  gap: 8px;
+  padding: 14px 14px 18px 14px;
+  background:
+    linear-gradient(180deg, #f4f4f4 0%, #e6e6e6 100%);
+  border-radius: 0 0 8px 8px;
+  margin-top: 6px;
+  position: relative;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -1px 0 rgba(0,0,0,0.08);
+}
+.key {
+  background:
+    linear-gradient(180deg, #303030 0%, #1a1a1a 50%, #0a0a0a 100%);
+  border: 1px solid #050505;
+  border-radius: 4px;
+  color: #f4f4f4;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 700;
+  font-size: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -2px 0 rgba(0,0,0,0.7),
+    inset 0 -3px 4px rgba(0,0,0,0.4),
+    0 1px 2px rgba(0,0,0,0.4);
+  transition: transform 0.05s ease, box-shadow 0.05s ease, filter 0.1s ease;
+  padding: 2px 1px;
+  line-height: 1.05;
+  text-align: center;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.6);
+}
+.key:active, .key.pressed {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.3),
+    0 0 2px rgba(0,0,0,0.4);
+  filter: brightness(1.2);
+}
+.key.num {
+  background:
+    linear-gradient(180deg, #f4f4f4 0%, #d6d6d6 55%, #aeaeae 100%);
+  color: #0a0a0a;
+  font-size: 13px;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  border-color: #6e6e6e;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    inset 0 -2px 0 rgba(0,0,0,0.12),
+    inset 0 -3px 4px rgba(0,0,0,0.08),
+    0 1px 2px rgba(0,0,0,0.55);
+}
+.key.num .sub {
+  font-size: 5.5px;
+  color: #444;
+  font-weight: 600;
+  margin-top: 1px;
+  text-shadow: none;
+}
+.key.num.smallnum {
+  background:
+    linear-gradient(180deg, #eaeaea 0%, #c6c6c6 55%, #a0a0a0 100%);
+  color: #0a0a0a;
+  font-size: 11px;
+}
+.key .sub {
+  font-size: 5.5px;
+  opacity: 0.72;
+  margin-top: 1px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.key.red {
+  background:
+    linear-gradient(180deg, #303030 0%, #1a1a1a 50%, #0a0a0a 100%);
+  color: #ff2828;
+  font-size: 18px;
+  text-shadow:
+    0 0 4px rgba(255,40,40,0.5),
+    0 1px 0 rgba(0,0,0,0.7);
+  font-weight: 900;
+}
+.key.tall {
+  grid-row: span 2;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+.key.tall .sub {
+  writing-mode: vertical-rl;
+  font-size: 6px;
+  margin-top: 0;
+  margin-left: 3px;
+  letter-spacing: 0.8px;
+}
+
+.key.cash-key {
+  writing-mode: horizontal-tb;
+  transform: none;
+  gap: 3px;
+  font-size: 13px;
+  line-height: 0.92;
+  letter-spacing: 1px;
+}
+.key.cash-key .cash-letters { display: block; font-weight: 900; }
+.key.cash-key .cash-sub { display: block; font-size: 7px; letter-spacing: 0.6px; margin-top: 2px; }
+
+.key.tiny { font-size: 7px; }
+.key.arrow { font-size: 11px; }
+.key.shift {
+  background:
+    linear-gradient(180deg, #404040 0%, #1c1c1c 100%);
+}
+.key.shift.active {
+  background: linear-gradient(180deg, #f7c948 0%, #b8870f 100%);
+  color: #000;
+  text-shadow: none;
+  box-shadow: 0 0 10px rgba(247,201,72,0.7), inset 0 -2px 0 rgba(0,0,0,0.3);
+}
+
+/* Bottom base lip - white side curving down */
+#base-lip {
+  height: 22px;
+  margin: 0 -12px;
+  background:
+    linear-gradient(180deg, #ececec 0%, #cfcfcf 60%, #a4a4a4 100%);
+  border-radius: 0 0 28px 28px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.85),
+    inset 0 -2px 4px rgba(0,0,0,0.2),
+    0 8px 16px rgba(0,0,0,0.4);
+  position: relative;
+}
+#base-lip::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 8%;
+  right: 8%;
+  height: 4px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 50%;
+  filter: blur(3px);
+}
+
+/* ============== RECEIPT ROLL (right column) ============== */
+#receipt-panel {
+  background: rgba(255,255,255,0.86);
+  border: 1px solid rgba(15,98,254,0.14);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 80vh;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+}
+#receipt-panel h3 {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #2563eb;
+  font-weight: 700;
+}
+#receipts {
+  background: #fafaf7;
+  color: #111;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  line-height: 1.35;
+  padding: 14px 12px;
+  border-radius: 4px;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 75vh;
+  white-space: pre;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.3);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 16px, rgba(0,0,0,0.025) 16px 17px);
+}
+#receipts:empty::before {
+  content: '— brak paragonów —';
+  color: #999;
+  font-style: italic;
+  white-space: normal;
+  display: block;
+  text-align: center;
+  padding: 20px 0;
+}
+.receipt-divider {
+  border-top: 1px dashed #aaa;
+  margin: 8px -12px;
+}
+
+/* ============== INFO STRIP ============== */
+#info-strip {
+  width: 587px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  font-size: 10px;
+  color: #475569;
+}
+.info-card {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(15,98,254,0.12);
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+}
+.info-card .label {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 9px;
+  color: #2563eb;
+  margin-bottom: 4px;
+}
+.info-card .val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: 'Courier New', monospace;
+}
+.info-card .val.fiscal { color: #6effa9; }
+.info-card .val.training { color: #f7c948; }
+
+/* ============== MODAL ============== */
+#modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+#modal-backdrop.show { display: flex; }
+.modal {
+  background: linear-gradient(180deg, #ffffff, #eef6ff);
+  border: 1px solid rgba(15,98,254,0.16);
+  border-radius: 16px;
+  padding: 24px 28px;
+  min-width: 380px;
+  max-width: 520px;
+  color: #0f172a;
+  box-shadow: 0 30px 80px rgba(15,23,42,0.22);
+}
+.modal h2 {
+  font-size: 16px;
+  margin-bottom: 14px;
+  color: #2563eb;
+  letter-spacing: 1px;
+}
+.modal p { font-size: 13px; line-height: 1.5; margin-bottom: 8px; }
+.modal pre {
+  background: #f8fbff;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre;
+  overflow-x: auto;
+  color: #0f172a;
+  border: 1px solid rgba(15,98,254,0.14);
+}
+.modal-actions { margin-top: 16px; display: flex; gap: 10px; justify-content: flex-end; }
+.btn {
+  background: #ffffff;
+  border: 1px solid rgba(15,98,254,0.22);
+  color: #0f172a;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+.btn:hover { background: #eef6ff; }
+.btn.primary { background: #0f62fe; border-color: #0f62fe; color: #fff; }
+.btn.primary:hover { background: #0b55dc; }
+
+/* Help / PLU panel */
+#help-panel {
+  width: 587px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(15,98,254,0.12);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 10px;
+  color: #475569;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+#help-panel h4 {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #2563eb;
+  margin-bottom: 8px;
+}
+.plu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 9.5px;
+}
+.plu-grid .plu-row { display: flex; justify-content: space-between; gap: 8px; }
+.plu-grid .plu-row .name { color: #0f172a; }
+.plu-grid .plu-row .price { color: #2563eb; }
+.hint-row {
+  margin-top: 10px;
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: 10.5px;
+}
+.hint-row span b { color: #0f62fe; }
+
+/* Receipt animation roll inside #receipts */
+.receipt {
+  animation: paperRoll 0.6s ease-out;
+}
+@keyframes paperRoll {
+  from { transform: translateY(-12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.beep-flash { animation: flash 0.15s ease; }
+@keyframes flash { 0%,100% { background-color: transparent; } 50% { background-color: rgba(110,255,169,0.15); } }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ LEFT: REGISTER ============ -->
+  <div id="register-wrap">
+    <div id="register">
+
+      <!-- Raised customer display pedestal at back-right -->
+      <div id="customer-display-mount">
+        <div id="customer-display"><span id="cust-text">USLUGA PRAWNA 150,00</span></div>
+      </div>
+
+      <!-- Top black housing -->
+      <div id="register-top">
+        <!-- Printer with flat cover + silver release button (top-left) -->
+        <div id="printer">
+          <div id="printer-button" title="Otwórz pokrywę papieru"></div>
+          <div id="printer-slot">
+            <div id="printer-cutter"></div>
+            <div id="paper-out"></div>
+          </div>
+        </div>
+
+        <!-- Sensor/IR module between printer and main panel -->
+        <div id="sensor-module" title="Czujnik / dioda sygnalizacyjna"></div>
+
+        <!-- Three vertical LED indicator windows on the right -->
+        <div id="led-stack">
+          <div class="led on-red"></div>
+          <div class="led on-yellow"></div>
+          <div class="led on-green"></div>
+        </div>
+
+        <!-- Brand row -->
+        <div class="brand-row">
+          <div class="brand">
+            <span class="brand-logo"></span>
+            <span class="brand-text">DATECS</span>
+            <span class="model-text">WP-25</span>
+          </div>
+          <div style="font-size:9px;opacity:0.65;letter-spacing:1.2px;color:#444;">FISKALNA</div>
+        </div>
+
+        <!-- Main display — centered, black-framed LCD -->
+        <div id="display-frame">
+          <div id="main-display">
+            <div id="display-status">
+              <span class="badge">📶</span>
+              <span class="badge">🔋</span>
+              <span id="clock">15:22</span>
+            </div>
+            <div id="display-line1"><span id="dline1-l">USLUGA PRAWNA</span><span id="dline1-r"></span></div>
+            <div id="display-line2"><span id="dline2-l"></span><span id="dline2-r">150,00</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyboard area (white base) -->
+      <div id="keyboard">
+        <!-- Row 1 -->
+        <div class="key tiny"     data-key="papier" style="grid-column:1;grid-row:1;">PAPIER</div>
+        <div class="key tiny arrow" data-key="esc"  style="grid-column:2;grid-row:1;">ESC ⏻</div>
+        <div class="key tiny arrow" data-key="up"   style="grid-column:3;grid-row:1;">↑</div>
+        <div class="key tiny arrow" data-key="down" style="grid-column:4;grid-row:1;">↓</div>
+        <div class="key tiny" data-key="minus" style="grid-column:5;grid-row:1;">%-<span class="sub">WYPŁ</span></div>
+        <div class="key tiny" data-key="plus"  style="grid-column:6;grid-row:1;">%+<span class="sub">WPŁ</span></div>
+        <div class="key tiny shift" data-key="shift" id="shift-btn" style="grid-column:7;grid-row:1;">SHIFT</div>
+
+        <!-- Row 2 -->
+        <div class="key red"  data-key="clear" style="grid-column:1;grid-row:2;">C</div>
+        <div class="key num smallnum" data-key="7" style="grid-column:2;grid-row:2;">7<span class="sub">F7 · NABYWCA</span></div>
+        <div class="key num smallnum" data-key="8" style="grid-column:3;grid-row:2;">8<span class="sub">F8 · NIP</span></div>
+        <div class="key num smallnum" data-key="9" style="grid-column:4;grid-row:2;">9<span class="sub">F9 · DOSTĘP</span></div>
+        <div class="key" data-key="suma" style="grid-column:5;grid-row:2; font-size:14px;">SUMA</div>
+        <div class="key" data-key="plu1" style="grid-column:6;grid-row:2;">PLU 1<span class="sub">PLU 7</span></div>
+        <div class="key" data-key="plu5" style="grid-column:7;grid-row:2;">PLU 5<span class="sub">PLU 11</span></div>
+
+        <!-- Row 3 -->
+        <div class="key" data-key="cena" style="grid-column:1;grid-row:3;">CENA<span class="sub">KAUCJA</span></div>
+        <div class="key num smallnum" data-key="4" style="grid-column:2;grid-row:3;">4<span class="sub">F4 · CZAS</span></div>
+        <div class="key num smallnum" data-key="5" style="grid-column:3;grid-row:3;">5<span class="sub">F5 · JĘZYK</span></div>
+        <div class="key num smallnum" data-key="6" style="grid-column:4;grid-row:3;">6<span class="sub">F6 · SPRZED.</span></div>
+        <div class="key" data-key="plu2" style="grid-column:6;grid-row:3;">PLU 2<span class="sub">PLU 8</span></div>
+        <div class="key" data-key="plu6" style="grid-column:7;grid-row:3;">PLU 6<span class="sub">PLU 12</span></div>
+
+        <!-- Row 4 -->
+        <div class="key" data-key="anul" style="grid-column:1;grid-row:4;">ANUL<span class="sub">KOREKTA</span></div>
+        <div class="key num smallnum" data-key="1" style="grid-column:2;grid-row:4;">1<span class="sub">F1 · POMOC</span></div>
+        <div class="key num smallnum" data-key="2" style="grid-column:3;grid-row:4;">2<span class="sub">F2 · TURY</span></div>
+        <div class="key num smallnum" data-key="3" style="grid-column:4;grid-row:4;">3<span class="sub">F3 · DEF</span></div>
+        <div class="key tall cash-key" data-key="gotowka" style="grid-column:5;grid-row:3/span 3;"><span class="cash-letters">G<br>O<br>T<br>Ó<br>W<br>K<br>A</span><span class="cash-sub">SZUFLADA</span></div>
+        <div class="key" data-key="plu3" style="grid-column:6;grid-row:4;">PLU 3<span class="sub">PLU 9</span></div>
+        <div class="key" data-key="menu" style="grid-column:7;grid-row:4;">MENU</div>
+
+        <!-- Row 5 -->
+        <div class="key" data-key="plucode" style="grid-column:1;grid-row:5;">PLU<span class="sub">KOD KR.</span></div>
+        <div class="key num smallnum" data-key="0" style="grid-column:2;grid-row:5;">0<span class="sub">ZEGAR</span></div>
+        <div class="key num smallnum" data-key="x" style="grid-column:3;grid-row:5;">X<span class="sub">WAGA</span></div>
+        <div class="key num smallnum" data-key="dot" style="grid-column:4;grid-row:5;">,<span class="sub">SPR.CENY</span></div>
+        <div class="key" data-key="plu4" style="grid-column:6;grid-row:5;">PLU 4<span class="sub">PLU 10</span></div>
+        <div class="key" data-key="platn" style="grid-column:7;grid-row:5;">PŁTN<span class="sub">WALUTA</span></div>
+      </div>
+
+      <div id="base-lip"></div>
+    </div>
+
+    <!-- Status info -->
+    <div id="info-strip">
+      <div class="info-card">
+        <div class="label">Tryb</div>
+        <div class="val fiscal" id="mode-display">FISKALNY</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Paragon Nr</div>
+        <div class="val" id="recno-display">0001</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Sprzedaż dziś</div>
+        <div class="val" id="today-display">0,00 zł</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Stan kasy</div>
+        <div class="val" id="cash-display">100,00 zł</div>
+      </div>
+    </div>
+
+    <!-- PLU help -->
+    <div id="help-panel">
+      <h4>Zaprogramowane PLU</h4>
+      <div class="plu-grid" id="plu-grid"></div>
+      <div class="hint-row">
+        <span><b>Tryb startowy</b>: SPRZEDAŻ. <b>ESC</b> → wyjście do MENU GŁÓWNEGO</span>
+        <span><b>↑ ↓</b> → nawigacja w menu</span>
+        <span><b>GOTÓWKA</b> → zatwierdź wybór / zapłata</span>
+        <span><b>Klik PLU n</b> → 1 szt produktu</span>
+        <span><b>3 → X → PLU 1</b> → 3 szt</span>
+        <span><b>9,99 → CENA → PLU 1</b> → otwarta cena</span>
+        <span><b>SHIFT + PLU 1</b> → PLU 7</span>
+        <span><b>ANUL</b> → kasuje ostatnią pozycję</span>
+        <span><b>C</b> → wyczyść wpis</span>
+        <span><b>Klawiatura PC</b>: 0–9, Enter=GOTÓWKA, +=SUMA, Esc=ESC/MENU, Backspace=C, F1–F6=PLU</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT: RECEIPTS ROLL ============ -->
+  <div id="receipt-panel">
+    <h3>Rolka paragonów (kopia)</h3>
+    <div id="receipts"></div>
+  </div>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div id="modal-backdrop">
+  <div class="modal" id="modal">
+    <h2 id="modal-title">—</h2>
+    <div id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn" id="modal-cancel">Anuluj</button>
+      <button class="btn primary" id="modal-ok">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ============ DATA ============
+const PLUS = [
+  { id:1,  name:'CHLEB ZWYKLY',     price: 5.50, vat:'C' },
+  { id:2,  name:'MLEKO 2% 1L',      price: 3.20, vat:'C' },
+  { id:3,  name:'MASLO EXTRA 200G', price: 8.99, vat:'C' },
+  { id:4,  name:'SER ZOLTY 1KG',    price:24.50, vat:'C' },
+  { id:5,  name:'WODA MIN. 1.5L',   price: 2.10, vat:'B' },
+  { id:6,  name:'SOK POMARANCZ. 1L',price: 6.49, vat:'B' },
+  { id:7,  name:'JABLKA 1KG',       price: 4.99, vat:'C' },
+  { id:8,  name:'BANANY 1KG',       price: 6.50, vat:'C' },
+  { id:9,  name:'ZIEMNIAKI 1KG',    price: 3.20, vat:'C' },
+  { id:10, name:'JAJKA L OP.10',    price:12.99, vat:'C' },
+  { id:11, name:'CUKIER 1KG',       price: 5.99, vat:'B' },
+  { id:12, name:'KAWA MIELONA 250G',price:28.00, vat:'A' },
+];
+const VAT_RATES = { A: 23, B: 8, C: 5, D: 0, E: 0 }; // E = zwolnione
+
+// Header (programmable in real device)
+const HEADER = {
+  name:    'INFOKASY',
+  address: 'ul Jana Pawła II 1',
+  city:    '19-300 Ełk',
+  nip:     'NIP 7393453936',
+  kasaNr:  'KASA NR 1   KASJER: 1',
+  uniqueNr:'ABCD 12345678901234',
+};
+
+// ============ STATE ============
+const S = {
+  mode: 'idle',          // idle | after-sum | menu | nip-entry | plu-program | price-check
+  fiscal: true,          // FISKALNY vs SZKOLENIOWY
+  input: '',
+  qty: null,             // pending qty from X
+  openPrice: null,       // pending open price from CENA
+  items: [],             // current basket
+  subtotal: 0,
+  totalDue: 0,
+  shift: false,
+  nipBuyer: '',
+  receiptNo: 1,
+  receipts: [],          // {no, text, ts}
+  cashInDrawer: 100.00,
+  todayGross: 0,
+  todayCount: 0,
+  todayByVat: { A:0, B:0, C:0, D:0, E:0 },
+  todayPtu:   { A:0, B:0, C:0, D:0, E:0 },
+  // Menu navigation
+  menuPath: [],
+  menuIndex: 0,
+  // Programming
+  programmingPlu: null,
+  programmingStep: null, // 'name' | 'price' | 'vat'
+};
+
+const MENU_TREE = {
+  root: {
+    title: 'MENU GLOWNE',
+    items: [
+      { id:'sprzedaz',    label:'1. SPRZEDAZ' },
+      { id:'rap-czyt',    label:'2. RAPORTY CZYTAJACE' },
+      { id:'rap-zer',     label:'3. RAPORTY ZERUJACE' },
+      { id:'programow',   label:'4. PROGRAMOWANIE' },
+      { id:'polacz-pc',   label:'5. POLACZENIE Z PC' },
+      { id:'serwis',      label:'6. SERWIS' },
+      { id:'testy',       label:'7. TESTY KASY' },
+      { id:'pam-chron',   label:'8. PAMIEC CHRONIONA' },
+      { id:'pomoc',       label:'9. POMOC' },
+      { id:'wylacz',      label:'10. WYLACZAM KASE' },
+      { id:'producent',   label:'11. PRODUCENT' },
+    ]
+  },
+  'rap-czyt': {
+    title: 'RAP. CZYTAJACE',
+    items: [
+      { id:'rapc-stan',     label:'1. STAN KASY' },
+      { id:'rapc-plu',      label:'2. SPRZEDAZ PLU' },
+      { id:'rapc-vat',      label:'3. SPRZEDAZ VAT' },
+      { id:'rapc-zmiana',   label:'4. ZMIANY KASJERA' },
+      { id:'rapc-okres',    label:'5. OKRESOWY' },
+      { id:'rapc-miesiac',  label:'6. MIESIECZNY' },
+    ]
+  },
+  'rap-zer': {
+    title: 'RAP. ZERUJACE',
+    items: [
+      { id:'rapz-dobowy',   label:'1. DOBOWY FISKALNY' },
+      { id:'rapz-zmiana',   label:'2. ZMIANY KASJERA' },
+      { id:'rapz-plu',      label:'3. SPRZEDAZY PLU' },
+      { id:'rapz-vat',      label:'4. STAWEK VAT' },
+    ]
+  },
+  programow: {
+    title: 'PROGRAMOWANIE',
+    items: [
+      { id:'prog-plu',      label:'1. PLU' },
+      { id:'prog-naglow',   label:'2. NAGLOWEK' },
+      { id:'prog-kasjer',   label:'3. KASJERZY' },
+      { id:'prog-vat',      label:'4. STAWKI VAT' },
+      { id:'prog-czas',     label:'5. CZAS / DATA' },
+      { id:'prog-platn',    label:'6. FORMY PLATNOSCI' },
+      { id:'prog-tryb',     label:'7. TRYB FISK/SZKOL' },
+      { id:'prog-nip',      label:'8. NIP NABYWCY' },
+    ]
+  },
+  'polacz-pc': {
+    title: 'POLACZENIE PC',
+    items: [
+      { id:'pc-status',     label:'1. STATUS POLACZENIA' },
+      { id:'pc-port',       label:'2. KONFIG. PORTU' },
+      { id:'pc-protok',     label:'3. PROTOKOL' },
+      { id:'pc-online',     label:'4. ONLINE' },
+    ]
+  },
+  serwis: {
+    title: 'SERWIS',
+    items: [
+      { id:'serw-haslo',    label:'1. HASLO SERWISOWE' },
+      { id:'serw-info',     label:'2. INFO O URZADZENIU' },
+      { id:'serw-log',      label:'3. LOGI SYSTEMOWE' },
+    ]
+  },
+  testy: {
+    title: 'TESTY KASY',
+    items: [
+      { id:'test-wysw',     label:'1. TEST WYSWIETLACZA' },
+      { id:'test-klaw',     label:'2. TEST KLAWIATURY' },
+      { id:'test-druk',     label:'3. TEST DRUKARKI' },
+      { id:'test-pam',      label:'4. TEST PAMIECI' },
+      { id:'test-zegar',    label:'5. TEST ZEGARA' },
+      { id:'test-szufl',    label:'6. TEST SZUFLADY' },
+    ]
+  },
+  'pam-chron': {
+    title: 'PAM. CHRONIONA',
+    items: [
+      { id:'pam-stan',      label:'1. STAN PAMIECI' },
+      { id:'pam-raporty',   label:'2. LISTA RAPORTOW' },
+      { id:'pam-kopia',     label:'3. KOPIA ELEKTRONICZNA' },
+      { id:'pam-eksport',   label:'4. EKSPORT NA NOSNIK' },
+    ]
+  },
+};
+
+// ============ UTIL ============
+const $ = sel => document.querySelector(sel);
+const fmtMoney = n => (Math.round(n*100)/100).toFixed(2).replace('.', ',');
+const fmtClock = d => {
+  const h = String(d.getHours()).padStart(2,'0');
+  const m = String(d.getMinutes()).padStart(2,'0');
+  return `${h}:${m}`;
+};
+const fmtDate = d => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+};
+const padLine = (left, right, width=32) => {
+  const l = String(left); const r = String(right);
+  const sp = Math.max(1, width - l.length - r.length);
+  return l + ' '.repeat(sp) + r;
+};
+const centerLine = (txt, width=32) => {
+  const pad = Math.max(0, Math.floor((width - txt.length)/2));
+  return ' '.repeat(pad) + txt;
+};
+
+// ============ AUDIO (simple beep) ============
+let audioCtx;
+function beep(freq=1200, dur=40, vol=0.06) {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type='square'; o.frequency.value=freq; g.gain.value=vol;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); setTimeout(()=>{ o.stop(); }, dur);
+  } catch(e) {}
+}
+
+// ============ DISPLAY ============
+function showLine(l1L='', l1R='', l2L='', l2R='') {
+  // Display the full text — no truncation (LCD width handles longer strings)
+  $('#dline1-l').textContent = String(l1L);
+  $('#dline1-r').textContent = String(l1R);
+  $('#dline2-l').textContent = String(l2L);
+  $('#dline2-r').textContent = String(l2R);
+  $('#main-display').classList.remove('beep-flash');
+  void $('#main-display').offsetWidth;
+  $('#main-display').classList.add('beep-flash');
+}
+function showError(msg) {
+  showLine('BLAD!', '', msg, '');
+  beep(300, 200);
+}
+function refreshDisplay() {
+  if (S.mode === 'menu') {
+    const node = currentMenuNode();
+    const item = node.items[S.menuIndex] || { label: '---' };
+    showLine(node.title, `${S.menuIndex+1}/${node.items.length}`, item.label, '');
+    return;
+  }
+  if (S.mode === 'nip-entry') {
+    showLine('NIP NABYWCY', '', S.input || '________', '');
+    return;
+  }
+  if (S.mode === 'after-sum') {
+    showLine('SUMA', '', 'DO ZAPLATY', fmtMoney(S.totalDue));
+    return;
+  }
+  if (S.mode === 'price-check') {
+    showLine('SPR. CENY', '', S.input || '_', '');
+    return;
+  }
+
+  // idle / building basket
+  if (S.items.length === 0 && !S.input) {
+    showLine('GOTOWY', '', '', '0.00');
+    return;
+  }
+  if (S.input) {
+    let label = 'KWOTA';
+    if (S.qty != null && S.openPrice != null) label = `${S.qty} X ${fmtMoney(S.openPrice)} KOD`;
+    else if (S.qty != null) label = `${S.qty} X KOD/CENA`;
+    else if (S.openPrice != null) label = `CENA ${fmtMoney(S.openPrice)} KOD`;
+    showLine(label, '', S.input.replace('.', ','), '');
+    return;
+  }
+  const lastItem = S.items[S.items.length - 1];
+  showLine(lastItem.name.substring(0,18), '', 'SUMA PLN', fmtMoney(S.subtotal));
+}
+
+// ============ KEY HANDLERS ============
+function press(key) {
+  beep(1100, 30);
+  const el = document.querySelector(`.key[data-key="${key}"]`);
+  if (el) { el.classList.add('pressed'); setTimeout(()=>el.classList.remove('pressed'), 80); }
+
+  // Menu mode handles separately
+  if (S.mode === 'menu') return handleMenuKey(key);
+  if (S.mode === 'nip-entry') return handleNipKey(key);
+  if (S.mode === 'price-check') return handlePriceCheckKey(key);
+
+  switch (key) {
+    case '0': case '1': case '2': case '3': case '4':
+    case '5': case '6': case '7': case '8': case '9':
+      if (S.input.replace(',', '').replace('.', '').length >= 9) { beep(300,80); return; }
+      S.input += key;
+      break;
+    case 'dot':
+      if (S.input.includes(',') || S.input.includes('.')) { beep(300,80); return; }
+      if (!S.input) { enterPriceCheck(); return; }
+      S.input += ',';
+      break;
+    case 'clear':
+      if (S.input) { S.input=''; }
+      else if (S.mode==='after-sum') { S.mode='idle'; S.totalDue=0; }
+      else { /* nothing */ }
+      break;
+    case 'esc':
+      handleEsc();
+      break;
+    case 'shift':
+      S.shift = !S.shift;
+      $('#shift-btn').classList.toggle('active', S.shift);
+      break;
+    case 'x':
+      handleX();
+      break;
+    case 'cena':
+      handleCena();
+      break;
+    case 'plucode':
+      handlePluCode();
+      break;
+    case 'plu1': case 'plu2': case 'plu3': case 'plu4':
+    case 'plu5': case 'plu6':
+      handleDirectPlu(parseInt(key.replace('plu','')));
+      break;
+    case 'suma':
+      handleSuma();
+      break;
+    case 'gotowka':
+      handlePayment('GOTOWKA');
+      break;
+    case 'platn':
+      handlePayment(S.shift ? 'WALUTA' : 'KARTA');
+      break;
+    case 'anul':
+      handleAnul();
+      break;
+    case 'menu':
+      enterMenu();
+      break;
+    case 'plus':
+      if (S.shift) handleCashIn(); else handlePercent('+');
+      break;
+    case 'minus':
+      if (S.shift) handleCashOut(); else handlePercent('-');
+      break;
+    case 'papier':
+      feedPaper();
+      break;
+    case 'up':
+    case 'down':
+      // outside menu, no-op
+      break;
+  }
+
+  // SHIFT-modified PLUs
+  if (key.startsWith('plu') && S.shift) {
+    // already handled above as 7-12
+  }
+
+  // Auto-clear shift after PLU press for direct PLU keys
+  if (key.startsWith('plu') && S.shift) {
+    S.shift = false;
+    $('#shift-btn').classList.remove('active');
+  }
+  refreshDisplay();
+}
+
+function handleEsc() {
+  // ESC behavior hierarchy:
+  // 1. After SUMA  → back to basket-building
+  // 2. Input in buffer → clear input only
+  // 3. Items in basket → ask to cancel receipt
+  // 4. Clean idle (sprzedaż) → enter MENU GŁÓWNE
+  if (S.mode === 'after-sum') {
+    S.mode = 'idle'; S.totalDue = 0;
+    return;
+  }
+  if (S.input) {
+    S.input = '';
+    return;
+  }
+  if (S.items.length) {
+    if (confirm('Anulować cały paragon?')) {
+      printNonFiscal('PARAGON ANULOWANY', S.items);
+      S.items = []; S.subtotal = 0; S.qty=null; S.openPrice=null;
+    }
+    return;
+  }
+  // From clean sales mode → open MENU GŁÓWNE
+  enterMenu();
+}
+
+function handleX() {
+  if (!S.input) { showError('PODAJ ILOSC'); return; }
+  S.qty = parseFloat(S.input.replace(',', '.'));
+  if (!isFinite(S.qty) || S.qty <= 0) { S.qty=null; showError('ZLA ILOSC'); return; }
+  S.input = '';
+}
+
+function handleCena() {
+  if (!S.input) { showError('PODAJ CENE'); return; }
+  S.openPrice = parseFloat(S.input.replace(',', '.'));
+  if (!isFinite(S.openPrice) || S.openPrice<=0) { S.openPrice=null; showError('ZLA CENA'); return; }
+  S.input = '';
+}
+
+function handlePluCode() {
+  if (!S.input) { showError('PODAJ KOD PLU'); return; }
+  const code = parseInt(S.input, 10);
+  S.input = '';
+  if (!code || code < 1 || code > PLUS.length) { showError('BRAK PLU'); return; }
+  addPluToBasket(code);
+}
+
+function handleDirectPlu(n) {
+  const code = S.shift ? n + 6 : n;
+  if (code > PLUS.length) { showError('BRAK PLU'); return; }
+  addPluToBasket(code);
+}
+
+function addPluToBasket(code) {
+  if (S.mode === 'after-sum') { showError('ZAMKNIJ PARAGON'); return; }
+  const plu = PLUS[code-1];
+  if (!plu) { showError('BRAK PLU'); return; }
+  const qty = S.qty != null ? S.qty : 1;
+  const price = S.openPrice != null ? S.openPrice : plu.price;
+  const total = Math.round(qty * price * 100) / 100;
+  S.items.push({ plu: plu.id, name: plu.name, qty, price, total, vat: plu.vat });
+  S.subtotal = Math.round((S.subtotal + total) * 100) / 100;
+  S.qty = null; S.openPrice = null;
+  // Customer display update
+  setCustomer(`${plu.name.substring(0,12)} ${fmtMoney(total)}`);
+}
+
+function handleSuma() {
+  if (S.items.length === 0) { showError('BRAK POZYCJI'); return; }
+  S.totalDue = S.subtotal;
+  S.mode = 'after-sum';
+}
+
+function handlePayment(type) {
+  if (S.items.length === 0) { showError('BRAK POZYCJI'); return; }
+  if (S.mode !== 'after-sum') { S.totalDue = S.subtotal; }
+  const tendered = S.input ? parseFloat(S.input.replace(',', '.')) : S.totalDue;
+  S.input = '';
+  if (type === 'GOTOWKA' && tendered < S.totalDue) { showError('ZA MALA KWOTA'); return; }
+  const change = Math.round((tendered - S.totalDue) * 100) / 100;
+  closeReceipt(type, tendered, change);
+}
+
+function handleAnul() {
+  if (S.items.length === 0) { showError('NIC DO ANUL'); return; }
+  const removed = S.items.pop();
+  S.subtotal = Math.round((S.subtotal - removed.total)*100)/100;
+  setCustomer(`ANUL ${removed.name.substring(0,8)} -${fmtMoney(removed.total)}`);
+}
+
+function handlePercent(sign) {
+  if (!S.input || S.items.length === 0) { showError('% NIEMOZL.'); return; }
+  const pct = parseFloat(S.input.replace(',', '.'));
+  S.input = '';
+  if (!isFinite(pct) || pct <= 0 || pct >= 100) { showError('ZLE %'); return; }
+  const last = S.items[S.items.length - 1];
+  const delta = Math.round((last.total * pct / 100) * (sign==='-' ? -1 : 1) * 100)/100;
+  last.discount = (last.discount||0) + delta;
+  last.total = Math.round((last.total + delta)*100)/100;
+  S.subtotal = Math.round((S.subtotal + delta)*100)/100;
+  setCustomer(`${sign==='-'?'RABAT':'NARZUT'} ${pct}% ${fmtMoney(Math.abs(delta))}`);
+}
+
+function handleCashIn() {
+  if (!S.input) { showError('PODAJ KWOTE'); return; }
+  const amt = parseFloat(S.input.replace(',', '.')); S.input='';
+  if (!isFinite(amt) || amt <= 0) { showError('ZLA KWOTA'); return; }
+  S.cashInDrawer = Math.round((S.cashInDrawer + amt)*100)/100;
+  printNonFiscal('WPLATA DO KASY', null, amt);
+  setCustomer(`WPLATA +${fmtMoney(amt)}`);
+}
+function handleCashOut() {
+  if (!S.input) { showError('PODAJ KWOTE'); return; }
+  const amt = parseFloat(S.input.replace(',', '.')); S.input='';
+  if (!isFinite(amt) || amt <= 0) { showError('ZLA KWOTA'); return; }
+  if (amt > S.cashInDrawer) { showError('BRAK GOTOWKI'); return; }
+  S.cashInDrawer = Math.round((S.cashInDrawer - amt)*100)/100;
+  printNonFiscal('WYPLATA Z KASY', null, amt);
+  setCustomer(`WYPLATA -${fmtMoney(amt)}`);
+}
+
+function enterPriceCheck() {
+  S.mode = 'price-check';
+  S.input = '';
+}
+function handlePriceCheckKey(key) {
+  if (['0','1','2','3','4','5','6','7','8','9'].includes(key)) {
+    S.input += key; refreshDisplay(); return;
+  }
+  if (key === 'clear' || key === 'esc') { S.mode='idle'; S.input=''; refreshDisplay(); return; }
+  if (key.startsWith('plu') || key === 'plucode') {
+    let code;
+    if (key === 'plucode') code = parseInt(S.input,10);
+    else { const n = parseInt(key.replace('plu','')); code = S.shift ? n+6 : n; }
+    S.input=''; S.mode='idle';
+    const plu = PLUS[code-1];
+    if (!plu) { showError('BRAK PLU'); return; }
+    showLine(plu.name.substring(0,18), '', 'CENA', fmtMoney(plu.price));
+    return;
+  }
+}
+
+// ============ MENU ============
+function enterMenu() {
+  if (S.items.length > 0) { showError('ZAMKNIJ PARAGON'); return; }
+  S.mode = 'menu';
+  S.menuPath = ['root'];
+  S.menuIndex = 0;
+  beep(1400, 60);
+}
+function currentMenuNode() {
+  return MENU_TREE[S.menuPath[S.menuPath.length-1]] || MENU_TREE.root;
+}
+function handleMenuKey(key) {
+  const node = currentMenuNode();
+  if (key === 'up')   { S.menuIndex = (S.menuIndex - 1 + node.items.length) % node.items.length; refreshDisplay(); return; }
+  if (key === 'down') { S.menuIndex = (S.menuIndex + 1) % node.items.length; refreshDisplay(); return; }
+  if (key === 'esc') {
+    S.menuPath.pop();
+    if (S.menuPath.length === 0) { S.mode='idle'; refreshDisplay(); return; }
+    S.menuIndex = 0; refreshDisplay(); return;
+  }
+  if (['1','2','3','4','5','6','7','8','9'].includes(key)) {
+    const idx = parseInt(key,10) - 1;
+    if (node.items[idx]) { S.menuIndex = idx; selectMenuItem(node.items[idx]); }
+    return;
+  }
+  if (key === 'gotowka' || key === 'suma') {
+    selectMenuItem(node.items[S.menuIndex]);
+    return;
+  }
+}
+function selectMenuItem(item) {
+  if (MENU_TREE[item.id]) {
+    S.menuPath.push(item.id);
+    S.menuIndex = 0;
+    refreshDisplay();
+    return;
+  }
+  // Leaf actions
+  switch (item.id) {
+    // === MENU GŁÓWNE → SPRZEDAŻ ===
+    case 'sprzedaz':       exitMenuAfter(()=> setCustomer('TRYB SPRZEDAZY')); break;
+
+    // === RAPORTY CZYTAJĄCE (bez zerowania) ===
+    case 'rapc-stan':      runReportStan(); break;
+    case 'rapc-plu':       runReportPlu(); break;
+    case 'rapc-vat':       runReportVat(false); break;
+    case 'rapc-zmiana':    runReportZmiana(false); break;
+    case 'rapc-okres':     runReportOkres(); break;
+    case 'rapc-miesiac':   runReportMiesiac(); break;
+
+    // === RAPORTY ZERUJĄCE ===
+    case 'rapz-dobowy':    runReportDobowy(); break;
+    case 'rapz-zmiana':    runReportZmiana(true); break;
+    case 'rapz-plu':       runReportPluZero(); break;
+    case 'rapz-vat':       runReportVat(true); break;
+
+    // === PROGRAMOWANIE ===
+    case 'prog-plu':       openPluProgramming(); break;
+    case 'prog-naglow':    openHeaderInfo(); break;
+    case 'prog-kasjer':    showInfo('KASJERZY', 'Kasjer 1: KIEROWNIK\nKasjer 2: ---\nKasjer 3: ---\nKasjer 4: ---\n(symulacja - bez edycji)'); exitMenuAfter(); break;
+    case 'prog-vat':       showInfo('STAWKI VAT', 'A = 23%\nB =  8%\nC =  5%\nD =  0%\nE = ZW\n(stawki zaprogramowane fabrycznie)'); exitMenuAfter(); break;
+    case 'prog-czas':      openClockInfo(); break;
+    case 'prog-platn':     showInfo('FORMY PLATNOSCI', '1. GOTOWKA\n2. KARTA\n3. CZEK\n4. BON\n5. WALUTA\n6. PRZELEW'); exitMenuAfter(); break;
+    case 'prog-tryb':      toggleFiscalMode(); break;
+    case 'prog-nip':       enterNipInput(); break;
+
+    // === POŁĄCZENIE Z PC ===
+    case 'pc-status':      showInfo('STATUS POLACZENIA','Port: COM1\nPredkosc: 115200 bps\nStatus: NIEPODLACZONY'); exitMenuAfter(); break;
+    case 'pc-port':        showInfo('KONFIG. PORTU','COM1: 115200/8/N/1\nUSB: dostępny\n(symulacja - bez zmian)'); exitMenuAfter(); break;
+    case 'pc-protok':      showInfo('PROTOKOL','Datecs Protocol v2.1\nXML over serial\nESC/POS dla wydruków'); exitMenuAfter(); break;
+    case 'pc-online':      showInfo('ONLINE','Tryb online: WYLACZONY\nSerwer fiskalny: brak konfig.\n(symulacja)'); exitMenuAfter(); break;
+
+    // === SERWIS ===
+    case 'serw-haslo':     showInfo('HASLO SERWISOWE','Wymagane uprawnienia serwisowe.\n_ _ _ _\nFUNKCJA ZABLOKOWANA'); exitMenuAfter(); break;
+    case 'serw-info':      showInfo('INFO O URZADZENIU',
+      `Model: DATECS WP-25\nWersja: 5.2.1\nSerial: ${HEADER.uniqueNr}\nData uruchomienia: 2026-01-15\nLiczba paragonów: ${S.receiptNo - 1}\nLiczba raportów: ${S.todayCount}`); exitMenuAfter(); break;
+    case 'serw-log':       showInfo('LOGI SYSTEMOWE','[OK] Startup\n[OK] RTC sync\n[OK] Drukarka termiczna\n[OK] Pamiec chroniona\n[OK] Wyswietlacze\n(brak bledow)'); exitMenuAfter(); break;
+
+    // === TESTY KASY ===
+    case 'test-wysw':      runDisplayTest(); break;
+    case 'test-klaw':      showInfo('TEST KLAWIATURY','Nacisnij dowolny klawisz\n(symulacja - kazde nacisniecie wydaje BEEP)'); exitMenuAfter(); break;
+    case 'test-druk':      runPrinterTest(); break;
+    case 'test-pam':       showInfo('TEST PAMIECI','Sprawdzanie RAM... OK\nSprawdzanie ROM... OK\nSprawdzanie pamieci fiskalnej... OK\nWszystkie testy: ZALICZONE'); exitMenuAfter(); break;
+    case 'test-zegar':     showInfo('TEST ZEGARA',`Aktualny czas:\n${fmtDate(new Date())}  ${fmtClock(new Date())}\nRTC: SPRAWNY\nBateria RTC: OK`); exitMenuAfter(); break;
+    case 'test-szufl':     openDrawer(); break;
+
+    // === PAMIĘĆ CHRONIONA ===
+    case 'pam-stan':       showInfo('STAN PAMIECI',
+      `Pojemnosc: 8 MB\nUzyte: ~${Math.min(99, S.receipts.length*2)} %\nWolne miejsce: ${Math.max(1, 100 - S.receipts.length*2)} %\nPrzewidywana data zapelnienia: 2031-05-17`); exitMenuAfter(); break;
+    case 'pam-raporty':    showInfo('LISTA RAPORTOW DOBOWYCH',
+      S.todayCount > 0 ? `Raporty z dnia ${fmtDate(new Date())}:\n${S.todayCount} x dobowy fiskalny` : 'Brak raportów dobowych za dziś.'); exitMenuAfter(); break;
+    case 'pam-kopia':      showKopia(); break;
+    case 'pam-eksport':    showInfo('EKSPORT NA NOSNIK','Wykryto nosnik: USB (symulacja)\nKopiowanie kopii elektronicznej...\n[#####    ] 50%\nUKONCZONO.'); exitMenuAfter(); break;
+
+    // === POMOC ===
+    case 'pomoc':          showHelp(); break;
+
+    // === WYŁĄCZAM KASĘ ===
+    case 'wylacz':         shutdownPrompt(); break;
+
+    // === PRODUCENT ===
+    case 'producent':      showInfo('PRODUCENT',
+      'DATECS Polska Sp. z o.o.\nul. Kolejowa 47/U-23\n01-210 WARSZAWA\nNIP: 526-21-31-219\ntel. +48 22 631-86-00\nwww.datecs.pl\n\nModel: WP-25\nHomologacja: PT/...\n(C) DATECS 1990-2026'); exitMenuAfter(); break;
+  }
+}
+function exitMenuAfter(cb) { S.mode='idle'; S.menuPath=[]; refreshDisplay(); cb && cb(); }
+
+function runDisplayTest() {
+  showInfo('TEST WYSWIETLACZA','Wzorzec testowy:\n\n████████████████\n████████████████\n\nZnaki:\nABCDEFGHIJKLMNOP\nQRSTUVWXYZ\n0123456789\n!@#$%^&*()_+-=,.\n\nTest zakonczony OK');
+  // Briefly fill display
+  const orig = [$('#dline1-l').textContent, $('#dline2-r').textContent];
+  $('#dline1-l').textContent = '################';
+  $('#dline2-r').textContent = '############';
+  setTimeout(()=> { $('#dline1-l').textContent = orig[0]; $('#dline2-r').textContent = orig[1]; }, 1500);
+  exitMenuAfter();
+}
+function runPrinterTest() {
+  const txt = centerLine('=== TEST DRUKARKI ===') + '\n\n' +
+    'Cieniowanie:\n' +
+    '████ ▓▓▓▓ ▒▒▒▒ ░░░░\n\n' +
+    'Czcionka standardowa:\n' +
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ\n' +
+    'abcdefghijklmnopqrstuvwxyz\n' +
+    '0123456789 !@#$%^&*()\n\n' +
+    'Polskie znaki:\n' +
+    'AaCcEeLlNnOoSsZzZz\n\n' +
+    centerLine('--- KONIEC TESTU ---');
+  printDirect(txt);
+  exitMenuAfter();
+}
+function shutdownPrompt() {
+  if (confirm('Wyłączyć kasę?\nWszystkie nieprzesłane dane zostaną zachowane.')) {
+    showInfo('WYLACZANIE KASY','Zamykanie sesji...\nZapisywanie pamieci chronionej...\nWylaczam...\n\n(symulacja - kasa nie zostanie faktycznie wylaczona)');
+    setTimeout(()=> {
+      $('#dline1-l').textContent = '';
+      $('#dline1-r').textContent = '';
+      $('#dline2-l').textContent = '';
+      $('#dline2-r').textContent = 'OFF';
+      setCustomer('-- OFF --');
+    }, 600);
+  }
+  exitMenuAfter();
+}
+function showHelp() {
+  showInfo('POMOC',
+`STEROWANIE:
+ESC      → wyjscie ze sprzedazy do MENU
+strzalki → nawigacja po menu
+GOTOWKA  → zatwierdz wybor / zaplata
+SUMA     → podsumowanie paragonu
+C        → wyczysc wpisana wartosc
+ANUL     → cofnij ostatnia pozycje
+
+SPRZEDAZ:
+PLU 1-12 → szybkie kody towarow
+liczba X PLU n → mnoznik ilosci
+kwota CENA PLU n → otwarta cena
+SHIFT + PLU 1-6 → PLU 7-12
+
+W kazdej chwili nacisnij ESC, aby wejsc do MENU GLOWNEGO.`);
+  exitMenuAfter();
+}
+
+function toggleFiscalMode() {
+  S.fiscal = !S.fiscal;
+  $('#mode-display').textContent = S.fiscal ? 'FISKALNY' : 'SZKOLENIOWY';
+  $('#mode-display').classList.toggle('fiscal', S.fiscal);
+  $('#mode-display').classList.toggle('training', !S.fiscal);
+  showInfo('TRYB ZMIENIONY', S.fiscal ? 'Tryb: FISKALNY\nParagony są fiskalne.' : 'Tryb: SZKOLENIOWY\nParagony NIEFISKALNE.');
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function enterNipInput() {
+  S.mode = 'nip-entry'; S.menuPath = []; S.input = '';
+  refreshDisplay();
+}
+function handleNipKey(key) {
+  if (['0','1','2','3','4','5','6','7','8','9'].includes(key)) { if (S.input.length<10) S.input += key; refreshDisplay(); return; }
+  if (key === 'clear') { S.input=''; refreshDisplay(); return; }
+  if (key === 'esc') { S.input=''; S.mode='idle'; refreshDisplay(); return; }
+  if (key === 'gotowka' || key === 'suma') {
+    if (S.input.length === 10) { S.nipBuyer = S.input; S.input=''; S.mode='idle'; refreshDisplay(); showInfo('NIP', 'NIP nabywcy zapisany:\n' + S.nipBuyer + '\nZostanie wydrukowany na paragonie.'); }
+    else { showError('NIP 10 CYFR'); }
+  }
+}
+
+// ============ REPORTS ============
+function runReportDobowy() {
+  const date = new Date();
+  let txt = '';
+  txt += centerLine(HEADER.name) + '\n';
+  txt += centerLine(HEADER.address) + '\n';
+  txt += centerLine(HEADER.city) + '\n';
+  txt += centerLine(HEADER.nip) + '\n';
+  txt += '\n';
+  txt += centerLine('RAPORT DOBOWY') + '\n';
+  txt += centerLine(S.fiscal ? 'FISKALNY' : '(NIEFISKALNY)') + '\n';
+  txt += '\n';
+  txt += padLine('Data:', fmtDate(date)) + '\n';
+  txt += padLine('Godzina:', fmtClock(date)) + '\n';
+  txt += padLine('Nr raportu:', String(S.todayCount === 0 ? '0001' : String(S.todayCount).padStart(4,'0'))) + '\n';
+  txt += '--------------------------------\n';
+  ['A','B','C','D','E'].forEach(v => {
+    if (S.todayByVat[v] > 0) {
+      txt += padLine(`SPRZED. OPOD. ${v} ${VAT_RATES[v]}%`, fmtMoney(S.todayByVat[v])) + '\n';
+      if (v !== 'E') txt += padLine(`KWOTA PTU ${v}`, fmtMoney(S.todayPtu[v])) + '\n';
+    }
+  });
+  txt += '--------------------------------\n';
+  txt += padLine('SUMA SPRZEDAZY', fmtMoney(S.todayGross)) + '\n';
+  const ptuSum = Object.values(S.todayPtu).reduce((a,b)=>a+b,0);
+  txt += padLine('SUMA PTU', fmtMoney(ptuSum)) + '\n';
+  txt += padLine('ILOSC PARAGONOW', String(S.todayCount)) + '\n';
+  txt += '--------------------------------\n';
+  txt += padLine('STAN KASY', fmtMoney(S.cashInDrawer)) + '\n';
+  txt += '\n';
+  txt += centerLine('### RAPORT ZAMKNIETY ###') + '\n';
+  txt += centerLine(HEADER.uniqueNr) + '\n';
+  // Reset day after closing dobowy
+  printDirect(txt);
+  if (S.fiscal && S.todayCount > 0) {
+    if (confirm('Wyzerować liczniki dobowe po raporcie fiskalnym?')) resetDay();
+  }
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function runReportOkres() {
+  let txt = centerLine(HEADER.name) + '\n' + centerLine('RAPORT OKRESOWY') + '\n' + centerLine('(NIEFISKALNY)') + '\n\n';
+  txt += padLine('Okres:', 'BIEZACY MIESIAC') + '\n';
+  txt += padLine('Sprzedaz:', fmtMoney(S.todayGross)) + '\n';
+  txt += padLine('Paragony:', String(S.todayCount)) + '\n';
+  printDirect(txt);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function runReportZmiana(zero=false) {
+  let txt = centerLine(zero ? 'RAPORT ZMIANY (ZERUJACY)' : 'RAPORT ZMIANY (CZYTAJACY)') + '\n' + centerLine('(NIEFISKALNY)') + '\n\n';
+  txt += padLine('Kasjer:', '1 KIEROWNIK') + '\n';
+  txt += padLine('Sprzedaz:', fmtMoney(S.todayGross)) + '\n';
+  txt += padLine('Paragony:', String(S.todayCount)) + '\n';
+  txt += padLine('Stan kasy:', fmtMoney(S.cashInDrawer)) + '\n';
+  if (zero) txt += '\n' + centerLine('### ZMIANA ZAMKNIETA ###');
+  printDirect(txt);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function runReportVat(zero=false) {
+  let txt = centerLine(zero ? 'RAPORT STAWEK VAT (ZER.)' : 'RAPORT STAWEK VAT') + '\n' + centerLine('(NIEFISKALNY)') + '\n\n';
+  ['A','B','C','D','E'].forEach(v => {
+    txt += padLine(`Stawka ${v} (${VAT_RATES[v]}%):`, fmtMoney(S.todayByVat[v])) + '\n';
+    if (v !== 'E') txt += padLine(`  PTU ${v}:`, fmtMoney(S.todayPtu[v])) + '\n';
+  });
+  txt += '--------------------------------\n';
+  txt += padLine('SUMA SPRZEDAZY:', fmtMoney(S.todayGross)) + '\n';
+  if (zero && confirm('Wyzerować liczniki VAT?')) {
+    S.todayByVat = { A:0, B:0, C:0, D:0, E:0 };
+    S.todayPtu   = { A:0, B:0, C:0, D:0, E:0 };
+  }
+  printDirect(txt);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function runReportPluZero() {
+  let txt = centerLine('RAPORT SPRZEDAZY PLU (ZER.)') + '\n' + centerLine('(NIEFISKALNY)') + '\n\n';
+  const counts = {};
+  S.receipts.forEach(r => (r.items||[]).forEach(it => {
+    counts[it.plu] = counts[it.plu] || { name: it.name, qty:0, gross:0 };
+    counts[it.plu].qty += it.qty; counts[it.plu].gross += it.total;
+  }));
+  if (Object.keys(counts).length === 0) txt += '  BRAK SPRZEDAZY\n';
+  Object.entries(counts).forEach(([id, c]) => {
+    txt += padLine(`#${id} ${c.name.substring(0,16)}`, fmtMoney(c.gross)) + '\n';
+    txt += padLine(`  ilosc: ${c.qty}`, '') + '\n';
+  });
+  if (confirm('Wyzerować liczniki PLU?')) {
+    // In real device this clears PLU sale counters. Here just confirm.
+  }
+  printDirect(txt);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function runReportMiesiac() {
+  const d = new Date();
+  let txt = centerLine('RAPORT MIESIECZNY') + '\n' + centerLine('(NIEFISKALNY)') + '\n\n';
+  txt += padLine('Miesiac:', String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear()) + '\n';
+  txt += padLine('Sprzedaz brutto:', fmtMoney(S.todayGross)) + '\n';
+  txt += padLine('Liczba paragonow:', String(S.todayCount)) + '\n';
+  txt += padLine('Liczba rap.dob.:', '1') + '\n';
+  printDirect(txt);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function runReportPlu() {
+  let txt = centerLine('RAPORT SPRZEDAZY PLU') + '\n' + centerLine('(NIEFISKALNY)') + '\n\n';
+  // Simple count from all receipts
+  const counts = {};
+  S.receipts.forEach(r => (r.items||[]).forEach(it => {
+    counts[it.plu] = counts[it.plu] || { name: it.name, qty:0, gross:0 };
+    counts[it.plu].qty += it.qty; counts[it.plu].gross += it.total;
+  }));
+  if (Object.keys(counts).length === 0) txt += '  BRAK SPRZEDAZY\n';
+  Object.entries(counts).forEach(([id, c]) => {
+    txt += padLine(`#${id} ${c.name.substring(0,16)}`, fmtMoney(c.gross)) + '\n';
+    txt += padLine(`  ilosc: ${c.qty}`, '') + '\n';
+  });
+  printDirect(txt);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function runReportStan() {
+  let txt = centerLine('RAPORT STANU KASY') + '\n' + centerLine('(NIEFISKALNY)') + '\n\n';
+  txt += padLine('Gotowka w kasie:', fmtMoney(S.cashInDrawer)) + '\n';
+  txt += padLine('Sprzedaz dziś:', fmtMoney(S.todayGross)) + '\n';
+  txt += padLine('Paragonow:', String(S.todayCount)) + '\n';
+  txt += padLine('Tryb:', S.fiscal ? 'FISKALNY' : 'SZKOLENIOWY') + '\n';
+  printDirect(txt);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function resetDay() {
+  S.todayGross = 0; S.todayCount = 0;
+  S.todayByVat = { A:0, B:0, C:0, D:0, E:0 };
+  S.todayPtu   = { A:0, B:0, C:0, D:0, E:0 };
+  $('#today-display').textContent = fmtMoney(0) + ' zł';
+}
+
+function openPluProgramming() {
+  const list = PLUS.map(p => `#${p.id}  ${p.name.padEnd(18)}  ${fmtMoney(p.price)}  VAT ${p.vat}`).join('\n');
+  showInfo('PROGRAMOWANIE PLU', 'Lista PLU (symulacja - bez edycji):\n\n' + list);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function openHeaderInfo() {
+  const txt = `Nazwa:   ${HEADER.name}\nAdres:   ${HEADER.address}\nMiasto:  ${HEADER.city}\nNIP:     ${HEADER.nip}\nNr unik: ${HEADER.uniqueNr}`;
+  showInfo('NAGLOWEK', txt);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function openClockInfo() {
+  const d = new Date();
+  showInfo('CZAS', `Data: ${fmtDate(d)}\nGodz: ${fmtClock(d)}\n(synchronizacja: zegar systemu)`);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function showKopia() {
+  showInfo('KOPIA ELEKTRONICZNA', `Wszystkie ${S.receipts.length} paragonów\nzapisane w pamięci urządzenia.\n(Patrz: rolka paragonów po prawej)`);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+function openDrawer() {
+  showInfo('SZUFLADA', '*** OTWARTO SZUFLADE ***\n(efekt dzwiekowy)');
+  beep(1800, 80); setTimeout(()=>beep(1500, 80), 100);
+  S.mode='idle'; S.menuPath=[]; refreshDisplay();
+}
+
+// ============ PRINTING ============
+function calcVatBreakdown(items) {
+  const grouped = {};
+  items.forEach(it => {
+    grouped[it.vat] = grouped[it.vat] || { gross:0, net:0, ptu:0 };
+    grouped[it.vat].gross += it.total;
+  });
+  Object.keys(grouped).forEach(v => {
+    const rate = VAT_RATES[v] || 0;
+    const gross = grouped[v].gross;
+    const net = rate > 0 ? gross / (1 + rate/100) : gross;
+    grouped[v].net = Math.round(net * 100) / 100;
+    grouped[v].ptu = Math.round((gross - net) * 100) / 100;
+    grouped[v].gross = Math.round(gross * 100) / 100;
+  });
+  return grouped;
+}
+
+function buildReceiptText(payType, tendered, change) {
+  const date = new Date();
+  const W = 32;
+  let t = '';
+  t += centerLine(HEADER.name, W) + '\n';
+  t += centerLine(HEADER.address, W) + '\n';
+  t += centerLine(HEADER.city, W) + '\n';
+  t += centerLine(HEADER.nip, W) + '\n';
+  t += '\n';
+  t += padLine(fmtDate(date), fmtClock(date), W) + '\n';
+  t += HEADER.kasaNr + '\n';
+  t += '\n';
+  t += centerLine(S.fiscal ? '==== PARAGON FISKALNY ====' : '== PARAGON NIEFISKALNY ==', W) + '\n';
+  t += '\n';
+
+  S.items.forEach(it => {
+    t += it.name + ' ' + it.vat + '\n';
+    const left = `  ${it.qty} x ${fmtMoney(it.price)}`;
+    const right = `${fmtMoney(it.total)} ${it.vat}`;
+    t += padLine(left, right, W) + '\n';
+    if (it.discount) {
+      const d = it.discount;
+      const label = d < 0 ? '  RABAT' : '  NARZUT';
+      t += padLine(label, fmtMoney(Math.abs(d)), W) + '\n';
+    }
+  });
+
+  t += '--------------------------------\n';
+  const vatBd = calcVatBreakdown(S.items);
+  Object.entries(vatBd).forEach(([v, b]) => {
+    t += padLine(`SPRZED. OPODATK. ${v}`, fmtMoney(b.gross), W) + '\n';
+    if (VAT_RATES[v] > 0) t += padLine(`KWOTA PTU ${v} ${VAT_RATES[v]}%`, fmtMoney(b.ptu), W) + '\n';
+  });
+  const ptuTotal = Object.values(vatBd).reduce((a,b)=>a+b.ptu,0);
+  t += padLine('SUMA PTU', fmtMoney(ptuTotal), W) + '\n';
+  t += '\n';
+  t += padLine('SUMA PLN', fmtMoney(S.subtotal), W) + '\n';
+  t += '================================\n';
+  t += padLine(payType, fmtMoney(tendered), W) + '\n';
+  if (change > 0) t += padLine('RESZTA', fmtMoney(change), W) + '\n';
+  if (S.nipBuyer) t += padLine('NIP NABYWCY:', S.nipBuyer, W) + '\n';
+  t += '\n';
+  const recNo = String(S.receiptNo).padStart(6,'0');
+  t += padLine(`Nr wydruku: ${recNo}`, '', W) + '\n';
+  t += centerLine(S.fiscal ? '[PL]  ' + HEADER.uniqueNr : 'PARAGON NIEFISKALNY', W) + '\n';
+  t += centerLine('WP-25  v.5.2.1', W) + '\n';
+  return t;
+}
+
+function closeReceipt(payType, tendered, change) {
+  const text = buildReceiptText(payType, tendered, change);
+  // Update day totals
+  if (S.fiscal) {
+    const vb = calcVatBreakdown(S.items);
+    Object.entries(vb).forEach(([v, b]) => {
+      S.todayByVat[v] = Math.round((S.todayByVat[v] + b.gross)*100)/100;
+      S.todayPtu[v]   = Math.round((S.todayPtu[v] + b.ptu)*100)/100;
+    });
+    S.todayGross = Math.round((S.todayGross + S.subtotal)*100)/100;
+    S.todayCount += 1;
+  }
+  if (payType === 'GOTOWKA') S.cashInDrawer = Math.round((S.cashInDrawer + S.subtotal)*100)/100;
+  S.receipts.unshift({ no: S.receiptNo, text, ts: new Date(), items: [...S.items], total: S.subtotal });
+  S.receiptNo += 1;
+
+  // Print
+  animatePrint(text);
+  appendToRoll(text);
+
+  // Reset basket
+  S.items = []; S.subtotal = 0; S.qty=null; S.openPrice=null; S.nipBuyer=''; S.totalDue=0; S.mode='idle';
+
+  $('#recno-display').textContent = String(S.receiptNo).padStart(4,'0');
+  $('#today-display').textContent = fmtMoney(S.todayGross) + ' zł';
+  $('#cash-display').textContent = fmtMoney(S.cashInDrawer) + ' zł';
+  setCustomer('DZIEKUJEMY');
+}
+
+function printNonFiscal(label, items, amount) {
+  const date = new Date();
+  const W = 32;
+  let t = '';
+  t += centerLine(HEADER.name, W) + '\n';
+  t += centerLine(HEADER.nip, W) + '\n\n';
+  t += centerLine('# NIEFISKALNY #', W) + '\n';
+  t += centerLine(label, W) + '\n\n';
+  t += padLine(fmtDate(date), fmtClock(date), W) + '\n';
+  if (items) items.forEach(it => t += padLine(it.name, fmtMoney(it.total), W) + '\n');
+  if (amount != null) t += padLine('KWOTA', fmtMoney(amount), W) + '\n';
+  t += '\n' + centerLine('# NIEFISKALNY #', W) + '\n';
+  animatePrint(t); appendToRoll(t);
+}
+
+function printDirect(text) { animatePrint(text); appendToRoll(text); }
+
+function animatePrint(text) {
+  const out = $('#paper-out');
+  out.textContent = text;
+  out.classList.remove('printing');
+  void out.offsetWidth;
+  out.classList.add('printing');
+  // simulate printer sound
+  let i = 0;
+  const ticker = setInterval(() => { if (i++ > 8) { clearInterval(ticker); return; } beep(2000 + Math.random()*400, 8, 0.02); }, 60);
+  // After display, "tear off" by clearing after some seconds
+  setTimeout(()=> { out.classList.remove('printing'); }, 5500);
+}
+function appendToRoll(text) {
+  const wrap = document.createElement('div');
+  wrap.className = 'receipt';
+  wrap.textContent = text;
+  const divider = document.createElement('div');
+  divider.className = 'receipt-divider';
+  const root = $('#receipts');
+  root.insertBefore(wrap, root.firstChild);
+  if (root.children.length > 1) root.insertBefore(divider, wrap.nextSibling);
+  root.scrollTop = 0;
+}
+
+function feedPaper() {
+  const out = $('#paper-out');
+  out.textContent = '\n\n\n';
+  out.classList.add('printing');
+  setTimeout(()=> out.classList.remove('printing'), 1200);
+  beep(1500, 40);
+}
+
+// ============ MODAL ============
+let modalResolver = null;
+function showInfo(title, body) {
+  $('#modal-title').textContent = title;
+  const el = $('#modal-body');
+  el.innerHTML = '<pre>' + body.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</pre>';
+  $('#modal-cancel').style.display = 'none';
+  $('#modal-ok').textContent = 'OK';
+  $('#modal-backdrop').classList.add('show');
+}
+$('#modal-ok').addEventListener('click', ()=> $('#modal-backdrop').classList.remove('show'));
+$('#modal-cancel').addEventListener('click', ()=> $('#modal-backdrop').classList.remove('show'));
+
+// ============ CUSTOMER DISPLAY ============
+let customerTimer = null;
+function setCustomer(text) {
+  $('#cust-text').textContent = text.substring(0, 22);
+  if (customerTimer) clearTimeout(customerTimer);
+  customerTimer = setTimeout(()=> $('#cust-text').textContent = 'ZAPRASZAMY', 4000);
+}
+
+// ============ CLOCK ============
+function tickClock() {
+  $('#clock').textContent = fmtClock(new Date());
+}
+setInterval(tickClock, 30 * 1000);
+tickClock();
+
+// ============ INIT KEYBOARD ============
+document.querySelectorAll('.key').forEach(el => {
+  el.addEventListener('click', () => press(el.dataset.key));
+});
+
+// Physical keyboard mapping
+const KEYMAP = {
+  '0':'0','1':'1','2':'2','3':'3','4':'4','5':'5','6':'6','7':'7','8':'8','9':'9',
+  ',':'dot','.':'dot',
+  'x':'x','X':'x','*':'x',
+  'Enter':'gotowka','+':'suma','-':'minus','/':'platn',
+  'Escape':'esc','Backspace':'clear','c':'clear','C':'clear',
+  'ArrowUp':'up','ArrowDown':'down',
+  'p':'platn','P':'platn',
+  's':'shift','S':'shift',
+  'm':'menu','M':'menu',
+  'a':'anul','A':'anul',
+  'r':'papier','R':'papier',
+  'F1':'plu1','F2':'plu2','F3':'plu3','F4':'plu4','F5':'plu5','F6':'plu6',
+};
+document.addEventListener('keydown', e => {
+  const k = KEYMAP[e.key];
+  if (k) { e.preventDefault(); press(k); }
+});
+
+// ============ INIT PLU HELP ============
+(function renderPluHelp(){
+  const root = $('#plu-grid');
+  PLUS.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'plu-row';
+    row.innerHTML = `<span class="name">#${p.id} ${p.name}</span><span class="price">${fmtMoney(p.price)} ${p.vat}</span>`;
+    root.appendChild(row);
+  });
+})();
+
+// Initial display starts at zero
+(function showInitialZero() {
+  showLine('GOTOWY', '', '', '0.00');
+})();
+setCustomer('ZAPRASZAMY');
+</script>
+</body>
+</html>

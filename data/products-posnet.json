@@ -1,0 +1,725 @@
+{
+  "metadata": {
+    "sourceFile": "ceny_posnet_kasy_drukarki_2026-05-24(1).xlsx",
+    "brand": "Posnet",
+    "generatedFor": "INFOKASY modal produktów",
+    "currency": "PLN",
+    "priceType": "netto",
+    "updatedAt": "2026-10-03",
+    "productCount": 18,
+    "rowCount": 20,
+    "note": "Ceny netto; do wyświetlania w modalu. Zdjęcia należy umieścić zgodnie ze ścieżkami w polu image."
+  },
+  "products": [
+    {
+      "id": "posnet-vero",
+      "brand": "Posnet",
+      "model": "VERO",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne",
+        "systemy-pos"
+      ],
+      "priceFromNet": 2199,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 199 zł netto",
+      "image": "pic/modele/posnet-vero.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Nowoczesna kasa fiskalna online",
+        "Kolorowy wyświetlacz",
+        "Rozwiązanie do punktu sprzedaży"
+      ],
+      "variants": [
+        {
+          "name": "VERO",
+          "category": "kasy-fiskalne",
+          "priceNet": 2199,
+          "displayPrice": "2 199 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-pospay2-online",
+      "brand": "Posnet",
+      "model": "POSPAY2 ONLINE",
+      "category": "kasy-i-drukarki-fiskalne",
+      "categories": [
+        "kasy-fiskalne",
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 1899,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 899 zł netto",
+      "image": "pic/modele/posnet-pospay2-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Urządzenie łączy funkcje kasy, drukarki fiskalnej i terminala",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Urządzenie łączy funkcje kasy, drukarki fiskalnej i terminala",
+        "Kompaktowe urządzenie online",
+        "Dobre rozwiązanie do mobilnej sprzedaży"
+      ],
+      "variants": [
+        {
+          "name": "POSPAY2 ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1899,
+          "displayPrice": "1 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Urządzenie łączy funkcje kasy, drukarki fiskalnej i terminala",
+          "active": true
+        },
+        {
+          "name": "POSPAY2 ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 1899,
+          "displayPrice": "1 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Na liście drukarek; także kasoterminal",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-evo",
+      "brand": "Posnet",
+      "model": "EVO",
+      "category": "kasy-i-drukarki-fiskalne",
+      "categories": [
+        "kasy-fiskalne",
+        "drukarki-fiskalne",
+        "systemy-pos"
+      ],
+      "priceFromNet": 1999,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 999 zł netto",
+      "image": "pic/modele/posnet-evo.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Urządzenie fiskalne online",
+        "Sprzedaż i konfiguracja w INFOKASY",
+        "Serwis i wsparcie po zakupie"
+      ],
+      "variants": [
+        {
+          "name": "EVO",
+          "category": "kasy-fiskalne",
+          "priceNet": 1999,
+          "displayPrice": "1 999 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        },
+        {
+          "name": "EVO",
+          "category": "drukarki-fiskalne",
+          "priceNet": 1999,
+          "displayPrice": "1 999 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Na liście drukarek; zestaw POS",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-mobile2-online",
+      "brand": "Posnet",
+      "model": "MOBILE2 ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1749,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 749 zł netto",
+      "image": "pic/modele/posnet-mobile2-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Mobilne urządzenie fiskalne",
+        "Kompaktowa konstrukcja",
+        "Sprawdza się w usługach i sprzedaży terenowej"
+      ],
+      "variants": [
+        {
+          "name": "MOBILE2 ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1749,
+          "displayPrice": "1 749 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-ergo-online",
+      "brand": "Posnet",
+      "model": "ERGO ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1449,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 449 zł netto",
+      "image": "pic/modele/posnet-ergo-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena od; warianty produktu mogą mieć inne ceny",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Cena od; warianty produktu mogą mieć inne ceny",
+        "Kasa fiskalna online",
+        "Dobra dla małych punktów sprzedaży"
+      ],
+      "variants": [
+        {
+          "name": "ERGO ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1449,
+          "displayPrice": "1 449 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena od; warianty produktu mogą mieć inne ceny",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-neo-online",
+      "brand": "Posnet",
+      "model": "NEO ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 2199,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 199 zł netto",
+      "image": "pic/modele/posnet-neo-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Urządzenie fiskalne online",
+        "Sprzedaż i konfiguracja w INFOKASY",
+        "Serwis i wsparcie po zakupie"
+      ],
+      "variants": [
+        {
+          "name": "NEO ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 2199,
+          "displayPrice": "2 199 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-mobile-online",
+      "brand": "Posnet",
+      "model": "MOBILE ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1649,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 649 zł netto",
+      "image": "pic/modele/posnet-mobile-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Mobilne urządzenie fiskalne",
+        "Kompaktowa konstrukcja",
+        "Sprawdza się w usługach i sprzedaży terenowej"
+      ],
+      "variants": [
+        {
+          "name": "MOBILE ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1649,
+          "displayPrice": "1 649 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-bingo-max2",
+      "brand": "Posnet",
+      "model": "BINGO Max2",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1799,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 799 zł netto",
+      "image": "pic/modele/posnet-bingo-max2.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Sprawdzona konstrukcja",
+        "Łatwa obsługa",
+        "Komunikacja online"
+      ],
+      "variants": [
+        {
+          "name": "BINGO Max2",
+          "category": "kasy-fiskalne",
+          "priceNet": 1799,
+          "displayPrice": "1 799 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-fawag-lite-online",
+      "brand": "Posnet",
+      "model": "FAWAG LITE ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1349,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 349 zł netto",
+      "image": "pic/modele/posnet-fawag-lite-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Atrakcyjna cena wejściowa",
+        "Kasa fiskalna online",
+        "Dobra dla małych punktów sprzedaży"
+      ],
+      "variants": [
+        {
+          "name": "FAWAG LITE ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1349,
+          "displayPrice": "1 349 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-zestaw-trio-online-tablet-triotab",
+      "brand": "Posnet",
+      "model": "Zestaw: Trio ONLINE + tablet TrioTAB",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 3999,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 3 999 zł netto",
+      "image": "pic/modele/posnet-zestaw-trio-online-tablet-triotab.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Kompletne stanowisko kasowe",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Kompletne stanowisko kasowe",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Zestaw: Trio ONLINE + tablet TrioTAB",
+          "category": "drukarki-fiskalne",
+          "priceNet": 3999,
+          "displayPrice": "3 999 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Kompletne stanowisko kasowe",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-xl2-b",
+      "brand": "Posnet",
+      "model": "Thermal XL2 B",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2899,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 899 zł netto",
+      "image": "pic/modele/posnet-thermal-xl2-b.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Thermal XL2 B",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2899,
+          "displayPrice": "2 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-xl2-online-2-3",
+      "brand": "Posnet",
+      "model": "Thermal XL2 ONLINE (2”, 3”)",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2899,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 899 zł netto",
+      "image": "pic/modele/posnet-thermal-xl2-online-2-3.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Thermal XL2 ONLINE (2”, 3”)",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2899,
+          "displayPrice": "2 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-xl2-a",
+      "brand": "Posnet",
+      "model": "Thermal XL2 A",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2899,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 899 zł netto",
+      "image": "pic/modele/posnet-thermal-xl2-a.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Thermal XL2 A",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2899,
+          "displayPrice": "2 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-temo-online",
+      "brand": "Posnet",
+      "model": "TEMO ONLINE",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2399,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 399 zł netto",
+      "image": "pic/modele/posnet-temo-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "TEMO ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2399,
+          "displayPrice": "2 399 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-trio-online",
+      "brand": "Posnet",
+      "model": "TRIO ONLINE",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2499,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 499 zł netto",
+      "image": "pic/modele/posnet-trio-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "TRIO ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2499,
+          "displayPrice": "2 499 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-hx-online",
+      "brand": "Posnet",
+      "model": "THERMAL HX ONLINE",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 3099,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 3 099 zł netto",
+      "image": "pic/modele/posnet-thermal-hx-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "THERMAL HX ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 3099,
+          "displayPrice": "3 099 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-fawag-box",
+      "brand": "Posnet",
+      "model": "Fawag box",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2099,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 099 zł netto",
+      "image": "pic/modele/posnet-fawag-box.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Fawag box",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2099,
+          "displayPrice": "2 099 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-hd-online",
+      "brand": "Posnet",
+      "model": "THERMAL HD ONLINE",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 3399,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 3 399 zł netto",
+      "image": "pic/modele/posnet-thermal-hd-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "THERMAL HD ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 3399,
+          "displayPrice": "3 399 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

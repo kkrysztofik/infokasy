@@ -1,0 +1,171 @@
+{
+  "meta": {
+    "name": "INFOKASY - katalog produktów",
+    "category": "wagi",
+    "brand": "SATIS",
+    "sourceFile": "satis_wagi_cpt_bw_2026-05-30.xlsx",
+    "generatedAt": "2026-10-03",
+    "notes": "Plik JSON przygotowany do zasilania okna modalnego z wagami SATIS."
+  },
+  "products": [
+    {
+      "id": "satis-cpt10",
+      "category": "wagi-sklepowe",
+      "type": "waga",
+      "brand": "SATIS",
+      "model": "SATIS CPT10",
+      "name": "SATIS CPT10",
+      "image": "pic/modele/satis-cpt10.webp",
+      "priceFrom": 584.25,
+      "currency": "PLN",
+      "priceType": "brutto",
+      "priceLabel": "od 584,25 zł brutto",
+      "features": [
+        "Legalizowana",
+        "Kalkulacja ceny",
+        "Akumulator"
+      ],
+      "description": "Legalizowana waga sklepowa kalkulacyjna z podświetlanymi wyświetlaczami LCD, kalkulacją ceny i obliczaniem reszty.",
+      "specifications": {
+        "capacity": "6/15 kg lub 15/30 kg",
+        "accuracy": "2/5 g lub 5/10 g",
+        "panSize": "22x31 cm",
+        "battery": "6V/4Ah",
+        "warranty": "2 lata"
+      },
+      "sourceUrl": "https://satispolska.pl/272-satis-waga-sklepowa-kalkulacyjna-cpt10.html",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "6/15 kg lub 15/30 kg",
+          "price": 584.25,
+          "currency": "PLN",
+          "priceType": "brutto",
+          "priceLabel": "584,25 zł brutto",
+          "sourceUrl": "https://satispolska.pl/272-satis-waga-sklepowa-kalkulacyjna-cpt10.html",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "satis-cpt20",
+      "category": "wagi-sklepowe",
+      "type": "waga",
+      "brand": "SATIS",
+      "model": "SATIS CPT20",
+      "name": "SATIS CPT20",
+      "image": "pic/modele/satis-cpt20.webp",
+      "priceFrom": 584.25,
+      "currency": "PLN",
+      "priceType": "brutto",
+      "priceLabel": "od 584,25 zł brutto",
+      "features": [
+        "Legalizowana",
+        "LCD z podświetleniem",
+        "Akumulator"
+      ],
+      "description": "Legalizowana waga sklepowa kalkulacyjna z czytelnym LCD, klawiaturą numeryczną, kalkulacją ceny i obliczaniem reszty.",
+      "specifications": {
+        "capacity": "6/15 kg lub 15/30 kg",
+        "accuracy": "2/5 g lub 5/10 g",
+        "panSize": "22x31 cm",
+        "battery": "6V/4Ah",
+        "warranty": "2 lata"
+      },
+      "sourceUrl": "https://satispolska.pl/273-satis-waga-sklepowa-kalkulacyjna-cpt20.html",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "6/15 kg lub 15/30 kg",
+          "price": 584.25,
+          "currency": "PLN",
+          "priceType": "brutto",
+          "priceLabel": "584,25 zł brutto",
+          "sourceUrl": "https://satispolska.pl/273-satis-waga-sklepowa-kalkulacyjna-cpt20.html",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "satis-bw-l-150",
+      "category": "wagi-magazynowe",
+      "type": "waga",
+      "brand": "SATIS",
+      "model": "SATIS BW-L-150",
+      "name": "SATIS BW-L-150",
+      "image": "pic/modele/satis-bw-l-150.webp",
+      "priceFrom": 1169,
+      "currency": "PLN",
+      "priceType": "brutto",
+      "priceLabel": "od 1 169 zł brutto",
+      "features": [
+        "Pomost 40x50 cm",
+        "RS232",
+        "Akumulator"
+      ],
+      "description": "Waga magazynowa jednoczujnikowa z miernikiem BW, pomostem 40x50 cm, RS232, zasilaczem i akumulatorem.",
+      "specifications": {
+        "capacity": "60/150 kg",
+        "accuracy": "20/50 g",
+        "platform": "40x50 cm",
+        "battery": "6V/1,3Ah",
+        "warranty": "2 lata"
+      },
+      "sourceUrl": "https://satispolska.pl/324-satis-waga-magazynowa-bw-l-150-40x50cm-60150kg.html",
+      "scrapedAt": "2026-05-30",
+      "active": true,
+      "variants": [
+        {
+          "version": "60/150 kg, pomost 40x50 cm",
+          "price": 1169,
+          "currency": "PLN",
+          "priceType": "brutto",
+          "priceLabel": "1 169 zł brutto",
+          "sourceUrl": "https://satispolska.pl/324-satis-waga-magazynowa-bw-l-150-40x50cm-60150kg.html",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "satis-ts-60x80-bw",
+      "category": "wagi-magazynowe",
+      "type": "waga",
+      "brand": "SATIS",
+      "model": "SATIS TS 60x80 BW",
+      "name": "SATIS TS 60x80 BW",
+      "image": "pic/modele/satis-ts-60x80-bw.webp",
+      "priceFrom": 2289,
+      "currency": "PLN",
+      "priceType": "brutto",
+      "priceLabel": "od 2 289 zł brutto",
+      "features": [
+        "Pomost 60x80 cm",
+        "RS232",
+        "HOLD"
+      ],
+      "description": "Waga magazynowa jednoczujnikowa z miernikiem BW, pomostem 60x80 cm, RS232, funkcją ważenia kontrolnego i HOLD.",
+      "specifications": {
+        "capacity": "150/300 kg",
+        "platform": "60x80 cm",
+        "battery": "6V/1,3Ah",
+        "warranty": "2 lata"
+      },
+      "sourceUrl": "https://satispolska.pl/257-2389-satis-waga-magazynowa-ts-60x80cm-bw.html",
+      "scrapedAt": "2026-05-30",
+      "active": true,
+      "variants": [
+        {
+          "version": "150/300 kg, pomost 60x80 cm",
+          "price": 2289,
+          "currency": "PLN",
+          "priceType": "brutto",
+          "priceLabel": "2 289 zł brutto",
+          "sourceUrl": "https://satispolska.pl/257-2389-satis-waga-magazynowa-ts-60x80cm-bw.html",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

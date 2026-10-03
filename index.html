@@ -1,0 +1,5379 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INFOKASY - kasy fiskalne, POS, wagi i serwis</title>
+  <meta name="description" content="Sprzedaż, instalacja i serwis kas fiskalnych, drukarek fiskalnych, systemów POS, wag i terminali płatniczych. INFOKASY, ul. Jana Pawła II 1.">
+  <link rel="icon" type="image/png" href="pic/favicon-128x128.png">
+  <link rel="shortcut icon" href="pic/favicon-128x128.png">
+  <link rel="apple-touch-icon" href="pic/favicon-128x128.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       DESIGN TOKENS - inspired by design.md (Webflow system)
+    ========================================================= */
+    :root {
+      --blue:          #146ef5;
+      --blue-400:      #3b89ff;
+      --blue-600:      #0055d4;
+      --blue-bg:       #eef5ff;
+      --near-black:    #080808;
+      --gray-800:      #222222;
+      --gray-700:      #363636;
+      --gray-500:      #5a5a5a;
+      --gray-300:      #ababab;
+      --border:        #d8d8d8;
+      --border-hover:  #898989;
+      --white:         #ffffff;
+      --dpd-red:       #dc002e;
+
+      --shadow-card: rgba(0,0,0,0) 0px 84px 24px,
+                     rgba(0,0,0,0.01) 0px 54px 22px,
+                     rgba(0,0,0,0.04) 0px 30px 18px,
+                     rgba(0,0,0,0.08) 0px 13px 13px,
+                     rgba(0,0,0,0.09) 0px 3px 7px;
+
+      --radius-sm:  4px;
+      --radius-md:  8px;
+      --transition: 0.2s ease;
+    }
+
+    /* =========================================================
+       RESET & BASE
+    ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'WF Visual Sans Variable', 'Inter', Arial, sans-serif;
+      font-weight: 500;
+      background: var(--white);
+      color: var(--near-black);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* =========================================================
+       TYPOGRAPHY HELPERS
+    ========================================================= */
+    .label-upper {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .section-heading {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 600;
+      line-height: 1.04;
+      color: var(--near-black);
+    }
+
+    .sub-heading {
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 500;
+      line-height: 1.40;
+      color: var(--gray-700);
+    }
+
+    .body-text {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.60;
+      color: var(--gray-700);
+    }
+
+    /* =========================================================
+       LAYOUT HELPERS
+    ========================================================= */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-pad { padding: 96px 0; }
+    .section-pad-sm { padding: 72px 0; }
+
+    /* =========================================================
+       BUTTONS
+    ========================================================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 500;
+      font-family: inherit;
+      letter-spacing: -0.16px;
+      cursor: pointer;
+      border: none;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-6px); }
+
+    .btn-primary {
+      background: var(--blue);
+      color: var(--white);
+    }
+    .btn-primary:hover {
+      background: var(--blue-600);
+      box-shadow: 0 16px 32px rgba(20, 110, 245, 0.30);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--near-black);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-card);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--blue);
+      padding: 14px 0;
+    }
+    .btn-ghost:hover { transform: translateY(-4px); }
+    .btn-ghost svg { transition: transform var(--transition); }
+    .btn-ghost:hover svg { transform: translateX(4px); }
+
+    /* =========================================================
+       NAV
+    ========================================================= */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      gap: 24px;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav__logo img {
+      height: 44px;
+      width: auto;
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--gray-700);
+      transition: color var(--transition);
+    }
+    .nav__links a:hover { color: var(--blue); }
+
+    .nav__contact {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav__phone {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--near-black);
+      transition: color var(--transition);
+    }
+    .nav__phone:hover { color: var(--blue); }
+
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav__hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--near-black);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* Mobile nav */
+    .nav__mobile {
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .nav__mobile.is-open { display: flex; }
+    .nav__mobile a {
+      display: block;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--border);
+      transition: color var(--transition), background var(--transition);
+    }
+    .nav__mobile a:last-child { border-bottom: none; }
+    .nav__mobile a:hover { color: var(--blue); background: var(--blue-bg); }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+    .hero {
+      background: linear-gradient(135deg, #f8fbff 0%, #eef5ff 60%, #e4efff 100%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(20,110,245,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      padding: 96px 0 80px;
+    }
+
+    .hero__label { margin-bottom: 20px; }
+
+    .hero__heading {
+      font-size: clamp(36px, 5.5vw, 72px);
+      font-weight: 600;
+      line-height: 1.04;
+      letter-spacing: -0.8px;
+      color: var(--near-black);
+      margin-bottom: 24px;
+    }
+
+    .hero__heading span { color: var(--blue); }
+
+    .hero__desc {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.50;
+      color: var(--gray-700);
+      margin-bottom: 40px;
+      max-width: 480px;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .hero__trust {
+      margin-top: 48px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(20,110,245,0.08);
+      border: 1px solid rgba(20,110,245,0.15);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .hero__visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero__img-wrap {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      background: var(--white);
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .hero__img-wrap img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Slideshow */
+    .hero__slideshow {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+    }
+
+    .hero__slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    .hero__slide.active { opacity: 1; }
+
+    .hero__slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      padding: 0;
+    }
+
+    .hero__slide-dots {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .hero__slide-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.3s;
+    }
+    .hero__slide-dot.active { background: var(--white); }
+
+    .hero__float-card {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero__float-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--blue-bg);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .hero__float-text strong { display: block; font-size: 14px; font-weight: 600; color: var(--near-black); }
+    .hero__float-text span  { font-size: 12px; color: var(--gray-500); }
+
+    /* =========================================================
+       OFERTA
+    ========================================================= */
+    .oferta { background: var(--white); }
+
+    .section-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 64px;
+    }
+
+    .section-header .label-upper { margin-bottom: 12px; display: block; }
+    .section-header .section-heading { margin-bottom: 16px; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      cursor: default;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-card);
+      border-color: var(--border-hover);
+    }
+
+    .card__img-wrap {
+      height: 180px;
+      margin: -32px -32px 24px;
+      background: #f8f9fb;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+
+    .card__img-wrap img {
+      max-height: 150px;
+      max-width: calc(100% - 32px);
+      object-fit: contain;
+      transition: transform var(--transition);
+    }
+
+    .card:hover .card__img-wrap img { transform: scale(1.04); }
+
+    .card__icon {
+      width: 52px;
+      height: 52px;
+      background: var(--blue-bg);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .card__icon svg { width: 26px; height: 26px; color: var(--blue); }
+
+    .card__title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--near-black);
+      margin-bottom: 10px;
+      line-height: 1.30;
+    }
+
+    .card__desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--gray-700);
+      line-height: 1.60;
+    }
+
+    .simulator-feature {
+      margin-top: 40px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.25fr);
+      min-height: 520px;
+    }
+
+    .simulator-feature__copy {
+      padding: clamp(28px, 5vw, 48px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+      border-right: 1px solid var(--border);
+    }
+
+    .simulator-feature__title {
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.08;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      color: var(--near-black);
+      max-width: 10em;
+    }
+
+    .simulator-feature__text {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.58;
+      color: var(--gray-700);
+      max-width: 34em;
+    }
+
+    .simulator-feature__list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      color: var(--gray-800);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .simulator-feature__list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .simulator-feature__list li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-top: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .simulator-feature__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .simulator-feature__frame {
+      position: relative;
+      background: #eef5ff;
+      min-height: 520px;
+    }
+
+    .simulator-feature__frame iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 520px;
+      border: 0;
+      display: block;
+      background: #f4f8ff;
+    }
+
+    /* =========================================================
+       MARKI
+    ========================================================= */
+    .marki { background: var(--blue-bg); border-top: 1px solid rgba(20,110,245,0.12); border-bottom: 1px solid rgba(20,110,245,0.12); }
+
+    .marki__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .marki__grid {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 16px;
+      width: 100%;
+      max-width: 1140px;
+    }
+
+    .brand-card {
+      flex: 0 0 calc((100% - 80px) / 6);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      text-align: center;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      box-shadow: rgba(0,0,0,0.04) 0px 4px 12px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .brand-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-card);
+      border-color: var(--blue);
+    }
+
+    .brand-card__img-wrap {
+      background: #f8f9fb;
+      padding: 20px 16px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 160px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-card__img-wrap img {
+      max-height: 120px;
+      max-width: 100%;
+      width: auto;
+      object-fit: contain;
+      transition: transform var(--transition);
+    }
+
+    .brand-card:hover .brand-card__img-wrap img { transform: scale(1.05); }
+
+    .brand-card__body { padding: 16px 16px 20px; }
+
+    .brand-card__name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--near-black);
+      letter-spacing: -0.3px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .brand-card__sub {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--gray-300);
+    }
+
+    .marki__note {
+      font-size: 15px;
+      color: var(--gray-500);
+      text-align: center;
+    }
+
+    /* =========================================================
+       DLACZEGO INFOKASY
+    ========================================================= */
+    .dlaczego { background: var(--white); }
+
+    .dlaczego__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 64px;
+    }
+
+    .benefit {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .benefit__icon {
+      width: 44px;
+      height: 44px;
+      background: var(--blue-bg);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .benefit__icon svg { width: 22px; height: 22px; color: var(--blue); }
+
+    .benefit__title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--near-black);
+      line-height: 1.30;
+    }
+
+    .benefit__desc {
+      font-size: 15px;
+      color: var(--gray-700);
+      line-height: 1.60;
+    }
+
+    /* =========================================================
+       DPD
+    ========================================================= */
+    .dpd-section {
+      background: var(--near-black);
+      color: var(--white);
+    }
+
+    .dpd__inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .dpd__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--dpd-red);
+      color: var(--white);
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .dpd__heading {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 600;
+      line-height: 1.10;
+      margin-bottom: 16px;
+    }
+
+    .dpd__desc {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.60;
+      color: rgba(255,255,255,0.70);
+      max-width: 520px;
+    }
+
+    .dpd__cta-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .btn-dpd {
+      background: var(--dpd-red);
+      color: var(--white);
+      width: 180px;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 600;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform var(--transition), background var(--transition);
+      text-decoration: none;
+    }
+    .btn-dpd:hover {
+      transform: translateY(-6px);
+      background: #b30024;
+    }
+
+    .dpd__logo {
+      width: 180px;
+      max-width: 180px;
+      height: auto;
+      border-radius: var(--radius-sm);
+      margin-bottom: 4px;
+    }
+
+    .dpd__note {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      text-align: right;
+    }
+
+    /* =========================================================
+       KONTAKT
+    ========================================================= */
+    .kontakt { background: var(--blue-bg); }
+
+    .kontakt__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .kontakt__info { display: flex; flex-direction: column; gap: 32px; }
+
+    .kontakt__detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .kontakt__detail-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: rgba(0,0,0,0.04) 0px 2px 8px;
+    }
+    .kontakt__detail-icon svg { width: 20px; height: 20px; color: var(--blue); }
+
+    .kontakt__detail-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--gray-300);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .kontakt__detail-value {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--near-black);
+    }
+
+    .kontakt__detail-value a {
+      color: var(--blue);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .kontakt__detail-value a:hover { color: var(--blue-600); }
+
+    .kontakt__actions { display: flex; flex-wrap: nowrap; gap: 0; justify-content: space-between; margin-top: 16px; }
+    .kontakt__actions .btn { flex: 1; justify-content: center; }
+    .kontakt__actions .btn + .btn { margin-left: 12px; }
+
+    .kontakt__map {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .map-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 48px 32px;
+      background: linear-gradient(135deg, #f0f6ff 0%, #e8f0fe 100%);
+      text-align: center;
+    }
+
+    .map-placeholder__icon {
+      width: 64px;
+      height: 64px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-card);
+    }
+    .map-placeholder__icon svg { width: 32px; height: 32px; color: var(--blue); }
+
+    .map-placeholder__title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--near-black);
+    }
+
+    .map-placeholder__addr {
+      font-size: 15px;
+      color: var(--gray-500);
+    }
+
+    .map-open-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue);
+      padding: 10px 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: transform var(--transition), box-shadow var(--transition);
+      text-decoration: none;
+    }
+    .map-open-link:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+    .footer {
+      background: var(--near-black);
+      color: rgba(255,255,255,0.55);
+      padding: 40px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer__logo { display: flex; align-items: center; gap: 10px; }
+    .footer__logo img { height: 32px; background: var(--white); padding: 3px 8px; border-radius: var(--radius-sm); }
+    .footer__logo-name { font-size: 16px; font-weight: 700; color: var(--white); }
+
+    .footer__copy { font-size: 13px; }
+
+    .footer__contact {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .footer__totop {
+      text-align: center;
+    }
+    .footer__totop a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      transition: color var(--transition);
+    }
+    .footer__totop a:hover { color: var(--white); }
+
+    .footer__links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .footer__links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      transition: color var(--transition);
+    }
+    .footer__links a:hover { color: var(--white); }
+
+    /* =========================================================
+       MODAL – PRODUKTY
+    ========================================================= */
+    .pm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,8,8,0.55);
+      z-index: 1000;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-y: auto;
+    }
+    .pm-overlay.is-open { display: flex; }
+
+    .pm-modal {
+      background: var(--white);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 48px);
+    }
+
+    .pm-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      border-radius: 12px 12px 0 0;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .pm-header h2 { font-size: 22px; font-weight: 700; color: var(--near-black); }
+    .pm-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      color: var(--gray-500);
+      font-size: 20px;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .pm-close:hover { border-color: var(--border-hover); color: var(--near-black); background: var(--blue-bg); }
+
+    .pm-filters {
+      display: flex;
+      gap: 8px;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      flex-shrink: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pm-filter {
+      padding: 7px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .pm-filter:hover { border-color: var(--blue); color: var(--blue); }
+    .pm-filter.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+    .pm-body {
+      padding: 24px 28px 28px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .pm-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .pm-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow var(--transition), border-color var(--transition);
+    }
+    .pm-card:hover { box-shadow: var(--shadow-card); border-color: var(--border-hover); }
+
+    .pm-card__img {
+      width: 100%;
+      height: 160px;
+      object-fit: contain;
+      background: var(--blue-bg);
+      padding: 16px;
+      display: block;
+    }
+    .pm-card__img-placeholder {
+      width: 100%;
+      height: 160px;
+      background: var(--blue-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-300);
+      font-size: 13px;
+    }
+
+    .pm-card__body { padding: 16px; display: flex; flex-direction: column; flex: 1; gap: 8px; }
+
+    .pm-card__brand {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+    .pm-card__name { font-size: 16px; font-weight: 700; color: var(--near-black); line-height: 1.3; }
+    .pm-card__price { font-size: 15px; font-weight: 600; color: var(--gray-700); }
+
+    .pm-card__features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 4px 0;
+    }
+    .pm-card__features li {
+      font-size: 13px;
+      color: var(--gray-500);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.4;
+    }
+    .pm-card__features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--blue);
+      font-size: 11px;
+      top: 1px;
+    }
+
+    .pm-card__actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 12px; }
+    .pm-card__btn {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+    .pm-card__btn--primary { background: var(--blue); color: var(--white); }
+    .pm-card__btn--primary:hover { background: var(--blue-600); }
+    .pm-card__btn--link {
+      background: transparent;
+      color: var(--blue);
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .pm-card__btn--link:hover { border-color: var(--blue); }
+
+    .pm-empty { text-align: center; padding: 48px 24px; color: var(--gray-500); font-size: 15px; }
+    .pm-error { text-align: center; padding: 48px 24px; color: #c0392b; font-size: 15px; }
+    .pm-loading { text-align: center; padding: 48px 24px; color: var(--gray-500); font-size: 15px; }
+
+    /* Formularz kontaktowy w modalu */
+    .pm-form-wrap {
+      padding: 8px 0;
+    }
+    .pm-form-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    .pm-form-back:hover { text-decoration: underline; }
+    .pm-form-title { font-size: 18px; font-weight: 700; color: var(--near-black); margin-bottom: 4px; }
+    .pm-form-sub { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; }
+
+    .pm-form { display: flex; flex-direction: column; gap: 14px; max-width: 560px; }
+    .pm-form label { font-size: 13px; font-weight: 600; color: var(--gray-700); display: block; margin-bottom: 5px; }
+    .pm-form input,
+    .pm-form textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--near-black);
+      transition: border-color var(--transition);
+      background: var(--white);
+    }
+    .pm-form input:focus,
+    .pm-form textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(20,110,245,0.1); }
+    .pm-form textarea { resize: vertical; min-height: 100px; }
+    .pm-form__submit {
+      padding: 12px 28px;
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background var(--transition);
+      align-self: flex-start;
+    }
+    .pm-form__submit:hover { background: var(--blue-600); }
+    .pm-form__success { color: #1a7a4a; font-size: 15px; font-weight: 600; padding: 16px 0; }
+
+    @media (max-width: 900px) {
+      .pm-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .pm-grid { grid-template-columns: 1fr; }
+      .pm-header { padding: 18px 16px 14px; }
+      .pm-body { padding: 16px; }
+      .pm-filters { padding: 12px 16px; flex-wrap: nowrap; }
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    /* ≤992px - tablet */
+    @media (max-width: 992px) {
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; }
+
+      .hero__inner { grid-template-columns: 1fr; gap: 40px; padding: 64px 0 48px; }
+      .hero__desc { max-width: 100%; }
+      .hero__visual { justify-content: center; }
+      .hero__img-wrap { max-width: 360px; }
+      .hero__img-wrap img { height: 320px; }
+
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .simulator-feature { grid-template-columns: 1fr; }
+      .simulator-feature__copy { border-right: 0; border-bottom: 1px solid var(--border); }
+
+      .marki__grid { grid-template-columns: repeat(2, 1fr); max-width: 480px; }
+
+      .dlaczego__grid { grid-template-columns: repeat(2, 1fr); }
+
+      .dpd__inner { grid-template-columns: 1fr; gap: 32px; }
+      .dpd__cta-wrap { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+      .dpd__note { text-align: left; }
+
+      .kontakt__inner { grid-template-columns: 1fr; gap: 40px; }
+      .kontakt__map { min-height: 280px; }
+    }
+
+    /* ≤768px - large mobile */
+    @media (max-width: 768px) {
+      .section-pad { padding: 64px 0; }
+      .section-pad-sm { padding: 48px 0; }
+
+      .hero__heading { font-size: clamp(28px, 8vw, 44px); }
+      .hero__desc { font-size: 17px; }
+      .hero__float-card { display: none; }
+
+      .cards-grid { grid-template-columns: 1fr; gap: 16px; }
+      .card { padding: 24px; }
+      .simulator-feature { margin-top: 28px; min-height: auto; }
+      .simulator-feature__frame { display: none; }
+      .simulator-feature__title { max-width: none; }
+      .simulator-feature__actions { width: 100%; }
+      .simulator-feature__actions .btn { justify-content: center; width: 100%; }
+
+      .dlaczego__grid { grid-template-columns: 1fr; gap: 24px; }
+
+      .footer__inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+
+    /* ≤479px - small mobile */
+    @media (max-width: 479px) {
+      .container { padding: 0 16px; }
+      .hero__inner { padding: 48px 0 40px; }
+      .btn { padding: 13px 20px; font-size: 15px; }
+      .hero__actions { flex-direction: column; align-items: stretch; }
+      .hero__actions .btn { text-align: center; justify-content: center; }
+      .marki__grid { grid-template-columns: repeat(2, 1fr); }
+      .nav__phone .phone-text { display: none; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+      .btn:hover, .card:hover, .brand-card:hover { transform: none !important; }
+    }
+
+    /* ── Modal Terminale płatnicze ──────────────────────────────── */
+    #tm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,8,8,0.55);
+      z-index: 1100;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-y: auto;
+    }
+    #tm-overlay.is-open { display: flex; }
+
+    #tm-modal {
+      background: var(--white);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 48px);
+    }
+
+    #tm-modal .pm-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #e8e8e8;
+      flex-shrink: 0;
+    }
+    #tm-modal .pm-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--near-black);
+      margin: 0;
+    }
+    #tm-modal .pm-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      padding: 4px;
+      border-radius: 6px;
+      line-height: 1;
+      transition: color 0.2s, background 0.2s;
+    }
+    #tm-modal .pm-close:hover { color: var(--near-black); background: #f0f0f0; }
+
+    #tm-modal .pm-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    #terminal-lead-form .tm-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 560px) {
+      #terminal-lead-form .tm-row { grid-template-columns: 1fr; }
+      #tm-modal .pm-body { padding: 16px; }
+    }
+
+    #terminal-lead-form .tm-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+    #terminal-lead-form .tm-field.tm-full { grid-column: 1 / -1; }
+
+    #terminal-lead-form label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #444;
+    }
+    #terminal-lead-form label .tm-req { color: var(--blue); margin-left: 2px; }
+
+    #terminal-lead-form input,
+    #terminal-lead-form select,
+    #terminal-lead-form textarea {
+      border: 1px solid #d0d0d0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: var(--near-black);
+      background: #fafafa;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    #terminal-lead-form input:focus,
+    #terminal-lead-form select:focus,
+    #terminal-lead-form textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(20,110,245,0.12);
+      background: #fff;
+    }
+    #terminal-lead-form textarea { resize: vertical; min-height: 80px; }
+
+    #terminal-lead-form .tm-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    #terminal-lead-form .tm-checkbox input[type=checkbox] {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+    #terminal-lead-form .tm-checkbox label {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #555;
+      cursor: pointer;
+    }
+
+    #terminal-lead-form .tm-submit {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    #terminal-lead-form .tm-submit:hover { background: #0f5cd8; }
+    #terminal-lead-form .tm-submit:disabled { opacity: 0.6; cursor: default; }
+
+    #tm-success {
+      display: none;
+      background: #eafaf1;
+      border: 1px solid #27ae60;
+      color: #1a6e3a;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+    #tm-error {
+      display: none;
+      background: #fff0f0;
+      border: 1px solid #e74c3c;
+      color: #922b21;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      font-size: 0.92rem;
+    }
+
+    /* ── Formularz produktowy – rozbudowany ──────────────────── */
+    .pm-req { color: var(--blue); margin-left: 2px; }
+
+    .pm-form-row { margin-bottom: 14px; }
+    .pm-form-row--2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 560px) {
+      .pm-form-row--2 { grid-template-columns: 1fr; }
+    }
+
+    .pm-form select {
+      border: 1px solid #d0d0d0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: var(--near-black);
+      background: #fafafa;
+      width: 100%;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: auto;
+    }
+    .pm-form select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(20,110,245,0.12);
+      background: #fff;
+    }
+
+    .pm-form-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .pm-form-checkbox input[type=checkbox] {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+    .pm-form-checkbox label {
+      font-size: 0.8rem;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .pm-form__error {
+      background: #fff0f0;
+      border: 1px solid #e74c3c;
+      color: #922b21;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 12px;
+      font-size: 0.88rem;
+    }
+
+    .pm-form__success-screen {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px 0 8px;
+      gap: 8px;
+    }
+    .pm-form__success-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #eafaf1;
+      color: #27ae60;
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pm-form__success-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--near-black);
+    }
+    .pm-form__success-screen p {
+      font-size: 0.9rem;
+      color: #555;
+      margin: 0;
+    }
+
+    /* ── Modal Serwis – profesjonalny ────────────────────────── */
+    #sm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8,8,8,0.55);
+      z-index: 1200;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-y: auto;
+    }
+    #sm-overlay.is-open { display: flex; }
+
+    #sm-modal {
+      background: var(--white);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 860px;
+      margin: auto;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+      overflow: hidden;
+      max-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Nagłówek */
+    #sm-modal .sm-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 22px 28px 18px;
+      border-bottom: 1px solid #e8e8e8;
+      flex-shrink: 0;
+      gap: 12px;
+    }
+    #sm-modal .sm-header-text h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--near-black);
+      margin: 0 0 4px;
+    }
+    #sm-modal .sm-header-text p {
+      font-size: 0.88rem;
+      color: #666;
+      margin: 0;
+      line-height: 1.5;
+    }
+    #sm-modal .pm-close {
+      background: none; border: none; cursor: pointer;
+      color: #888; padding: 4px; border-radius: 6px; line-height: 1;
+      transition: color .2s, background .2s; flex-shrink: 0; margin-top: 2px;
+    }
+    #sm-modal .pm-close:hover { color: var(--near-black); background: #f0f0f0; }
+
+    /* Ciało modala */
+    .sm-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Lewa kolumna – usługi */
+    .sm-col-left {
+      padding: 24px 20px 24px 28px;
+      border-right: 1px solid #f0f0f0;
+    }
+    .sm-col-left h3 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--blue);
+      margin: 0 0 14px;
+    }
+    .sm-service-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: #f8faff;
+      border: 1px solid #e8f0fe;
+      transition: border-color .2s, background .2s;
+    }
+    .sm-service-card:hover { border-color: #c0d8fb; background: #f0f6ff; }
+    .sm-service-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(20,110,245,0.08);
+      border: 1px solid rgba(20,110,245,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sm-service-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--blue);
+    }
+    .sm-service-card h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--near-black);
+      margin: 0 0 2px;
+    }
+    .sm-service-card p {
+      font-size: 0.8rem;
+      color: #666;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Prawa kolumna */
+    .sm-col-right {
+      padding: 24px 28px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sm-col-right h3 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--blue);
+      margin: 0 0 10px;
+    }
+
+    /* Lista zalet */
+    .sm-benefits {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sm-benefits li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--near-black);
+    }
+    .sm-benefits li::before {
+      content: '';
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #eaf1ff;
+      border: 1.5px solid var(--blue);
+      flex-shrink: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%23146ef5' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: 11px;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* Kontakt */
+    .sm-contact-block { display: flex; flex-direction: column; gap: 6px; }
+    .sm-phone {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--near-black);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color .2s;
+    }
+    .sm-phone:hover { color: var(--blue); }
+    .sm-phone::before { content: '📞'; font-size: 1rem; }
+    .sm-email {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .sm-email:hover { text-decoration: underline; }
+
+    /* Niebieski box CTA */
+    .sm-cta-box {
+      background: linear-gradient(135deg, var(--blue) 0%, #0f5cd8 100%);
+      border-radius: 10px;
+      padding: 18px 20px;
+      color: #fff;
+    }
+    .sm-cta-box h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: #fff;
+    }
+    .sm-cta-box p {
+      font-size: 0.82rem;
+      margin: 0 0 14px;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.5;
+    }
+    .sm-cta-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .sm-btn-primary {
+      background: #fff;
+      color: var(--blue);
+      border: none;
+      border-radius: 7px;
+      padding: 9px 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .sm-btn-primary:hover { background: #f0f6ff; transform: translateY(-1px); }
+    .sm-btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      border-radius: 7px;
+      padding: 9px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .2s, border-color .2s;
+      display: inline-flex;
+      align-items: center;
+    }
+    .sm-btn-outline:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+
+    /* Formularz serwisowy */
+    #sm-form-view {
+      display: none;
+      padding: 24px 28px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .sm-form-back {
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sm-form-back:hover { text-decoration: underline; }
+
+    #sm-service-form .sm-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    #sm-service-form .sm-form-row.sm-full {
+      grid-template-columns: 1fr;
+    }
+    #sm-service-form label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 5px;
+    }
+    #sm-service-form .sm-req { color: var(--blue); }
+    #sm-service-form input,
+    #sm-service-form select,
+    #sm-service-form textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #d0d0d0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: var(--near-black);
+      background: #fafafa;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    #sm-service-form input:focus,
+    #sm-service-form select:focus,
+    #sm-service-form textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(20,110,245,0.12);
+      background: #fff;
+    }
+    #sm-service-form textarea { resize: vertical; min-height: 90px; }
+    .sm-form-submit {
+      width: 100%;
+      margin-top: 6px;
+      padding: 12px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, opacity .2s;
+    }
+    .sm-form-submit:hover { background: #0f5cd8; }
+    .sm-form-submit:disabled { opacity: 0.6; cursor: default; }
+    .sm-form-error {
+      display: none;
+      background: #fff0f0;
+      border: 1px solid #e74c3c;
+      color: #922b21;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 12px;
+      font-size: 0.88rem;
+    }
+    .sm-form-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 30px 0 10px;
+      gap: 10px;
+    }
+    .sm-form-success-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #eafaf1;
+      color: #27ae60;
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sm-form-success h4 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--near-black);
+      margin: 0;
+    }
+    .sm-form-success p { font-size: 0.9rem; color: #555; margin: 0; }
+
+    /* Responsywność */
+    @media (max-width: 640px) {
+      .sm-body { grid-template-columns: 1fr; }
+      .sm-col-left { border-right: none; border-bottom: 1px solid #f0f0f0; padding: 20px; }
+      .sm-col-right { padding: 20px; }
+      #sm-modal .sm-header { padding: 18px 20px 14px; }
+      #sm-service-form .sm-form-row { grid-template-columns: 1fr; }
+      #sm-form-view { padding: 20px; }
+    }
+  </style>
+</head>
+
+<body id="top">
+
+  <!-- ====================================================
+       NAV
+  ==================================================== -->
+  <header class="nav" role="banner">
+    <div class="container">
+      <div class="nav__inner">
+
+        <a href="#" class="nav__logo" aria-label="INFOKASY - strona główna">
+          <img src="pic/mpa0oypx-logo.png" alt="Logo INFOKASY" height="44">
+        </a>
+
+        <nav aria-label="Nawigacja główna">
+          <ul class="nav__links">
+            <li><a href="#oferta">Oferta</a></li>
+            <li><a href="#marki">Marki</a></li>
+            <li><a href="#dlaczego">O nas</a></li>
+            <li><a href="#symulator">Symulator</a></li>
+            <li><a href="#dpd">DPD</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav__contact">
+          <a href="tel:+48876104163" class="nav__phone" aria-label="Zadzwoń: 87 610 41 63">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.33C1.61 2.18 2.48 1.2 3.64 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.12 6.12l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="phone-text">87 610 41 63</span>
+          </a>
+          <a href="tel:+48600994205" class="nav__phone" aria-label="Zadzwoń: 600 994 205">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.33C1.61 2.18 2.48 1.2 3.64 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.12 6.12l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span class="phone-text">600 994 205</span>
+          </a>
+          <button class="nav__hamburger" aria-label="Otwórz menu" aria-expanded="false" id="hamburger">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    <nav class="nav__mobile" id="mobileMenu" aria-label="Menu mobilne">
+      <a href="#oferta">Oferta</a>
+      <a href="#marki">Marki</a>
+      <a href="#dlaczego">O nas</a>
+      <a href="#symulator">Symulator</a>
+      <a href="#dpd">Punkt DPD</a>
+      <a href="#kontakt">Kontakt</a>
+      <a href="tel:+48876104163" style="color: var(--blue); font-weight: 600;">Telefon: 87 610 41 63</a>
+      <a href="tel:+48600994205" style="color: var(--blue); font-weight: 600;">Kom: 600 994 205</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ====================================================
+         HERO
+    ==================================================== -->
+    <section class="hero" id="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <div class="hero__inner">
+
+          <div class="hero__content">
+            <span class="label-upper hero__label">Kasy fiskalne · Drukarki · POS · Serwis</span>
+            <h1 class="hero__heading" id="hero-heading">
+              Kasy fiskalne,<br>drukarki, POS<br>i <span style="color: var(--near-black);">serwis</span>
+            </h1>
+            <p class="hero__desc">
+              Sprzedaż, instalacja i serwis kas fiskalnych, drukarek fiskalnych, systemów POS, wag oraz terminali płatniczych. Jeden partner - kompleksowa obsługa.
+            </p>
+            <div class="hero__actions">
+              <a href="tel:+48876104163" class="btn btn-primary" style="width:180px;justify-content:center;" aria-label="Zadzwoń do nas: 87 610 41 63">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.33C1.61 2.18 2.48 1.2 3.64 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.12 6.12l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                87 610 41 63
+              </a>
+              <a href="tel:+48600994205" class="btn btn-primary" style="width:180px;justify-content:center;" aria-label="Zadzwoń do nas: 600 994 205">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.33C1.61 2.18 2.48 1.2 3.64 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.12 6.12l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                600 994 205
+              </a>
+              <a href="mailto:kontakt@infokasy.pl" class="btn btn-outline" style="width:180px;justify-content:center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                Napisz e-mail
+              </a>
+              <a href="#oferta" class="btn btn-outline" style="width:180px;justify-content:center;">
+                Sprawdź ofertę
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+            <div class="hero__trust">
+            </div>
+          </div>
+
+          <div class="hero__visual" aria-hidden="true">
+            <div class="hero__img-wrap">
+              <div class="hero__slideshow" id="heroSlideshow">
+
+                <div class="hero__slide active">
+                  <img src="pic/firma.webp" alt="INFOKASY - siedziba firmy" loading="eager">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/wystawa.webp" alt="Wystawa kas fiskalnych" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/novitus1.webp" alt="Kasa fiskalna Novitus" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/datecs1.webp" alt="Kasa fiskalna Datecs" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/posnet1.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/posnet2.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/posnet3.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/posnet4.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/satis1.webp" alt="Kasa fiskalna Satis" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/sensorWag1.webp" alt="Waga Sensor" loading="lazy">
+                </div>
+                <div class="hero__slide">
+                  <img src="pic/sensorwag2.webp" alt="Waga Sensor" loading="lazy">
+                </div>
+
+                <div class="hero__slide-dots" id="heroSlideDots"></div>
+              </div>
+            </div>
+            <div class="hero__float-card">
+              <div class="hero__float-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#146ef5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div class="hero__float-text">
+                <strong>Serwis i instalacja</strong>
+                <span>Sprzedaż · Montaż · Naprawa</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================
+         OFERTA
+    ==================================================== -->
+    <section class="oferta section-pad" id="oferta" aria-labelledby="oferta-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="label-upper">Oferta</span>
+          <h2 class="section-heading" id="oferta-heading">Wszystko, czego potrzebujesz</h2>
+          <p class="sub-heading">Kompleksowa obsługa urządzeń fiskalnych, systemów POS, wag i terminali płatniczych.</p>
+        </div>
+
+        <div class="cards-grid">
+
+          <!-- Kasy i drukarki fiskalne -->
+          <article class="card" data-open-products-modal style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz katalog kas i drukarek fiskalnych">
+            <div class="card__img-wrap">
+              <img src="pic/mpa0oymt-datecs_przod.png" alt="Kasa fiskalna Datecs" loading="lazy">
+            </div>
+            <div class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><rect width="4" height="4" x="7" y="13" rx="1"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <h3 class="card__title">Kasy i drukarki fiskalne</h3>
+            <p class="card__desc">Sprzedaż kas i drukarek fiskalnych wiodących marek. Dobierzemy urządzenie dopasowane do Twojej działalności - sklep, gastronomia, usługi.</p>
+            <span class="btn-ghost" style="margin-top:8px;font-size:14px;">Zobacz modele →</span>
+          </article>
+
+          <!-- Systemy POS -->
+          <article class="card" data-open-pos-modal style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz katalog systemów POS">
+            <div class="card__img-wrap">
+              <img src="pic/mpa0oyl0-vero.webp" alt="System POS Vero" loading="lazy">
+            </div>
+            <div class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="12" x="3" y="4" rx="2"/><line x1="2" x2="22" y1="20" y2="20"/><path d="M7 20h10"/><rect width="4" height="3" x="10" y="14" rx="1"/></svg>
+            </div>
+            <h3 class="card__title">Systemy POS</h3>
+            <p class="card__desc">Kompleksowe systemy punktów sprzedaży - sprzedaż, konfiguracja i serwis. Rozwiązania dla sklepów, restauracji i punktów usługowych.</p>
+          </article>
+
+          <!-- Wagi -->
+          <article class="card" data-open-wagi-modal style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz katalog wag">
+            <div class="card__img-wrap">
+              <img src="pic/mpa0oyky-sensorwag.webp" alt="Waga handlowa" loading="lazy">
+            </div>
+            <div class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg>
+            </div>
+            <h3 class="card__title">Wagi</h3>
+            <p class="card__desc">Sprzedaż, naprawa, kalibracja wag oraz transport do legalizacji. Obsługujemy wagi handlowe i przemysłowe różnych typów.</p>
+          </article>
+
+          <!-- Terminale płatnicze -->
+          <article class="card" data-open-terminal-form style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz formularz – Terminale płatnicze">
+            <div class="card__img-wrap">
+              <img src="pic/mpa0oyjm-paxa920.webp" alt="Terminal płatniczy PAX A920" loading="lazy">
+            </div>
+            <div class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 15h.01M10 15h.01M6 19h.01"/></svg>
+            </div>
+            <h3 class="card__title">Terminale płatnicze</h3>
+            <p class="card__desc">Instalacja i serwis terminali płatniczych. Przyjmuj płatności kartą i zbliżeniowo - skonfigurujemy wszystko za Ciebie.</p>
+          </article>
+
+          <!-- Serwis i instalacje -->
+          <article class="card" data-open-serwis-modal style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz mapę obsługiwanych miejscowości">
+            <div class="card__img-wrap">
+              <img src="pic/mpa0oym3-01_WP25.webp" alt="Posnet WP-25 - serwis kas fiskalnych" loading="lazy">
+            </div>
+            <div class="card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <h3 class="card__title">Serwis i instalacje</h3>
+            <p class="card__desc">Profesjonalny serwis kas fiskalnych, drukarek, wag i terminali. Szybkie naprawy, przeglądy i konfiguracja - działamy sprawnie i rzetelnie.</p>
+          </article>
+
+          <!-- Punkt DPD -->
+          <article class="card" style="border-color: rgba(220,0,46,0.2); background: linear-gradient(135deg, #fff8f8 0%, #fff 100%); cursor:pointer;" role="button" tabindex="0" aria-label="Przejdź do serwisu Moja Paczka DPD" onclick="window.open('https://mojapaczka.dpd.com.pl/login','_blank','noopener')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('https://mojapaczka.dpd.com.pl/login','_blank','noopener')}">
+            <div class="card__img-wrap">
+              <img src="pic/mpa0oykx-przesylka.webp" alt="Nadawanie paczek DPD" loading="lazy">
+            </div>
+            <div class="card__icon" style="background: rgba(220,0,46,0.08);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#dc002e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3 class="card__title">Punkt DPD Pickup</h3>
+            <p class="card__desc">Nadaj lub odbierz swoją paczkę. Jesteśmy autoryzowanym punktem DPD - szybko, wygodnie, lokalnie.</p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================
+         MARKI
+    ==================================================== -->
+    <section class="marki section-pad-sm" id="marki" aria-labelledby="marki-heading">
+      <div class="container">
+        <div class="marki__inner">
+          <div class="section-header" style="margin-bottom: 0;">
+            <span class="label-upper">Obsługiwane marki</span>
+            <h2 class="section-heading" id="marki-heading">Autoryzowany serwis<br>wiodących marek</h2>
+          </div>
+
+          <div class="marki__grid">
+            <a class="brand-card" href="https://www.posnet.com.pl" target="_blank" rel="noopener noreferrer" aria-label="Posnet - strona producenta (otwiera się w nowej karcie)">
+              <div class="brand-card__img-wrap">
+                <img src="pic/mpa0oyjm-posnetfawag.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+              </div>
+              <div class="brand-card__body">
+                <span class="brand-card__name">Posnet</span>
+                <span class="brand-card__sub">Kasy fiskalne</span>
+              </div>
+            </a>
+            <a class="brand-card" href="https://www.novitus.pl" target="_blank" rel="noopener noreferrer" aria-label="Novitus - strona producenta (otwiera się w nowej karcie)">
+              <div class="brand-card__img-wrap">
+                <img src="pic/mpa0oyjk-novitus-next-pro-online-01.webp" alt="Kasa fiskalna Novitus Next Pro Online" loading="lazy">
+              </div>
+              <div class="brand-card__body">
+                <span class="brand-card__name">Novitus</span>
+                <span class="brand-card__sub">Kasy fiskalne</span>
+              </div>
+            </a>
+            <a class="brand-card" href="https://www.datecs-polska.pl" target="_blank" rel="noopener noreferrer" aria-label="Datecs - strona producenta (otwiera się w nowej karcie)">
+              <div class="brand-card__img-wrap">
+                <img src="pic/mpa0oyl9-wp-50-kasa-datecs.webp" alt="Kasa fiskalna Datecs WP-50" loading="lazy">
+              </div>
+              <div class="brand-card__body">
+                <span class="brand-card__name">Datecs</span>
+                <span class="brand-card__sub">Kasy fiskalne</span>
+              </div>
+            </a>
+            <a class="brand-card" href="https://aclas-polska.pl" target="_blank" rel="noopener noreferrer" aria-label="Aclas - strona producenta (otwiera się w nowej karcie)">
+              <div class="brand-card__img-wrap">
+                <img src="pic/mpa0oypr-i-aclas-online-kos-on-lan-wifi.webp" alt="Kasa fiskalna Aclas Online" loading="lazy">
+              </div>
+              <div class="brand-card__body">
+                <span class="brand-card__name">Aclas</span>
+                <span class="brand-card__sub">Kasy fiskalne</span>
+              </div>
+            </a>
+            <a class="brand-card" href="https://satispolska.pl" target="_blank" rel="noopener noreferrer" aria-label="Satis - strona producenta (otwiera się w nowej karcie)">
+              <div class="brand-card__img-wrap">
+                <img src="pic/modele/satis/satisK.png" alt="Kasa fiskalna Satis" loading="lazy">
+              </div>
+              <div class="brand-card__body">
+                <span class="brand-card__name">Satis</span>
+                <span class="brand-card__sub">Wagi</span>
+              </div>
+            </a>
+            <a class="brand-card" href="https://www.axis.pl/pl/" target="_blank" rel="noopener noreferrer" aria-label="Axis - strona producenta (otwiera się w nowej karcie)">
+              <div class="brand-card__img-wrap">
+                <img src="pic/modele/axis.png" alt="Waga Axis" loading="lazy">
+              </div>
+              <div class="brand-card__body">
+                <span class="brand-card__name">Axis</span>
+                <span class="brand-card__sub">Wagi</span>
+              </div>
+            </a>
+          </div>
+
+          <p class="marki__note">Serwisujemy i sprzedajemy urządzenia tych marek - dobieramy model optymalny dla Twojej branży.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         DLACZEGO INFOKASY
+    ==================================================== -->
+    <section class="dlaczego section-pad" id="dlaczego" aria-labelledby="dlaczego-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="label-upper">Dlaczego INFOKASY?</span>
+          <h2 class="section-heading" id="dlaczego-heading">Lokalny partner,<br>któremu możesz zaufać</h2>
+          <p class="sub-heading">Kompleksowa obsługa w jednym miejscu - od zakupu, przez instalację, aż po serwis.</p>
+        </div>
+
+        <div class="dlaczego__grid">
+
+          <div class="benefit">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+            </div>
+            <h3 class="benefit__title">Wieloletnie doświadczenie</h3>
+            <p class="benefit__desc">Zajmujemy się kasami fiskalnymi i systemami POS od lat. Znamy rynek, przepisy i specyfikę różnych branż.</p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="benefit__title">Kompleksowa obsługa</h3>
+            <p class="benefit__desc">Sprzedaż, instalacja, konfiguracja i serwis - wszystko pod jednym dachem. Nie musisz szukać kilku firm.</p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 class="benefit__title">Pomoc lokalnym firmom</h3>
+            <p class="benefit__desc">Obsługujemy przedsiębiorców w naszym regionie. Wiemy, z jakimi wyzwaniami mierzą się lokalne firmy.</p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.33C1.61 2.18 2.48 1.2 3.64 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.12 6.12l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <h3 class="benefit__title">Szybki kontakt</h3>
+            <p class="benefit__desc">Jeden telefon wystarczy. Odpowiadamy sprawnie, ustalamy termin i działamy - bez zbędnych formalności.</p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2z"/><path d="M7 7h.01"/></svg>
+            </div>
+            <h3 class="benefit__title">Uczciwe ceny</h3>
+            <p class="benefit__desc">Przejrzyste wyceny bez ukrytych kosztów. Zawsze wiesz, za co płacisz i co otrzymujesz.</p>
+          </div>
+
+          <div class="benefit">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3 class="benefit__title">Szybka realizacja</h3>
+            <p class="benefit__desc">Rozumiemy, że każda przerwa w działaniu kasy to strata dla firmy. Staramy się działać możliwie szybko.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section-pad-sm" aria-label="Symulator kasy fiskalnej">
+      <div class="container">
+        <section class="simulator-feature" id="symulator" aria-labelledby="symulator-heading">
+          <div class="simulator-feature__copy">
+            <span class="label-upper">Interaktywny symulator</span>
+            <h2 class="simulator-feature__title" id="symulator-heading">Sprawdź kasę Datecs WP-25 przed kontaktem</h2>
+            <p class="simulator-feature__text">
+              Dodaliśmy symulator kasy fiskalnej, żeby klient mógł zobaczyć podstawowe operacje i lepiej zrozumieć obsługę urządzenia przed zakupem lub szkoleniem.
+            </p>
+            <ul class="simulator-feature__list">
+              <li>Podgląd klawiatury, wyświetlacza i paragonu w jednym miejscu.</li>
+              <li>Praktyczny dodatek do oferty kas fiskalnych i serwisu.</li>
+              <li>Pełna wersja otwiera się w osobnym widoku, wygodnym na desktopie.</li>
+            </ul>
+            <div class="simulator-feature__actions">
+              <a href="mpa0rk8f-datecs-wp25-v0.2.html" class="btn btn-primary" style="width:240px;justify-content:center;">Uruchom symulator</a>
+              <a href="#kontakt" class="btn btn-outline" style="width:240px;justify-content:center;">Zapytaj o kasę WP-25</a>
+            </div>
+          </div>
+          <div class="simulator-feature__frame" aria-label="Podgląd symulatora kasy fiskalnej Datecs WP-25">
+            <iframe src="mpa0rk8f-datecs-wp25-v0.2.html" title="Symulator kasy fiskalnej Datecs WP-25" loading="lazy"></iframe>
+          </div>
+        </section>
+      </div>
+    </section>
+    <!-- ====================================================
+         DPD
+    ==================================================== -->
+    <section class="dpd-section section-pad-sm" id="dpd" aria-labelledby="dpd-heading">
+      <div class="container">
+        <div class="dpd__inner">
+
+          <div class="dpd__content">
+            <span class="dpd__badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Punkt DPD
+            </span>
+            <h2 class="dpd__heading" id="dpd-heading">Nadaj lub odbierz paczkę<br>w naszym punkcie</h2>
+            <p class="dpd__desc">
+              Na miejscu nadasz i odbierzesz swoją przesyłkę - jesteśmy autoryzowanym punktem DPD. Szybko, wygodnie i blisko Ciebie. Przy okazji zajmij się kasą fiskalną lub serwisem.
+            </p>
+          </div>
+
+          <div class="dpd__cta-wrap">
+            <img src="pic/mpa0oynp-dpd.webp" alt="Logo DPD - autoryzowany punkt nadawania i odbioru paczek" class="dpd__logo" loading="lazy">
+            <a href="#kontakt" class="btn-dpd" aria-label="Znajdź nasz punkt DPD">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Znajdź nas
+            </a>
+            <p class="dpd__note">ul. Jana Pawła II 1, 19-300 Ełk</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         KONTAKT
+    ==================================================== -->
+    <section class="kontakt section-pad" id="kontakt" aria-labelledby="kontakt-heading">
+      <div class="container">
+        <div class="section-header">
+          <span class="label-upper">Kontakt</span>
+          <h2 class="section-heading" id="kontakt-heading">Skontaktuj się z nami</h2>
+          <p class="sub-heading">Chętnie odpowiemy na pytania, pomożemy dobrać urządzenie i umówimy wizytę serwisową.</p>
+        </div>
+
+        <div class="kontakt__inner">
+
+          <div class="kontakt__info">
+
+            <div class="kontakt__detail">
+              <div class="kontakt__detail-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <span class="kontakt__detail-label">Adres</span>
+                <div class="kontakt__detail-value" style="color: var(--blue);">
+                  INFOKASY<br>ul. Jana Pawła II 1<br>19-300 Ełk
+                </div>
+                <div class="kontakt__detail-value" style="color: var(--blue); margin-top: 2px;">
+                  Pon–Pt 7:30–15:30
+                </div>
+              </div>
+            </div>
+
+            <div class="kontakt__detail">
+              <div class="kontakt__detail-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.33C1.61 2.18 2.48 1.2 3.64 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.12 6.12l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div>
+                <span class="kontakt__detail-label">Telefon</span>
+                <div class="kontakt__detail-value">
+                  <a href="tel:+48876104163">87 610 41 63</a><br>
+                  <a href="tel:+48600994205">600 994 205</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="kontakt__detail">
+              <div class="kontakt__detail-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </div>
+              <div>
+                <span class="kontakt__detail-label">E-mail</span>
+                <div class="kontakt__detail-value">
+                  <a href="mailto:kontakt@infokasy.pl">kontakt@infokasy.pl</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="kontakt__actions">
+              <a href="tel:+48876104163" class="btn btn-primary" aria-label="Zadzwoń teraz: 87 610 41 63">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.33C1.61 2.18 2.48 1.2 3.64 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.12 6.12l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                87 610 41 63
+              </a>
+              <a href="tel:+48600994205" class="btn btn-primary" aria-label="Zadzwoń teraz: 600 994 205">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.33C1.61 2.18 2.48 1.2 3.64 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.12 6.12l.97-.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                600 994 205
+              </a>
+              <a href="mailto:kontakt@infokasy.pl" class="btn btn-outline" aria-label="Napisz e-mail">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                Napisz e-mail
+              </a>
+            </div>
+
+          </div>
+
+          <div class="kontakt__map" aria-label="Lokalizacja INFOKASY">
+            <iframe
+              src="https://maps.google.com/maps?q=INFOKASY+E%C5%82k+kasy+drukarki+fiskalne+online+serwis+wag+Jana+Paw%C5%82a+II+1+19-300+E%C5%82k+Polska&hl=pl&output=embed&z=16"
+              width="100%"
+              height="360"
+              style="border:0; display:block; flex:1;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Mapa lokalizacji INFOKASY - ul. Jana Pawła II 1, 19-300 Ełk"
+            ></iframe>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================================
+       FOOTER
+  ==================================================== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__inner">
+
+        <div class="footer__contact">
+          <p class="footer__copy">© <span id="year"></span> INFOKASY. Wszelkie prawa zastrzeżone.</p>
+          <ul class="footer__links">
+            <li><a href="tel:+48876104163">87 610 41 63</a></li>
+            <li><a href="tel:+48600994205">600 994 205</a></li>
+            <li><a href="mailto:kontakt@infokasy.pl">kontakt@infokasy.pl</a></li>
+          </ul>
+        </div>
+
+        <ul class="footer__links">
+          <li><a href="#oferta">Oferta</a></li>
+          <li><a href="#marki">Marki</a></li>
+          <li><a href="#dlaczego">O nas</a></li>
+          <li><a href="#symulator">Symulator</a></li>
+          <li><a href="#dpd">DPD</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+
+        <div class="footer__totop">
+          <a href="#top" aria-label="Powrót na początek strony">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+            Powrót na górę
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================================================
+       MODAL – KASY I DRUKARKI FISKALNE
+  ==================================================== -->
+  <div class="pm-overlay" id="pmOverlay" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+    <div class="pm-modal" id="pmModal">
+
+      <div class="pm-header">
+        <h2 id="pmTitle">Kasy i drukarki fiskalne</h2>
+        <button class="pm-close" id="pmClose" aria-label="Zamknij">&times;</button>
+      </div>
+
+      <div class="pm-filters" id="pmFilters" role="group" aria-label="Filtry produktów">
+        <!-- Przyciski filtrów generowane automatycznie z danych JSON (buildFilters) -->
+        <button class="pm-filter active" data-filter="all">Wszystkie modele</button>
+      </div>
+
+      <div class="pm-body" id="pmBody">
+        <!-- Widok: lista produktów -->
+        <div id="pmProducts">
+          <div class="pm-loading">Ładowanie produktów…</div>
+        </div>
+
+        <!-- Widok: formularz -->
+        <div id="pmFormView" style="display:none;">
+          <div class="pm-form-wrap">
+            <button class="pm-form-back" id="pmFormBack">← Wróć do listy</button>
+            <div class="pm-form-title">Zapytaj o model</div>
+            <form class="pm-form" id="pmContactForm" novalidate>
+              <input type="hidden" name="_subject" value="Nowy lead produktowy - INFOKASY">
+              <input type="hidden" id="pmFieldBrand"    name="productBrand">
+              <input type="hidden" id="pmFieldCategory" name="productCategory">
+
+              <div class="pm-form-row">
+                <div>
+                  <label for="pmFieldModel">Interesujący model</label>
+                  <input type="text" id="pmFieldModel" name="model" readonly>
+                </div>
+              </div>
+
+              <div class="pm-form-row pm-form-row--2">
+                <div>
+                  <label for="pmFieldName">Imię i nazwisko <span class="pm-req">*</span></label>
+                  <input type="text" id="pmFieldName" name="name" placeholder="Jan Kowalski" required>
+                </div>
+                <div>
+                  <label for="pmFieldPhone">Telefon <span class="pm-req">*</span></label>
+                  <input type="tel" id="pmFieldPhone" name="phone" placeholder="600 000 000" required>
+                </div>
+              </div>
+
+              <div class="pm-form-row pm-form-row--2">
+                <div>
+                  <label for="pmFieldEmail">E-mail</label>
+                  <input type="email" id="pmFieldEmail" name="email" placeholder="jan@firma.pl">
+                </div>
+                <div>
+                  <label for="pmFieldCity">Miasto</label>
+                  <input type="text" id="pmFieldCity" name="city" placeholder="Ełk">
+                </div>
+              </div>
+
+              <div class="pm-form-row pm-form-row--2">
+                <div>
+                  <label for="pmFieldCompany">Firma</label>
+                  <input type="text" id="pmFieldCompany" name="company" placeholder="Nazwa firmy">
+                </div>
+                <div>
+                  <label for="pmFieldTiming">Planowany termin zakupu</label>
+                  <select id="pmFieldTiming" name="timing">
+                    <option value="">— wybierz —</option>
+                    <option>Jak najszybciej</option>
+                    <option>Do 30 dni</option>
+                    <option>Do 3 miesięcy</option>
+                    <option>Tylko sprawdzam ofertę</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="pm-form-row">
+                <div>
+                  <label for="pmFieldMsg">Wiadomość</label>
+                  <textarea id="pmFieldMsg" name="message" placeholder="Dodatkowe pytania lub informacje…"></textarea>
+                </div>
+              </div>
+
+              <div class="pm-form-row">
+                <div class="pm-form-checkbox">
+                  <input type="checkbox" id="pmFieldConsent" name="consent" required>
+                  <label for="pmFieldConsent">Wyrażam zgodę na kontakt telefoniczny lub e-mailowy w celu przedstawienia oferty przez INFOKASY. <span class="pm-req">*</span></label>
+                </div>
+              </div>
+
+              <button type="submit" class="pm-form__submit" id="pmSubmitBtn">Wyślij zapytanie</button>
+
+              <div id="pmFormError" class="pm-form__error" style="display:none;"></div>
+
+              <div id="pmFormSuccess" class="pm-form__success-screen" style="display:none;">
+                <div class="pm-form__success-icon">✔</div>
+                <div class="pm-form__success-title">Dziękujemy</div>
+                <p>Twoje zapytanie zostało wysłane. Skontaktujemy się z Tobą najszybciej jak to możliwe.</p>
+                <button type="button" class="pm-form__submit" id="pmSuccessClose">Zamknij</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====================================================
+       JS - hamburger menu + current year
+  ==================================================== -->
+  <!-- Dane produktów – wbudowane inline, działa bez serwera HTTP -->
+  <script type="application/json" id="pd-datecs">
+{
+  "meta": {
+    "name": "INFOKASY - katalog produktów",
+    "category": "kasy-fiskalne",
+    "sourceFile": "datecs_wp_plus_ceny_warianty_2026-05-24(1).xlsx",
+    "generatedAt": "2026-05-24",
+    "notes": "Plik JSON przygotowany do zasilania okna modalnego z modelami kas. Zdjęcia powinny znajdować się pod ścieżkami z pola image."
+  },
+  "products": [
+    {
+      "id": "wp-25-plus",
+      "category": "kasy-fiskalne",
+      "brand": "Datecs",
+      "model": "DATECS WP-25 PLUS",
+      "name": "Datecs WP-25 Plus",
+      "image": "pic/modele/wp-25-plus.webp",
+      "priceFrom": 1349,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 349 zł netto",
+      "features": [
+        "Niewielkie rozmiary",
+        "Kolorowy wyświetlacz",
+        "Mobilna praca"
+      ],
+      "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+      "updatedOnSource": "2026-04-14",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "WP-25 LAN",
+          "price": 1349,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 349 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        },
+        {
+          "version": "WP-25 WIFI",
+          "price": 1439,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 439 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        },
+        {
+          "version": "WP-25 GPRS3",
+          "price": 1499,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 499 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        },
+        {
+          "version": "WP-25 LAN I GPRS3",
+          "price": 1549,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 549 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        },
+        {
+          "version": "WP-25 WIFI I GPRS3",
+          "price": 1639,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 639 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/616-datecs-wp-plus",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "wp-50-plus",
+      "category": "kasy-fiskalne",
+      "brand": "Datecs",
+      "model": "DATECS WP-50 PLUS",
+      "name": "Datecs WP-50 Plus",
+      "image": "pic/modele/wp-50-plus.webp",
+      "priceFrom": 1399,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 399 zł netto",
+      "features": [
+        "Większa klawiatura",
+        "Wersje z WiFi/GPRS",
+        "Do handlu i usług"
+      ],
+      "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+      "updatedOnSource": "2026-04-14",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "WP-50 PLUS GPRS",
+          "price": 1399,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 399 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+          "active": true
+        },
+        {
+          "version": "WP-50 PLUS WIFI",
+          "price": 1449,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 449 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+          "active": true
+        },
+        {
+          "version": "WP-50 PLUS GPRS 3",
+          "price": 1519,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 519 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+          "active": true
+        },
+        {
+          "version": "WP-50 WIFI i GPRS 3",
+          "price": 1639,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 639 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/617-datecs-wp-50-plus",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "wp-500-plus",
+      "category": "kasy-fiskalne",
+      "brand": "Datecs",
+      "model": "DATECS WP-500 PLUS",
+      "name": "Datecs WP-500 Plus",
+      "image": "pic/modele/wp-500-plus.webp",
+      "priceFrom": 1499,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 499 zł netto",
+      "features": [
+        "Stabilna konstrukcja",
+        "Warianty LAN/WiFi/GPRS",
+        "Do pracy stacjonarnej"
+      ],
+      "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+      "updatedOnSource": "2026-04-14",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "WP-500 LAN",
+          "price": 1499,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 499 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+          "active": true
+        },
+        {
+          "version": "WP-500 WIFI",
+          "price": 1549,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 549 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+          "active": true
+        },
+        {
+          "version": "WP-500 LAN I GPRS3",
+          "price": 1629,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 629 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+          "active": true
+        },
+        {
+          "version": "WP-500 WIFI I GPRS3",
+          "price": 1679,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 679 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/urzadzenia-fiskalne/kasy-fiskalne-online/615-datecs-wp-500-plus",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "hiopos-sun-ii",
+      "category": "systemy-pos",
+      "type": "pos",
+      "brand": "Datecs",
+      "model": "HIOPOS SUN II",
+      "name": "HioPOS SUN II",
+      "image": "pic/modele/hiopos-sun-ii.webp",
+      "priceFrom": 1490,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 490 zł netto",
+      "features": [
+        "System Android 11",
+        "Ekran dotykowy 15.6 cala",
+        "RAM 4 GB"
+      ],
+      "description": "Nowoczesny terminal POS pracujący pod kontrolą systemu Android 11.",
+      "specifications": {
+        "system": "Android 11",
+        "processor": "RK3568 Quad-Core",
+        "ram": "4 GB",
+        "storage": "64 GB",
+        "screen": "15.6 cala",
+        "warranty": "12 miesięcy"
+      },
+      "gallery": [
+        "pic/modele/hiopos-sun-ii.webp",
+        "pic/modele/hiopos-sun-ii-2.webp",
+        "pic/modele/hiopos-sun-ii-3.webp",
+        "pic/modele/hiopos-sun-ii-4.webp"
+      ],
+      "downloads": [],
+      "sourceUrl": "https://www.datecs-polska.pl/oferta/systemy-pos/pos-hiopos/639-hiopos-sun-ii",
+      "updatedOnSource": "2024-10-28",
+      "scrapedAt": "2026-05-30",
+      "active": true,
+      "variants": [
+        {
+          "version": "Wersja podstawowa",
+          "price": 1490,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 490 zł netto",
+          "sourceUrl": "https://www.datecs-polska.pl/oferta/systemy-pos/pos-hiopos/639-hiopos-sun-ii",
+          "active": true
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script type="application/json" id="pd-posnet">
+{
+  "metadata": {
+    "sourceFile": "ceny_posnet_kasy_drukarki_2026-05-24(1).xlsx",
+    "brand": "Posnet",
+    "generatedFor": "INFOKASY modal produktów",
+    "currency": "PLN",
+    "priceType": "netto",
+    "updatedAt": "2026-10-03",
+    "productCount": 18,
+    "rowCount": 20,
+    "note": "Ceny netto; do wyświetlania w modalu. Zdjęcia należy umieścić zgodnie ze ścieżkami w polu image."
+  },
+  "products": [
+    {
+      "id": "posnet-vero",
+      "brand": "Posnet",
+      "model": "VERO",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne",
+        "systemy-pos"
+      ],
+      "priceFromNet": 2199,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 199 zł netto",
+      "image": "pic/modele/posnet-vero.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Nowoczesna kasa fiskalna online",
+        "Kolorowy wyświetlacz",
+        "Rozwiązanie do punktu sprzedaży"
+      ],
+      "variants": [
+        {
+          "name": "VERO",
+          "category": "kasy-fiskalne",
+          "priceNet": 2199,
+          "displayPrice": "2 199 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-pospay2-online",
+      "brand": "Posnet",
+      "model": "POSPAY2 ONLINE",
+      "category": "kasy-i-drukarki-fiskalne",
+      "categories": [
+        "kasy-fiskalne",
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 1899,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 899 zł netto",
+      "image": "pic/modele/posnet-pospay2-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Urządzenie łączy funkcje kasy, drukarki fiskalnej i terminala",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Urządzenie łączy funkcje kasy, drukarki fiskalnej i terminala",
+        "Kompaktowe urządzenie online",
+        "Dobre rozwiązanie do mobilnej sprzedaży"
+      ],
+      "variants": [
+        {
+          "name": "POSPAY2 ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1899,
+          "displayPrice": "1 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Urządzenie łączy funkcje kasy, drukarki fiskalnej i terminala",
+          "active": true
+        },
+        {
+          "name": "POSPAY2 ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 1899,
+          "displayPrice": "1 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Na liście drukarek; także kasoterminal",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-evo",
+      "brand": "Posnet",
+      "model": "EVO",
+      "category": "kasy-i-drukarki-fiskalne",
+      "categories": [
+        "kasy-fiskalne",
+        "drukarki-fiskalne",
+        "systemy-pos"
+      ],
+      "priceFromNet": 1999,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 999 zł netto",
+      "image": "pic/modele/posnet-evo.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Urządzenie fiskalne online",
+        "Sprzedaż i konfiguracja w INFOKASY",
+        "Serwis i wsparcie po zakupie"
+      ],
+      "variants": [
+        {
+          "name": "EVO",
+          "category": "kasy-fiskalne",
+          "priceNet": 1999,
+          "displayPrice": "1 999 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        },
+        {
+          "name": "EVO",
+          "category": "drukarki-fiskalne",
+          "priceNet": 1999,
+          "displayPrice": "1 999 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Na liście drukarek; zestaw POS",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-mobile2-online",
+      "brand": "Posnet",
+      "model": "MOBILE2 ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1749,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 749 zł netto",
+      "image": "pic/modele/posnet-mobile2-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Mobilne urządzenie fiskalne",
+        "Kompaktowa konstrukcja",
+        "Sprawdza się w usługach i sprzedaży terenowej"
+      ],
+      "variants": [
+        {
+          "name": "MOBILE2 ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1749,
+          "displayPrice": "1 749 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-ergo-online",
+      "brand": "Posnet",
+      "model": "ERGO ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1449,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 449 zł netto",
+      "image": "pic/modele/posnet-ergo-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena od; warianty produktu mogą mieć inne ceny",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Cena od; warianty produktu mogą mieć inne ceny",
+        "Kasa fiskalna online",
+        "Dobra dla małych punktów sprzedaży"
+      ],
+      "variants": [
+        {
+          "name": "ERGO ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1449,
+          "displayPrice": "1 449 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena od; warianty produktu mogą mieć inne ceny",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-neo-online",
+      "brand": "Posnet",
+      "model": "NEO ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 2199,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 199 zł netto",
+      "image": "pic/modele/posnet-neo-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Urządzenie fiskalne online",
+        "Sprzedaż i konfiguracja w INFOKASY",
+        "Serwis i wsparcie po zakupie"
+      ],
+      "variants": [
+        {
+          "name": "NEO ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 2199,
+          "displayPrice": "2 199 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-mobile-online",
+      "brand": "Posnet",
+      "model": "MOBILE ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1649,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 649 zł netto",
+      "image": "pic/modele/posnet-mobile-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Mobilne urządzenie fiskalne",
+        "Kompaktowa konstrukcja",
+        "Sprawdza się w usługach i sprzedaży terenowej"
+      ],
+      "variants": [
+        {
+          "name": "MOBILE ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1649,
+          "displayPrice": "1 649 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-bingo-max2",
+      "brand": "Posnet",
+      "model": "BINGO Max2",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1799,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 799 zł netto",
+      "image": "pic/modele/posnet-bingo-max2.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Sprawdzona konstrukcja",
+        "Łatwa obsługa",
+        "Komunikacja online"
+      ],
+      "variants": [
+        {
+          "name": "BINGO Max2",
+          "category": "kasy-fiskalne",
+          "priceNet": 1799,
+          "displayPrice": "1 799 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-fawag-lite-online",
+      "brand": "Posnet",
+      "model": "FAWAG LITE ONLINE",
+      "category": "kasy-fiskalne",
+      "categories": [
+        "kasy-fiskalne"
+      ],
+      "priceFromNet": 1349,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 1 349 zł netto",
+      "image": "pic/modele/posnet-fawag-lite-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Atrakcyjna cena wejściowa",
+        "Kasa fiskalna online",
+        "Dobra dla małych punktów sprzedaży"
+      ],
+      "variants": [
+        {
+          "name": "FAWAG LITE ONLINE",
+          "category": "kasy-fiskalne",
+          "priceNet": 1349,
+          "displayPrice": "1 349 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/1/kasy-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-zestaw-trio-online-tablet-triotab",
+      "brand": "Posnet",
+      "model": "Zestaw: Trio ONLINE + tablet TrioTAB",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 3999,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 3 999 zł netto",
+      "image": "pic/modele/posnet-zestaw-trio-online-tablet-triotab.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Kompletne stanowisko kasowe",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Kompletne stanowisko kasowe",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Zestaw: Trio ONLINE + tablet TrioTAB",
+          "category": "drukarki-fiskalne",
+          "priceNet": 3999,
+          "displayPrice": "3 999 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Kompletne stanowisko kasowe",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-xl2-b",
+      "brand": "Posnet",
+      "model": "Thermal XL2 B",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2899,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 899 zł netto",
+      "image": "pic/modele/posnet-thermal-xl2-b.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Thermal XL2 B",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2899,
+          "displayPrice": "2 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-xl2-online-2-3",
+      "brand": "Posnet",
+      "model": "Thermal XL2 ONLINE (2”, 3”)",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2899,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 899 zł netto",
+      "image": "pic/modele/posnet-thermal-xl2-online-2-3.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Thermal XL2 ONLINE (2”, 3”)",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2899,
+          "displayPrice": "2 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-xl2-a",
+      "brand": "Posnet",
+      "model": "Thermal XL2 A",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2899,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 899 zł netto",
+      "image": "pic/modele/posnet-thermal-xl2-a.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Thermal XL2 A",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2899,
+          "displayPrice": "2 899 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-temo-online",
+      "brand": "Posnet",
+      "model": "TEMO ONLINE",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2399,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 399 zł netto",
+      "image": "pic/modele/posnet-temo-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "TEMO ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2399,
+          "displayPrice": "2 399 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-trio-online",
+      "brand": "Posnet",
+      "model": "TRIO ONLINE",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2499,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 499 zł netto",
+      "image": "pic/modele/posnet-trio-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "TRIO ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2499,
+          "displayPrice": "2 499 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-hx-online",
+      "brand": "Posnet",
+      "model": "THERMAL HX ONLINE",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 3099,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 3 099 zł netto",
+      "image": "pic/modele/posnet-thermal-hx-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "THERMAL HX ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 3099,
+          "displayPrice": "3 099 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-fawag-box",
+      "brand": "Posnet",
+      "model": "Fawag box",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 2099,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 2 099 zł netto",
+      "image": "pic/modele/posnet-fawag-box.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-05-24",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "Fawag box",
+          "category": "drukarki-fiskalne",
+          "priceNet": 2099,
+          "displayPrice": "2 099 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-05-24",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "posnet-thermal-hd-online",
+      "brand": "Posnet",
+      "model": "THERMAL HD ONLINE",
+      "category": "drukarki-fiskalne",
+      "categories": [
+        "drukarki-fiskalne"
+      ],
+      "priceFromNet": 3399,
+      "currency": "PLN",
+      "priceType": "netto",
+      "displayPrice": "od 3 399 zł netto",
+      "image": "pic/modele/posnet-thermal-hd-online.webp",
+      "sourceUrls": [
+        "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne"
+      ],
+      "dateScraped": "2026-10-03",
+      "notes": "Cena z listy kategorii",
+      "active": true,
+      "featured": false,
+      "features": [
+        "Drukarka fiskalna online",
+        "Do integracji z systemem sprzedaży",
+        "Wydruk paragonów i dokumentów fiskalnych"
+      ],
+      "variants": [
+        {
+          "name": "THERMAL HD ONLINE",
+          "category": "drukarki-fiskalne",
+          "priceNet": 3399,
+          "displayPrice": "3 399 zł netto",
+          "sourceUrl": "https://www.posnet.com.pl/produkty/category/2/drukarki-fiskalne",
+          "dateScraped": "2026-10-03",
+          "notes": "Cena z listy kategorii",
+          "active": true
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script type="application/json" id="pd-novitus">
+{
+  "meta": {
+    "name": "INFOKASY - katalog produktów",
+    "category": "kasy-i-drukarki-fiskalne",
+    "brand": "Novitus",
+    "sourceFile": "novitus_kasy_fiskalne_ceny_2026-05-24(5).xlsx",
+    "generatedAt": "2026-10-03",
+    "notes": "Plik JSON przygotowany do zasilania okna modalnego z modelami Novitus. Zawiera 11 kas fiskalnych oraz 2 drukarki fiskalne POINT, bez wersji POINT APTEKA."
+  },
+  "products": [
+    {
+      "id": "next-pro-online-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NEXT PRO ONLINE GSM24",
+      "name": "NEXT PRO ONLINE GSM24",
+      "image": "pic/modele/next-pro-online-gsm24.webp",
+      "priceFrom": 3090,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 3 090 zł netto",
+      "features": [
+        "Wbudowany LAN",
+        "WiFi",
+        "modem GSM z kartą SIM"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 3090,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "3 090 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "next-pro-online",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NEXT PRO ONLINE",
+      "name": "NEXT PRO ONLINE",
+      "image": "pic/modele/next-pro-online.webp",
+      "priceFrom": 2890,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 890 zł netto",
+      "features": [
+        "Wbudowane LAN",
+        "WiFi",
+        "opcja GSM"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2890,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 890 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "nano-online",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NANO ONLINE",
+      "name": "NANO ONLINE",
+      "image": "pic/modele/nano-online.webp",
+      "priceFrom": 1690,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 690 zł netto",
+      "features": [
+        "Wbudowane LAN",
+        "opcjonalne WiFi i GSM",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1690,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 690 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "nano-online-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NANO ONLINE GSM24",
+      "name": "NANO ONLINE GSM24",
+      "image": "pic/modele/nano-online-gsm24.webp",
+      "priceFrom": 1890,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 890 zł netto",
+      "features": [
+        "Wbudowane LAN oraz GSM",
+        "opcjonalne WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1890,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 890 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "nano-ii-online",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NANO II ONLINE",
+      "name": "NANO II ONLINE",
+      "image": "pic/modele/nano-ii-online.webp",
+      "priceFrom": 1750,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 750 zł netto",
+      "features": [
+        "Wbudowane LAN oraz WiFi",
+        "opcjonalne GSM",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1750,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 750 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "nano-ii-online-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "NANO II ONLINE GSM24",
+      "name": "NANO II ONLINE GSM24",
+      "image": "pic/modele/nano-ii-online-gsm24.webp",
+      "priceFrom": 1950,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 950 zł netto",
+      "features": [
+        "Wbudowany modem GSM",
+        "opcjonalne WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1950,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 950 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "one-pro",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "ONE PRO",
+      "name": "ONE PRO",
+      "image": "pic/modele/one-pro.webp",
+      "priceFrom": 2090,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 090 zł netto",
+      "features": [
+        "Wbudowane LAN oraz WiFi",
+        "opcjonalne GSM",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2090,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 090 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "one-pro-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "ONE PRO GSM24",
+      "name": "ONE PRO GSM24",
+      "image": "pic/modele/one-pro-gsm24.webp",
+      "priceFrom": 2290,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 290 zł netto",
+      "features": [
+        "Wbudowane LAN oraz modem GSM",
+        "opcjonalne WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2290,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 290 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "link-online",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "LINK ONLINE",
+      "name": "LINK ONLINE",
+      "image": "pic/modele/link-online.webp",
+      "priceFrom": 1690,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 690 zł netto",
+      "features": [
+        "Wbudowane LAN",
+        "opcjonalne WiFi i GSM",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1690,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 690 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "link-online-gsm24",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Novitus",
+      "model": "LINK ONLINE GSM24",
+      "name": "LINK ONLINE GSM24",
+      "image": "pic/modele/link-online-gsm24.webp",
+      "priceFrom": 1890,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 890 zł netto",
+      "features": [
+        "Wbudowane LAN oraz modem GSM",
+        "opcjonalne WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1890,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 890 zł netto",
+          "sourceUrl": "https://novitus.pl/kasy-fiskalne,0,1,0,30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "point-2",
+      "category": "drukarki-fiskalne",
+      "type": "drukarka",
+      "brand": "Novitus",
+      "model": "POINT 2",
+      "name": "POINT 2",
+      "image": "pic/modele/point-2.webp",
+      "priceFrom": 2790,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 790 zł netto",
+      "features": [
+        "Drukarka fiskalna 2 cale",
+        "LAN",
+        "USB"
+      ],
+      "sourceUrl": "https://novitus.pl/drukarki-fiskalne",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2790,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 790 zł netto",
+          "sourceUrl": "https://novitus.pl/drukarki-fiskalne",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "point-3",
+      "category": "drukarki-fiskalne",
+      "type": "drukarka",
+      "brand": "Novitus",
+      "model": "POINT 3",
+      "name": "POINT 3",
+      "image": "pic/modele/point-3.webp",
+      "priceFrom": 2990,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 2 990 zł netto",
+      "features": [
+        "Drukarka fiskalna 3 cale",
+        "LAN",
+        "USB"
+      ],
+      "sourceUrl": "https://novitus.pl/drukarki-fiskalne",
+      "updatedOnSource": "",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 2990,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "2 990 zł netto",
+          "sourceUrl": "https://novitus.pl/drukarki-fiskalne",
+          "active": true
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script type="application/json" id="pd-aclas">
+{
+  "meta": {
+    "name": "INFOKASY - katalog produktów",
+    "category": "kasy-fiskalne",
+    "brand": "Aclas",
+    "sourceFile": "aclas_kasy_fiskalne_ceny_2026-05-24(1).xlsx",
+    "generatedAt": "2026-05-29",
+    "notes": "Plik JSON przygotowany do zasilania okna modalnego z modelami ACLAS. Użyto cen sugerowanych netto z arkusza, a warianty pogrupowano pod rodzinami modeli."
+  },
+  "products": [
+    {
+      "id": "aclas-kos-ol",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Aclas",
+      "model": "ACLAS KOS_OL",
+      "name": "ACLAS Kos_OL",
+      "image": "pic/modele/aclas-kos-ol.webp",
+      "priceFrom": 1449,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 449 zł netto",
+      "features": [
+        "LAN",
+        "WiFi",
+        "Kasa fiskalna online"
+      ],
+      "sourceUrl": "https://www.aclas-polska.pl/produkty/kasa-fiskalna-aclas-kos_ol-lan-wifi/",
+      "updatedOnSource": "2026-08-31",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "LAN + WiFi",
+          "price": 1449,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 449 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/produkty/kasa-fiskalna-aclas-kos_ol-lan-wifi/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi + 4G zew.",
+          "price": 1549,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 549 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/produkty/kasa-fiskalna-aclas-kos_ol-lan-wifi-4g-zew/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi + 4G wew.",
+          "price": 1599,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 599 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/produkty/kasa-fiskalna-aclas-kos_ol-lan-wifi-4g-wew/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi + 4G zew. + SIM 2 lata",
+          "price": 1669,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 669 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi + 4G wew. + SIM 2 lata",
+          "price": 1719,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 719 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "aclas-kobra-on",
+      "category": "kasy-fiskalne",
+      "type": "kasa",
+      "brand": "Aclas",
+      "model": "ACLAS KOBRA_ON",
+      "name": "ACLAS Kobra_ON",
+      "image": "pic/modele/aclas-kobra-on.webp",
+      "priceFrom": 1349,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 349 zł netto",
+      "features": [
+        "LAN",
+        "Kasa fiskalna online",
+        "Dostępne w INFOKASY"
+      ],
+      "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+      "updatedOnSource": "2026-08-31",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "LAN",
+          "price": 1349,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 349 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        },
+        {
+          "version": "LAN + WiFi",
+          "price": 1449,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 449 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        },
+        {
+          "version": "LAN + GSM",
+          "price": 1449,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 449 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        },
+        {
+          "version": "LAN + GSM z SIM 2 lata",
+          "price": 1569,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 569 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasy-fiskalne-online/",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "kasa-gastronomiczna-p9",
+      "category": "kasy-gastronomiczne",
+      "type": "kasa-gastronomiczna",
+      "brand": "Aclas",
+      "model": "KASA GASTRONOMICZNA P9",
+      "name": "Kasa Gastronomiczna P9",
+      "image": "pic/modele/kasa-gastronomiczna-p9.webp",
+      "priceFrom": 1699,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 699 zł netto",
+      "features": [
+        "Kasa gastronomiczna",
+        "Sprzedaż mobilna",
+        "Online"
+      ],
+      "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasa-gastro/",
+      "updatedOnSource": "2026-08-31",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1699,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 699 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasa-gastro/",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "kasa-gastronomiczna-aow",
+      "category": "kasy-gastronomiczne",
+      "type": "kasa-gastronomiczna",
+      "brand": "Aclas",
+      "model": "KASA GASTRONOMICZNA AOW",
+      "name": "Kasa Gastronomiczna AOW",
+      "image": "pic/modele/kasa-gastronomiczna-aow.webp",
+      "priceFrom": 1699,
+      "currency": "PLN",
+      "priceType": "netto",
+      "priceLabel": "od 1 699 zł netto",
+      "features": [
+        "Kasa gastronomiczna",
+        "Sprzedaż mobilna",
+        "Online"
+      ],
+      "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasa-gastro/",
+      "updatedOnSource": "2026-08-31",
+      "scrapedAt": "2026-05-24",
+      "active": true,
+      "variants": [
+        {
+          "version": "Standard",
+          "price": 1699,
+          "currency": "PLN",
+          "priceType": "netto",
+          "priceLabel": "1 699 zł netto",
+          "vat": "23%",
+          "sourceUrl": "https://www.aclas-polska.pl/kategoria_produktu/kasa-gastro/",
+          "active": true
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script type="application/json" id="pd-satis">
+{
+  "meta": {
+    "name": "INFOKASY - katalog produktów",
+    "category": "wagi",
+    "brand": "SATIS",
+    "sourceFile": "satis_wagi_cpt_bw_2026-05-30.xlsx",
+    "generatedAt": "2026-10-03",
+    "notes": "Plik JSON przygotowany do zasilania okna modalnego z wagami SATIS."
+  },
+  "products": [
+    {
+      "id": "satis-cpt10",
+      "category": "wagi-sklepowe",
+      "type": "waga",
+      "brand": "SATIS",
+      "model": "SATIS CPT10",
+      "name": "SATIS CPT10",
+      "image": "pic/modele/satis-cpt10.webp",
+      "priceFrom": 584.25,
+      "currency": "PLN",
+      "priceType": "brutto",
+      "priceLabel": "od 584,25 zł brutto",
+      "features": [
+        "Legalizowana",
+        "Kalkulacja ceny",
+        "Akumulator"
+      ],
+      "description": "Legalizowana waga sklepowa kalkulacyjna z podświetlanymi wyświetlaczami LCD, kalkulacją ceny i obliczaniem reszty.",
+      "specifications": {
+        "capacity": "6/15 kg lub 15/30 kg",
+        "accuracy": "2/5 g lub 5/10 g",
+        "panSize": "22x31 cm",
+        "battery": "6V/4Ah",
+        "warranty": "2 lata"
+      },
+      "sourceUrl": "https://satispolska.pl/272-satis-waga-sklepowa-kalkulacyjna-cpt10.html",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "6/15 kg lub 15/30 kg",
+          "price": 584.25,
+          "currency": "PLN",
+          "priceType": "brutto",
+          "priceLabel": "584,25 zł brutto",
+          "sourceUrl": "https://satispolska.pl/272-satis-waga-sklepowa-kalkulacyjna-cpt10.html",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "satis-cpt20",
+      "category": "wagi-sklepowe",
+      "type": "waga",
+      "brand": "SATIS",
+      "model": "SATIS CPT20",
+      "name": "SATIS CPT20",
+      "image": "pic/modele/satis-cpt20.webp",
+      "priceFrom": 584.25,
+      "currency": "PLN",
+      "priceType": "brutto",
+      "priceLabel": "od 584,25 zł brutto",
+      "features": [
+        "Legalizowana",
+        "LCD z podświetleniem",
+        "Akumulator"
+      ],
+      "description": "Legalizowana waga sklepowa kalkulacyjna z czytelnym LCD, klawiaturą numeryczną, kalkulacją ceny i obliczaniem reszty.",
+      "specifications": {
+        "capacity": "6/15 kg lub 15/30 kg",
+        "accuracy": "2/5 g lub 5/10 g",
+        "panSize": "22x31 cm",
+        "battery": "6V/4Ah",
+        "warranty": "2 lata"
+      },
+      "sourceUrl": "https://satispolska.pl/273-satis-waga-sklepowa-kalkulacyjna-cpt20.html",
+      "scrapedAt": "2026-10-03",
+      "active": true,
+      "variants": [
+        {
+          "version": "6/15 kg lub 15/30 kg",
+          "price": 584.25,
+          "currency": "PLN",
+          "priceType": "brutto",
+          "priceLabel": "584,25 zł brutto",
+          "sourceUrl": "https://satispolska.pl/273-satis-waga-sklepowa-kalkulacyjna-cpt20.html",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "satis-bw-l-150",
+      "category": "wagi-magazynowe",
+      "type": "waga",
+      "brand": "SATIS",
+      "model": "SATIS BW-L-150",
+      "name": "SATIS BW-L-150",
+      "image": "pic/modele/satis-bw-l-150.webp",
+      "priceFrom": 1169,
+      "currency": "PLN",
+      "priceType": "brutto",
+      "priceLabel": "od 1 169 zł brutto",
+      "features": [
+        "Pomost 40x50 cm",
+        "RS232",
+        "Akumulator"
+      ],
+      "description": "Waga magazynowa jednoczujnikowa z miernikiem BW, pomostem 40x50 cm, RS232, zasilaczem i akumulatorem.",
+      "specifications": {
+        "capacity": "60/150 kg",
+        "accuracy": "20/50 g",
+        "platform": "40x50 cm",
+        "battery": "6V/1,3Ah",
+        "warranty": "2 lata"
+      },
+      "sourceUrl": "https://satispolska.pl/324-satis-waga-magazynowa-bw-l-150-40x50cm-60150kg.html",
+      "scrapedAt": "2026-05-30",
+      "active": true,
+      "variants": [
+        {
+          "version": "60/150 kg, pomost 40x50 cm",
+          "price": 1169,
+          "currency": "PLN",
+          "priceType": "brutto",
+          "priceLabel": "1 169 zł brutto",
+          "sourceUrl": "https://satispolska.pl/324-satis-waga-magazynowa-bw-l-150-40x50cm-60150kg.html",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "satis-ts-60x80-bw",
+      "category": "wagi-magazynowe",
+      "type": "waga",
+      "brand": "SATIS",
+      "model": "SATIS TS 60x80 BW",
+      "name": "SATIS TS 60x80 BW",
+      "image": "pic/modele/satis-ts-60x80-bw.webp",
+      "priceFrom": 2289,
+      "currency": "PLN",
+      "priceType": "brutto",
+      "priceLabel": "od 2 289 zł brutto",
+      "features": [
+        "Pomost 60x80 cm",
+        "RS232",
+        "HOLD"
+      ],
+      "description": "Waga magazynowa jednoczujnikowa z miernikiem BW, pomostem 60x80 cm, RS232, funkcją ważenia kontrolnego i HOLD.",
+      "specifications": {
+        "capacity": "150/300 kg",
+        "platform": "60x80 cm",
+        "battery": "6V/1,3Ah",
+        "warranty": "2 lata"
+      },
+      "sourceUrl": "https://satispolska.pl/257-2389-satis-waga-magazynowa-ts-60x80cm-bw.html",
+      "scrapedAt": "2026-05-30",
+      "active": true,
+      "variants": [
+        {
+          "version": "150/300 kg, pomost 60x80 cm",
+          "price": 2289,
+          "currency": "PLN",
+          "priceType": "brutto",
+          "priceLabel": "2 289 zł brutto",
+          "sourceUrl": "https://satispolska.pl/257-2389-satis-waga-magazynowa-ts-60x80cm-bw.html",
+          "active": true
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <script>
+    (function () {
+      // Current year
+      var yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // ── MODAL PRODUKTÓW ──────────────────────────────────
+      (function () {
+        var overlay   = document.getElementById('pmOverlay');
+        var modal     = document.getElementById('pmModal');
+        var closeBtn  = document.getElementById('pmClose');
+        var filtersEl = document.getElementById('pmFilters');
+        var productsEl= document.getElementById('pmProducts');
+        var formView  = document.getElementById('pmFormView');
+        var formBack  = document.getElementById('pmFormBack');
+        var form      = document.getElementById('pmContactForm');
+        var fieldModel= document.getElementById('pmFieldModel');
+        var formOk    = document.getElementById('pmFormSuccess');
+        var trigger   = document.querySelector('[data-open-products-modal]');
+
+        var allProducts = [];
+        var activeFilter = 'all';
+        var loaded = false;
+
+        // ── Źródła danych ─────────────────────────────────────
+        // Każdy wpis: zewnętrzny plik JSON (edytowalny) + id bloku
+        // inline (kopia awaryjna używana przy otwieraniu pliku przez file://).
+        var DATA_SOURCES = [
+          { file: 'data/products-datecs.json',  inline: 'pd-datecs'  },
+          { file: 'data/products-posnet.json',  inline: 'pd-posnet'  },
+          { file: 'data/products-novitus.json', inline: 'pd-novitus' },
+          { file: 'data/products-aclas.json',   inline: 'pd-aclas'   },
+          { file: 'data/products-satis.json',   inline: 'pd-satis'   }
+        ];
+
+        // Ładne nazwy kategorii + kolejność na liście filtrów.
+        // Dopisanie kategorii w JSON, której nie ma poniżej, też zadziała –
+        // dostanie automatycznie wygenerowaną etykietę (humanizeLabel).
+        var CATEGORY_LABELS = {
+          'kasy-fiskalne':       'Kasy fiskalne',
+          'drukarki-fiskalne':   'Drukarki fiskalne',
+          'systemy-pos':         'Systemy POS',
+          'wagi':                'Wagi',
+          'wagi-sklepowe':       'Wagi sklepowe',
+          'wagi-magazynowe':     'Wagi magazynowe',
+          'kasy-gastronomiczne': 'Gastronomiczne'
+        };
+        var CATEGORY_ORDER = [
+          'kasy-fiskalne', 'drukarki-fiskalne', 'systemy-pos',
+          'wagi', 'wagi-sklepowe', 'wagi-magazynowe', 'kasy-gastronomiczne'
+        ];
+        // Kolejność marek na liście filtrów (pozostałe dopisywane alfabetycznie).
+        var BRAND_ORDER = ['Datecs', 'Posnet', 'Novitus', 'Aclas', 'SATIS'];
+
+        var knownBrands = [];      // marki obecne w danych (do filtrowania)
+        var hasWagiGroup = false;  // czy pokazać zbiorczy filtr „Wagi”
+
+        function humanizeLabel(slug) {
+          var s = String(slug).replace(/[-_]/g, ' ').trim();
+          return s.charAt(0).toUpperCase() + s.slice(1);
+        }
+
+        // ── Budowanie przycisków filtrów z danych ──
+        function buildFilters() {
+          // Zbierz kategorie i marki występujące w produktach
+          var catSet = {}, brandSet = {};
+          allProducts.forEach(function(p) {
+            (p.categories || []).forEach(function(c){ if (c) catSet[c] = true; });
+            if (p.brand) brandSet[p.brand] = true;
+          });
+          hasWagiGroup = !!(catSet['wagi-sklepowe'] || catSet['wagi-magazynowe'] || catSet['wagi']);
+
+          // Uporządkuj kategorie: najpierw wg CATEGORY_ORDER, potem reszta alfabetycznie
+          var cats = Object.keys(catSet);
+          if (hasWagiGroup) catSet['wagi'] = true;
+          cats = Object.keys(catSet);
+          cats.sort(function(a, b) {
+            var ia = CATEGORY_ORDER.indexOf(a), ib = CATEGORY_ORDER.indexOf(b);
+            if (ia === -1) ia = 999; if (ib === -1) ib = 999;
+            if (ia !== ib) return ia - ib;
+            return a.localeCompare(b, 'pl');
+          });
+
+          // Uporządkuj marki
+          knownBrands = Object.keys(brandSet);
+          var brands = knownBrands.slice().sort(function(a, b) {
+            var ia = BRAND_ORDER.indexOf(a), ib = BRAND_ORDER.indexOf(b);
+            if (ia === -1) ia = 999; if (ib === -1) ib = 999;
+            if (ia !== ib) return ia - ib;
+            return a.localeCompare(b, 'pl');
+          });
+
+          function btn(value, label) {
+            var cls = (value === activeFilter) ? 'pm-filter active' : 'pm-filter';
+            return '<button class="' + cls + '" data-filter="' + value + '">' + label + '</button>';
+          }
+          var html = btn('all', 'Wszystkie modele');
+          cats.forEach(function(c) {
+            html += btn(c, CATEGORY_LABELS[c] || humanizeLabel(c));
+          });
+          brands.forEach(function(b) {
+            html += btn(b, b);
+          });
+          filtersEl.innerHTML = html;
+        }
+
+        // ── Normalizacja danych z dwóch różnych formatów JSON ──
+        function normalizeProduct(p) {
+          var price = p.priceFrom || p.priceFromNet || 0;
+          if (p.variants && p.variants.length) {
+            var prices = p.variants
+              .filter(function(v){ return v.active !== false; })
+              .map(function(v){ return v.price || v.priceNet || 0; })
+              .filter(function(v){ return v > 0; });
+            if (prices.length) price = Math.min.apply(null, prices);
+          }
+          var cats = p.categories || (p.category ? [p.category] : []);
+          var url  = p.sourceUrl || (p.sourceUrls && p.sourceUrls[0]) || null;
+          return {
+            id:       p.id,
+            brand:    p.brand || '',
+            model:    p.model || p.name || '',
+            image:    p.image || null,
+            price:    price,
+            priceLabel: price ? 'od ' + price.toLocaleString('pl-PL') + ' zł ' + (p.priceType || 'netto') : '',
+            features: (p.features || []).slice(0, 3),
+            categories: cats,
+            url:      url
+          };
+        }
+
+        // Odczyt z bloku inline (kopia awaryjna w index.html)
+        function readInline(id) {
+          var el = document.getElementById(id);
+          if (!el) return { products: [] };
+          try { return JSON.parse(el.textContent) || { products: [] }; }
+          catch (e) { return { products: [] }; }
+        }
+
+        // ── Ładowanie danych ──────────────────────────────────
+        // 1. Próbuje pobrać zewnętrzne pliki data/products-*.json (fetch).
+        //    Dzięki temu edycja tych plików natychmiast zmienia stronę
+        //    (działa, gdy strona jest serwowana przez HTTP/hosting).
+        // 2. Jeśli fetch zawiedzie dla danego pliku (np. otwarcie przez
+        //    file://), używa kopii inline wbudowanej w index.html.
+        function loadProducts() {
+          if (loaded) return Promise.resolve();
+
+          var jobs = DATA_SOURCES.map(function(src) {
+            if (typeof fetch !== 'function') {
+              return Promise.resolve(readInline(src.inline));
+            }
+            return fetch(src.file, { cache: 'no-store' })
+              .then(function(r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+              })
+              .catch(function() {
+                // Fallback do kopii inline (m.in. tryb file://)
+                return readInline(src.inline);
+              });
+          });
+
+          return Promise.all(jobs).then(function(results) {
+            allProducts = [];
+            results.forEach(function(data) {
+              allProducts = allProducts.concat(
+                (data && data.products ? data.products : []).map(normalizeProduct)
+              );
+            });
+            buildFilters();
+            loaded = true;
+          });
+        }
+
+        // ── Renderowanie kart ──
+        function renderProducts(filter) {
+          var list = allProducts.filter(function(p) {
+            if (filter === 'all') return true;
+            if (knownBrands.indexOf(filter) !== -1) return p.brand === filter;
+            if (filter === 'wagi') return p.categories.indexOf('wagi-sklepowe') !== -1 || p.categories.indexOf('wagi-magazynowe') !== -1 || p.categories.indexOf('wagi') !== -1;
+            return p.categories.indexOf(filter) !== -1;
+          });
+
+          if (!list.length) {
+            productsEl.innerHTML = '<div class="pm-empty">Brak produktów dla wybranego filtra.</div>';
+            return;
+          }
+
+          var html = '<div class="pm-grid">';
+          list.forEach(function(p) {
+            var imgHtml = p.image
+              ? '<img class="pm-card__img" src="' + p.image + '" alt="' + p.model + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="pm-card__img-placeholder" style="display:none;">Brak zdjęcia</div>'
+              : '<div class="pm-card__img-placeholder">Brak zdjęcia</div>';
+
+            var feats = p.features.map(function(f){ return '<li>' + f + '</li>'; }).join('');
+
+            var detailsBtn = p.url
+              ? '<a href="' + p.url + '" target="_blank" rel="noopener" class="pm-card__btn pm-card__btn--link">Zobacz szczegóły ↗</a>'
+              : '';
+
+            var safeModel = p.model.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+            html += '<div class="pm-card">'
+              + imgHtml
+              + '<div class="pm-card__body">'
+              + '<span class="pm-card__brand">' + p.brand + '</span>'
+              + '<div class="pm-card__name">' + p.model + '</div>'
+              + '<div class="pm-card__price">' + p.priceLabel + '</div>'
+              + '<ul class="pm-card__features">' + feats + '</ul>'
+              + '<div class="pm-card__actions">'
+              + '<button class="pm-card__btn pm-card__btn--primary" data-ask="' + safeModel + '" data-brand="' + p.brand.replace(/"/g, '&quot;') + '" data-category="' + (p.categories[0] || '').replace(/"/g, '&quot;') + '">Zapytaj o ten model</button>'
+              + detailsBtn
+              + '</div>'
+              + '</div>'
+              + '</div>';
+          });
+          html += '</div>';
+          productsEl.innerHTML = html;
+
+          // Zdarzenia "Zapytaj"
+          productsEl.querySelectorAll('[data-ask]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              openForm(
+                btn.getAttribute('data-ask'),
+                btn.getAttribute('data-brand') || '',
+                btn.getAttribute('data-category') || ''
+              );
+            });
+          });
+        }
+
+        // ── Widoki: lista / formularz ──
+        function showProducts() {
+          productsEl.style.display = '';
+          formView.style.display = 'none';
+          filtersEl.style.display = '';
+          modal.querySelector('.pm-header h2').textContent = 'Kasy i drukarki fiskalne';
+        }
+
+        function openForm(modelName, brand, category) {
+          form.reset();
+          // Wypełnij pola automatyczne
+          fieldModel.value = modelName || '';
+          document.getElementById('pmFieldBrand').value    = brand    || '';
+          document.getElementById('pmFieldCategory').value = category || '';
+          // Ukryj ekran sukcesu / błędu
+          document.getElementById('pmFormSuccess').style.display = 'none';
+          document.getElementById('pmFormError').style.display   = 'none';
+          var submitBtn = document.getElementById('pmSubmitBtn');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Wyślij zapytanie';
+          form.querySelectorAll('input:not([type=hidden]), select, textarea, button[type=submit]').forEach(function(el){ el.disabled = false; });
+          // Przełącz widoki
+          productsEl.style.display = 'none';
+          filtersEl.style.display  = 'none';
+          formView.style.display   = '';
+          modal.querySelector('.pm-header h2').textContent = 'Zapytaj o model';
+          document.getElementById('pmFieldName').focus();
+        }
+
+        // ── Otwarcie / zamknięcie modalu ──
+        function openModal() {
+          overlay.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+          closeBtn.focus();
+
+          if (!loaded) {
+            productsEl.innerHTML = '<div class="pm-loading">Ładowanie produktów…</div>';
+            loadProducts().then(function() {
+              showProducts();
+              renderProducts(activeFilter);
+            }).catch(function() {
+              productsEl.innerHTML = '<div class="pm-error">Nie udało się załadować produktów. Spróbuj odświeżyć stronę.</div>';
+            });
+          } else {
+            showProducts();
+            renderProducts(activeFilter);
+          }
+        }
+
+        function closeModal() {
+          overlay.classList.remove('is-open');
+          document.body.style.overflow = '';
+          if (trigger) trigger.focus();
+        }
+
+        // ── Focus trap ──
+        overlay.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') { closeModal(); return; }
+          if (e.key !== 'Tab') return;
+          var focusable = modal.querySelectorAll('button:not([disabled]), input, textarea, a[href], [tabindex]:not([tabindex="-1"])');
+          var first = focusable[0];
+          var last  = focusable[focusable.length - 1];
+          if (e.shiftKey) {
+            if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+          } else {
+            if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+          }
+        });
+
+        // ── Zdarzenia ──
+        if (trigger) {
+          trigger.addEventListener('click', function() {
+            activeFilter = 'all';
+            filtersEl.querySelectorAll('.pm-filter').forEach(function(b){ b.classList.remove('active'); });
+            var allBtn = filtersEl.querySelector('[data-filter="all"]');
+            if (allBtn) allBtn.classList.add('active');
+            openModal();
+          });
+          trigger.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger.click(); } });
+        }
+
+        // Kafelek Systemy POS – otwiera modal z filtrem systemy-pos
+        var posTrigger = document.querySelector('[data-open-pos-modal]');
+        if (posTrigger) {
+          posTrigger.addEventListener('click', function() {
+            activeFilter = 'systemy-pos';
+            openModal();
+            // Ustaw aktywny filtr wizualnie
+            filtersEl.querySelectorAll('.pm-filter').forEach(function(b){ b.classList.remove('active'); });
+            var posBtn = filtersEl.querySelector('[data-filter="systemy-pos"]');
+            if (posBtn) posBtn.classList.add('active');
+          });
+          posTrigger.addEventListener('keydown', function(e){
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); posTrigger.click(); }
+          });
+        }
+
+        // Kafelek Wagi – otwiera modal z filtrem wagi
+        var wagiTrigger = document.querySelector('[data-open-wagi-modal]');
+        if (wagiTrigger) {
+          wagiTrigger.addEventListener('click', function() {
+            activeFilter = 'wagi';
+            openModal();
+            filtersEl.querySelectorAll('.pm-filter').forEach(function(b){ b.classList.remove('active'); });
+            var wagiBtn = filtersEl.querySelector('[data-filter="wagi"]');
+            if (wagiBtn) wagiBtn.classList.add('active');
+          });
+          wagiTrigger.addEventListener('keydown', function(e){
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wagiTrigger.click(); }
+          });
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) closeModal();
+        });
+
+        filtersEl.addEventListener('click', function(e) {
+          var btn = e.target.closest('.pm-filter');
+          if (!btn) return;
+          filtersEl.querySelectorAll('.pm-filter').forEach(function(b){ b.classList.remove('active'); });
+          btn.classList.add('active');
+          activeFilter = btn.dataset.filter;
+          renderProducts(activeFilter);
+          productsEl.parentElement.scrollTop = 0;
+        });
+
+        formBack.addEventListener('click', function() {
+          showProducts();
+          renderProducts(activeFilter);
+        });
+
+        // ── "Zamknij" na ekranie sukcesu ──
+        document.getElementById('pmSuccessClose').addEventListener('click', function() {
+          closeModal();
+        });
+
+        // ── Submit formularza produktowego przez Formspree AJAX ──
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var name    = document.getElementById('pmFieldName').value.trim();
+          var phone   = document.getElementById('pmFieldPhone').value.trim();
+          var consent = document.getElementById('pmFieldConsent').checked;
+          var errorEl = document.getElementById('pmFormError');
+          errorEl.style.display = 'none';
+
+          if (!name || !phone) {
+            errorEl.textContent = 'Uzupełnij imię i nazwisko oraz telefon.';
+            errorEl.style.display = 'block';
+            return;
+          }
+          if (!consent) {
+            errorEl.textContent = 'Wymagana jest zgoda na kontakt.';
+            errorEl.style.display = 'block';
+            return;
+          }
+
+          var submitBtn = document.getElementById('pmSubmitBtn');
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Wysyłanie…';
+
+          fetch('https://formspree.io/f/xqejjgok', {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          })
+          .then(function(res){ return res.json(); })
+          .then(function(json){
+            if (json.ok || json.next) {
+              // Sukces – ukryj formularz, pokaż ekran sukcesu
+              form.querySelectorAll('input:not([type=hidden]), select, textarea, button[type=submit]').forEach(function(el){ el.disabled = true; });
+              submitBtn.style.display = 'none';
+              document.getElementById('pmFormSuccess').style.display = 'flex';
+            } else {
+              throw new Error('error');
+            }
+          })
+          .catch(function(){
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Wyślij zapytanie';
+            errorEl.textContent = 'Błąd wysyłania. Zadzwoń: 87 610 41 63 lub 600 994 205.';
+            errorEl.style.display = 'block';
+          });
+        });
+
+      })();
+
+      // Hero slideshow
+      (function () {
+        var slides = document.querySelectorAll('.hero__slide');
+        var dotsWrap = document.getElementById('heroSlideDots');
+        var current = 0;
+        var timer;
+
+        // Utwórz kropki
+        slides.forEach(function (_, i) {
+          var dot = document.createElement('button');
+          dot.className = 'hero__slide-dot' + (i === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', 'Zdjęcie ' + (i + 1));
+          dot.addEventListener('click', function () { goTo(i); resetTimer(); });
+          dotsWrap.appendChild(dot);
+        });
+
+        function goTo(n) {
+          slides[current].classList.remove('active');
+          dotsWrap.children[current].classList.remove('active');
+          current = (n + slides.length) % slides.length;
+          slides[current].classList.add('active');
+          dotsWrap.children[current].classList.add('active');
+        }
+
+        function next() { goTo(current + 1); }
+
+        function resetTimer() {
+          clearInterval(timer);
+          timer = setInterval(next, 3500);
+        }
+
+        resetTimer();
+      })();
+
+      // Hamburger menu
+      var btn   = document.getElementById('hamburger');
+      var menu  = document.getElementById('mobileMenu');
+
+      if (btn && menu) {
+        btn.addEventListener('click', function () {
+          var isOpen = menu.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        // Close menu when a link is clicked
+        menu.querySelectorAll('a').forEach(function (link) {
+          link.addEventListener('click', function () {
+            menu.classList.remove('is-open');
+            btn.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+    })();
+  </script>
+
+  <!-- Modal: Terminale płatnicze -->
+  <div id="tm-overlay" role="dialog" aria-modal="true" aria-labelledby="tmTitle">
+    <div id="tm-modal">
+      <div class="pm-header">
+        <h2 id="tmTitle">Terminale płatnicze – zapytaj o ofertę</h2>
+        <button class="pm-close" id="tmClose" aria-label="Zamknij">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="pm-body">
+        <form id="terminal-lead-form" novalidate>
+          <input type="hidden" name="_subject" value="Nowy lead - terminal płatniczy - INFOKASY">
+
+          <div class="tm-row">
+            <div class="tm-field">
+              <label for="tmName">Imię i nazwisko<span class="tm-req">*</span></label>
+              <input type="text" id="tmName" name="name" required placeholder="Jan Kowalski">
+            </div>
+            <div class="tm-field">
+              <label for="tmPhone">Telefon<span class="tm-req">*</span></label>
+              <input type="tel" id="tmPhone" name="phone" required placeholder="+48 600 000 000">
+            </div>
+          </div>
+
+          <div class="tm-row">
+            <div class="tm-field">
+              <label for="tmEmail">E-mail<span class="tm-req">*</span></label>
+              <input type="email" id="tmEmail" name="email" required placeholder="jan@firma.pl">
+            </div>
+            <div class="tm-field">
+              <label for="tmCompany">Nazwa firmy</label>
+              <input type="text" id="tmCompany" name="company" placeholder="Firma Sp. z o.o.">
+            </div>
+          </div>
+
+          <div class="tm-row">
+            <div class="tm-field">
+              <label for="tmNip">NIP</label>
+              <input type="text" id="tmNip" name="nip" placeholder="000-000-00-00">
+            </div>
+            <div class="tm-field">
+              <label for="tmBranch">Branża<span class="tm-req">*</span></label>
+              <select id="tmBranch" name="branch" required>
+                <option value="">— wybierz —</option>
+                <option>Sklep</option>
+                <option>Gastronomia</option>
+                <option>Salon kosmetyczny</option>
+                <option>Barber</option>
+                <option>Usługi</option>
+                <option>Inna</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tm-row">
+            <div class="tm-field">
+              <label for="tmStations">Ilość stanowisk / kas</label>
+              <input type="number" id="tmStations" name="stations" min="1" placeholder="np. 2">
+            </div>
+            <div class="tm-field">
+              <label for="tmHasTerminal">Czy klient ma już terminal?</label>
+              <select id="tmHasTerminal" name="has_terminal">
+                <option value="">— wybierz —</option>
+                <option>Nie</option>
+                <option>Tak</option>
+                <option>Nie wiem</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="tm-field">
+            <label for="tmInfo">Dodatkowe informacje</label>
+            <textarea id="tmInfo" name="info" placeholder="Opisz swoje potrzeby..."></textarea>
+          </div>
+
+          <div class="tm-checkbox">
+            <input type="checkbox" id="tmConsent" name="consent" required>
+            <label for="tmConsent">Wyrażam zgodę na kontakt telefoniczny lub e-mailowy w celu przedstawienia oferty terminali płatniczych przez INFOKASY.<span class="tm-req">*</span></label>
+          </div>
+
+          <button type="submit" class="tm-submit" id="tmSubmit">Wyślij zapytanie</button>
+
+          <div id="tm-success">Dziękujemy. Zgłoszenie zostało wysłane. Skontaktujemy się z Tobą.</div>
+          <div id="tm-error">Wystąpił błąd podczas wysyłania. Zadzwoń do nas: <strong>87 610 41 63</strong> lub <strong>600 994 205</strong>.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/@formspree/ajax@1"></script>
+  <script>
+    (function () {
+      var overlay   = document.getElementById('tm-overlay');
+      var modal     = document.getElementById('tm-modal');
+      var closeBtn  = document.getElementById('tmClose');
+      var form      = document.getElementById('terminal-lead-form');
+      var submitBtn = document.getElementById('tmSubmit');
+      var successEl = document.getElementById('tm-success');
+      var errorEl   = document.getElementById('tm-error');
+      var trigger   = document.querySelector('[data-open-terminal-form]');
+
+      function openModal() {
+        overlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+
+      function closeModal() {
+        overlay.classList.remove('is-open');
+        document.body.style.overflow = '';
+        if (trigger) trigger.focus();
+      }
+
+      if (trigger) {
+        trigger.addEventListener('click', openModal);
+        trigger.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); }
+        });
+      }
+
+      closeBtn.addEventListener('click', closeModal);
+
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeModal();
+      });
+
+      // ESC + focus trap
+      overlay.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { closeModal(); return; }
+        if (e.key !== 'Tab') return;
+        var focusable = modal.querySelectorAll('button:not([disabled]), input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])');
+        var first = focusable[0];
+        var last  = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+        }
+      });
+
+      // Formspree AJAX
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Walidacja
+        var name    = document.getElementById('tmName').value.trim();
+        var phone   = document.getElementById('tmPhone').value.trim();
+        var email   = document.getElementById('tmEmail').value.trim();
+        var branch  = document.getElementById('tmBranch').value;
+        var consent = document.getElementById('tmConsent').checked;
+
+        if (!name || !phone || !email || !branch || !consent) {
+          errorEl.textContent = 'Uzupełnij wszystkie wymagane pola i zaznacz zgodę na kontakt.';
+          errorEl.style.display = 'block';
+          successEl.style.display = 'none';
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Wysyłanie…';
+        errorEl.style.display = 'none';
+        successEl.style.display = 'none';
+
+        var data = new FormData(form);
+
+        fetch('https://formspree.io/f/xqejjgok', {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (json) {
+          if (json.ok || json.next) {
+            successEl.style.display = 'block';
+            form.querySelectorAll('input, select, textarea, button').forEach(function (el) { el.disabled = true; });
+          } else {
+            throw new Error('error');
+          }
+        })
+        .catch(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Wyślij zapytanie';
+          errorEl.textContent = 'Wystąpił błąd podczas wysyłania. Zadzwoń do nas: 87 610 41 63 lub 600 994 205.';
+          errorEl.style.display = 'block';
+        });
+      });
+    })();
+  </script>
+
+  <!-- Modal: Serwis i instalacje – mapa zasięgu -->
+  <div id="sm-overlay" role="dialog" aria-modal="true" aria-labelledby="smTitle">
+    <div id="sm-modal">
+
+      <!-- Nagłówek -->
+      <div class="sm-header">
+        <div class="sm-header-text">
+          <h2 id="smTitle">Profesjonalny serwis urządzeń fiskalnych</h2>
+          <p>Od 1987 roku pomagamy firmom w całym regionie.<br>
+             Naprawiamy, konfigurujemy i serwisujemy urządzenia fiskalne szybko i skutecznie.</p>
+        </div>
+        <button class="pm-close" id="smClose" aria-label="Zamknij">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Widok główny: dwie kolumny -->
+      <div class="sm-body" id="smBodyView">
+
+        <!-- LEWA KOLUMNA: usługi -->
+        <div class="sm-col-left">
+          <h3>Co serwisujemy</h3>
+
+          <div class="sm-service-card">
+            <div class="sm-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><rect width="4" height="4" x="7" y="13" rx="1"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <div>
+              <h4>Kasy fiskalne</h4>
+              <p>Naprawa i konfiguracja wszystkich popularnych modeli.</p>
+            </div>
+          </div>
+
+          <div class="sm-service-card">
+            <div class="sm-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg></div>
+            <div>
+              <h4>Drukarki fiskalne</h4>
+              <p>Diagnostyka, naprawa i instalacja.</p>
+            </div>
+          </div>
+
+          <div class="sm-service-card">
+            <div class="sm-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg></div>
+            <div>
+              <h4>Wagi sklepowe</h4>
+              <p>Legalizacja, kalibracja i naprawy.</p>
+            </div>
+          </div>
+
+          <div class="sm-service-card">
+            <div class="sm-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 15h.01M10 15h.01M6 19h.01"/></svg></div>
+            <div>
+              <h4>Terminale płatnicze</h4>
+              <p>Konfiguracja i wsparcie techniczne.</p>
+            </div>
+          </div>
+
+          <div class="sm-service-card">
+            <div class="sm-service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="12" x="3" y="4" rx="2"/><line x1="2" x2="22" y1="20" y2="20"/><path d="M7 20h10"/><rect width="4" height="3" x="10" y="14" rx="1"/></svg></div>
+            <div>
+              <h4>Systemy POS</h4>
+              <p>Instalacja i serwis stanowisk sprzedażowych.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRAWA KOLUMNA -->
+        <div class="sm-col-right">
+
+          <!-- Dlaczego INFOKASY -->
+          <div>
+            <h3>Dlaczego INFOKASY?</h3>
+            <ul class="sm-benefits">
+              <li>Działamy od 1987 roku</li>
+              <li>Autoryzowany serwis wiodących marek</li>
+              <li>Dojazd do klienta</li>
+              <li>Szybka reakcja serwisowa</li>
+              <li>Pomoc telefoniczna</li>
+            </ul>
+          </div>
+
+          <!-- Dane kontaktowe -->
+          <div class="sm-contact-block">
+            <a href="tel:+48876104163" class="sm-phone">87 610 41 63</a>
+            <a href="tel:+48600994205" class="sm-phone">600 994 205</a>
+            <a href="mailto:kontakt@infokasy.pl" class="sm-email">kontakt@infokasy.pl</a>
+          </div>
+
+          <!-- CTA box -->
+          <div class="sm-cta-box">
+            <h4>Potrzebujesz pomocy?</h4>
+            <p>Skontaktuj się z nami i opisz problem.<br>
+               Pomożemy najszybciej jak to możliwe.</p>
+            <div class="sm-cta-buttons">
+              <button class="sm-btn-primary" id="smOpenForm">Zgłoś serwis</button>
+              <a href="tel:+48876104163" class="sm-btn-outline">Zadzwoń teraz</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Widok formularza serwisowego -->
+      <div id="sm-form-view">
+        <button class="sm-form-back" id="smFormBack">← Wróć</button>
+        <form id="sm-service-form" novalidate>
+          <input type="hidden" name="_subject" value="Nowe zgłoszenie serwisowe - INFOKASY">
+
+          <div class="sm-form-row">
+            <div>
+              <label>Imię i nazwisko <span class="sm-req">*</span></label>
+              <input type="text" name="name" id="smName" placeholder="Jan Kowalski" required>
+            </div>
+            <div>
+              <label>Telefon <span class="sm-req">*</span></label>
+              <input type="tel" name="phone" id="smPhone" placeholder="600 000 000" required>
+            </div>
+          </div>
+
+          <div class="sm-form-row">
+            <div>
+              <label>E-mail</label>
+              <input type="email" name="email" placeholder="jan@firma.pl">
+            </div>
+            <div>
+              <label>Firma</label>
+              <input type="text" name="company" placeholder="Nazwa firmy">
+            </div>
+          </div>
+
+          <div class="sm-form-row">
+            <div>
+              <label>Miasto</label>
+              <input type="text" name="city" placeholder="Mrągowo">
+            </div>
+            <div>
+              <label>Rodzaj urządzenia</label>
+              <select name="device_type">
+                <option value="">— wybierz —</option>
+                <option>Kasa fiskalna</option>
+                <option>Drukarka fiskalna</option>
+                <option>Waga</option>
+                <option>Terminal płatniczy</option>
+                <option>POS</option>
+                <option>Inne</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="sm-form-row sm-full">
+            <div>
+              <label>Opis problemu <span class="sm-req">*</span></label>
+              <textarea name="problem" id="smProblem" placeholder="Opisz dokładnie usterkę lub potrzebę serwisową…" required></textarea>
+            </div>
+          </div>
+
+          <div class="sm-form-row sm-full">
+            <div>
+              <label>Pilność</label>
+              <select name="urgency">
+                <option value="">— wybierz —</option>
+                <option>Awaria</option>
+                <option>Problem techniczny</option>
+                <option>Konfiguracja</option>
+                <option>Przegląd okresowy</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="sm-form-submit" id="smFormSubmit">Wyślij zgłoszenie</button>
+          <div class="sm-form-error" id="smFormError"></div>
+
+          <div class="sm-form-success" id="smFormSuccess">
+            <div class="sm-form-success-icon">✔</div>
+            <h4>Dziękujemy</h4>
+            <p>Zgłoszenie zostało wysłane.<br>Nasz serwisant skontaktuje się z Tobą.</p>
+            <button type="button" class="sm-form-submit" style="margin-top:10px;width:auto;padding:10px 28px;" id="smSuccessClose">Zamknij</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var smOverlay  = document.getElementById('sm-overlay');
+      var smClose    = document.getElementById('smClose');
+      var smTriggers = document.querySelectorAll('[data-open-serwis-modal]');
+      var smBodyView = document.getElementById('smBodyView');
+      var smFormView = document.getElementById('sm-form-view');
+      var smOpenForm = document.getElementById('smOpenForm');
+      var smFormBack = document.getElementById('smFormBack');
+      var smForm     = document.getElementById('sm-service-form');
+      var smSubmit   = document.getElementById('smFormSubmit');
+      var smError    = document.getElementById('smFormError');
+      var smSuccess  = document.getElementById('smFormSuccess');
+      var smSuccessClose = document.getElementById('smSuccessClose');
+
+      if (!smOverlay) return;
+
+      function showBody() {
+        if (smBodyView) smBodyView.style.display = '';
+        if (smFormView) smFormView.style.display = 'none';
+        if (smError)   smError.style.display = 'none';
+        if (smSuccess) smSuccess.style.display = 'none';
+      }
+
+      function showForm() {
+        if (smBodyView) smBodyView.style.display = 'none';
+        if (smFormView) smFormView.style.display = 'block';
+        if (smError)   smError.style.display = 'none';
+        if (smSuccess) smSuccess.style.display = 'none';
+      }
+
+      function smOpen() {
+        smOverlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        showBody();
+      }
+
+      function smCloseModal() {
+        smOverlay.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+
+      // Otwieranie kafelkiem "Serwis i instalacje"
+      smTriggers.forEach(function (trigger) {
+        trigger.addEventListener('click', smOpen);
+        trigger.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            smOpen();
+          }
+        });
+      });
+
+      // Zamykanie
+      if (smClose) smClose.addEventListener('click', smCloseModal);
+      smOverlay.addEventListener('click', function (e) {
+        if (e.target === smOverlay) smCloseModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && smOverlay.classList.contains('is-open')) smCloseModal();
+      });
+
+      // Przełączanie widoków
+      if (smOpenForm) smOpenForm.addEventListener('click', showForm);
+      if (smFormBack) smFormBack.addEventListener('click', showBody);
+      if (smSuccessClose) smSuccessClose.addEventListener('click', smCloseModal);
+
+      // Wysyłka formularza serwisowego (Formspree AJAX)
+      if (smForm) {
+        smForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          var name    = (document.getElementById('smName').value || '').trim();
+          var phone   = (document.getElementById('smPhone').value || '').trim();
+          var problem = (document.getElementById('smProblem').value || '').trim();
+
+          if (!name || !phone || !problem) {
+            smError.textContent = 'Uzupełnij imię i nazwisko, telefon oraz opis problemu.';
+            smError.style.display = 'block';
+            return;
+          }
+
+          smSubmit.disabled = true;
+          smSubmit.textContent = 'Wysyłanie…';
+          smError.style.display = 'none';
+
+          var data = new FormData(smForm);
+
+          fetch('https://formspree.io/f/xqejjgok', {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+          })
+          .then(function (res) { return res.json(); })
+          .then(function (json) {
+            if (json.ok || json.next) {
+              smSuccess.style.display = 'flex';
+              smForm.querySelectorAll('input, select, textarea, button').forEach(function (el) {
+                if (el.id !== 'smSuccessClose') el.disabled = true;
+              });
+            } else {
+              throw new Error('error');
+            }
+          })
+          .catch(function () {
+            smSubmit.disabled = false;
+            smSubmit.textContent = 'Wyślij zgłoszenie';
+            smError.textContent = 'Wystąpił błąd podczas wysyłania. Zadzwoń do nas: 87 610 41 63 lub 600 994 205.';
+            smError.style.display = 'block';
+          });
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
+
+
+
+
+
