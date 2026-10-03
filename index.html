@@ -1272,10 +1272,11 @@
       .hero__img-wrap img { height: 320px; }
 
       .cards-grid { grid-template-columns: repeat(2, 1fr); }
-      .simulator-feature { grid-template-columns: 1fr; }
+      .simulator-feature { grid-template-columns: minmax(0, 1fr); }
       .simulator-feature__copy { border-right: 0; border-bottom: 1px solid var(--border); }
 
-      .marki__grid { grid-template-columns: repeat(2, 1fr); max-width: 480px; }
+      .marki__grid { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 640px; margin: 0 auto; }
+      .brand-card { flex: none; min-width: 0; }
 
       .dlaczego__grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -1283,7 +1284,7 @@
       .dpd__cta-wrap { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
       .dpd__note { text-align: left; }
 
-      .kontakt__inner { grid-template-columns: 1fr; gap: 40px; }
+      .kontakt__inner { grid-template-columns: minmax(0, 1fr); gap: 40px; }
       .kontakt__map { min-height: 280px; }
     }
 
@@ -1306,7 +1307,21 @@
 
       .dlaczego__grid { grid-template-columns: 1fr; gap: 24px; }
 
+      .kontakt__actions { flex-direction: column; gap: 10px; }
+      .kontakt__actions .btn + .btn { margin-left: 0; }
+
       .footer__inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .footer__links { flex-wrap: wrap; gap: 8px 20px; }
+    }
+
+    /* ≤360px - bardzo małe telefony: mniejsze logo */
+    @media (max-width: 360px) {
+      .nav__logo img { height: 34px; }
+    }
+
+    /* ≤600px - numery telefonów w nagłówku tylko jako ikony */
+    @media (max-width: 600px) {
+      .nav__phone .phone-text { display: none; }
     }
 
     /* ≤479px - small mobile */
@@ -1316,7 +1331,12 @@
       .btn { padding: 13px 20px; font-size: 15px; }
       .hero__actions { flex-direction: column; align-items: stretch; }
       .hero__actions .btn { text-align: center; justify-content: center; }
-      .marki__grid { grid-template-columns: repeat(2, 1fr); }
+      .marki__grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .brand-card__img-wrap { height: 130px; padding: 16px 12px 12px; }
+      .brand-card__img-wrap img { max-height: 100px; }
+      .brand-card__body { padding: 12px 10px 16px; }
+      .brand-card__name { font-size: 17px; }
+      .brand-card__sub { font-size: 10px; letter-spacing: 0.8px; }
       .nav__phone .phone-text { display: none; }
     }
 
