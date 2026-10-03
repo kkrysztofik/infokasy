@@ -3,8 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INFOKASY - kasy fiskalne, POS, wagi i serwis</title>
-  <meta name="description" content="Sprzedaż, instalacja i serwis kas fiskalnych, drukarek fiskalnych, systemów POS, wag i terminali płatniczych. INFOKASY, ul. Jana Pawła II 1.">
+  <title>INFOKASY EŁK - kasy fiskalne, POS, wagi i serwis</title>
+  <meta name="description" content="Sprzedaż, instalacja i serwis kas i drukarek fiskalnych, systemów POS, wag oraz terminali płatniczych w Ełku. INFOKASY, ul. Jana Pawła II 1.">
+  <!-- Adres strony: przy przeniesieniu na własną domenę zmień go tutaj, w og:url, og:image, twitter:image, w danych JSON-LD poniżej oraz w sitemap.xml i robots.txt -->
+  <link rel="canonical" href="https://kkrysztofik.github.io/infokasy/">
+
+  <!-- Open Graph (Facebook, LinkedIn, Messenger, WhatsApp) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pl_PL">
+  <meta property="og:site_name" content="INFOKASY">
+  <meta property="og:url" content="https://kkrysztofik.github.io/infokasy/">
+  <meta property="og:title" content="INFOKASY EŁK - kasy fiskalne, POS, wagi i serwis">
+  <meta property="og:description" content="Sprzedaż, instalacja i serwis kas i drukarek fiskalnych, systemów POS, wag oraz terminali płatniczych w Ełku.">
+  <meta property="og:image" content="https://kkrysztofik.github.io/infokasy/pic/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="INFOKASY – kasy fiskalne, POS, wagi i serwis, Ełk">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="INFOKASY EŁK - kasy fiskalne, POS, wagi i serwis">
+  <meta name="twitter:description" content="Sprzedaż, instalacja i serwis kas i drukarek fiskalnych, systemów POS, wag oraz terminali płatniczych w Ełku.">
+  <meta name="twitter:image" content="https://kkrysztofik.github.io/infokasy/pic/og-image.jpg">
+
+  <!-- Dane strukturalne firmy (Google: wizytówka, mapa, godziny otwarcia) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ElectronicsStore",
+    "@id": "https://kkrysztofik.github.io/infokasy/#firma",
+    "name": "INFOKASY",
+    "description": "Sprzedaż, instalacja i serwis kas i drukarek fiskalnych, systemów POS, wag oraz terminali płatniczych. Autoryzowany serwis Posnet, Novitus, Datecs, Aclas i Satis. Punkt DPD Pickup.",
+    "url": "https://kkrysztofik.github.io/infokasy/",
+    "logo": "https://kkrysztofik.github.io/infokasy/pic/mpa0oypx-logo.png",
+    "image": [
+      "https://kkrysztofik.github.io/infokasy/pic/og-image.jpg",
+      "https://kkrysztofik.github.io/infokasy/pic/firma.webp"
+    ],
+    "telephone": "+48 87 610 41 63",
+    "email": "kontakt@infokasy.pl",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ul. Jana Pawła II 1",
+      "postalCode": "19-300",
+      "addressLocality": "Ełk",
+      "addressCountry": "PL"
+    },
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "07:30",
+      "closes": "15:30"
+    }],
+    "contactPoint": [
+      { "@type": "ContactPoint", "telephone": "+48 87 610 41 63", "contactType": "customer service", "areaServed": "PL", "availableLanguage": "pl" },
+      { "@type": "ContactPoint", "telephone": "+48 600 994 205", "contactType": "customer service", "areaServed": "PL", "availableLanguage": "pl" }
+    ],
+    "hasMap": "https://maps.google.com/maps?q=INFOKASY+E%C5%82k+Jana+Paw%C5%82a+II+1+19-300+E%C5%82k",
+    "areaServed": { "@type": "City", "name": "Ełk" },
+    "knowsAbout": ["kasy fiskalne", "drukarki fiskalne", "systemy POS", "wagi sklepowe", "terminale płatnicze", "serwis urządzeń fiskalnych"]
+  }
+  </script>
   <link rel="icon" type="image/png" href="pic/favicon-128x128.png">
   <link rel="shortcut icon" href="pic/favicon-128x128.png">
   <link rel="apple-touch-icon" href="pic/favicon-128x128.png">
@@ -482,6 +541,7 @@
     }
 
     .card__img-wrap img {
+      width: auto;
       max-height: 150px;
       max-width: calc(100% - 32px);
       object-fit: contain;
@@ -1977,7 +2037,7 @@
       <div class="nav__inner">
 
         <a href="#" class="nav__logo" aria-label="INFOKASY - strona główna">
-          <img src="pic/mpa0oypx-logo.png" alt="Logo INFOKASY" height="44">
+          <img width="183" height="44" src="pic/mpa0oypx-logo.png" alt="Logo INFOKASY">
         </a>
 
         <nav aria-label="Nawigacja główna">
@@ -2031,7 +2091,7 @@
           <div class="hero__content">
             <span class="label-upper hero__label">Kasy fiskalne · Drukarki · POS · Serwis</span>
             <h1 class="hero__heading" id="hero-heading">
-              Kasy fiskalne,<br>drukarki, POS<br>i <span style="color: var(--near-black);">serwis</span>
+              Kasy fiskalne, <br>drukarki, POS <br>i <span style="color: var(--near-black);">serwis</span>
             </h1>
             <p class="hero__desc">
               Sprzedaż, instalacja i serwis kas fiskalnych, drukarek fiskalnych, systemów POS, wag oraz terminali płatniczych. Jeden partner - kompleksowa obsługa.
@@ -2063,37 +2123,37 @@
               <div class="hero__slideshow" id="heroSlideshow">
 
                 <div class="hero__slide active">
-                  <img src="pic/firma.webp" alt="INFOKASY - siedziba firmy" loading="eager">
+                  <img width="1760" height="1320" src="pic/firma.webp" alt="INFOKASY - siedziba firmy" loading="eager">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/wystawa.webp" alt="Wystawa kas fiskalnych" loading="lazy">
+                  <img width="1448" height="1086" src="pic/wystawa.webp" alt="Wystawa kas fiskalnych" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/novitus1.webp" alt="Kasa fiskalna Novitus" loading="lazy">
+                  <img width="2060" height="1545" src="pic/novitus1.webp" alt="Kasa fiskalna Novitus" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/datecs1.webp" alt="Kasa fiskalna Datecs" loading="lazy">
+                  <img width="1974" height="1481" src="pic/datecs1.webp" alt="Kasa fiskalna Datecs" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/posnet1.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                  <img width="2017" height="1513" src="pic/posnet1.webp" alt="Kasa fiskalna Posnet" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/posnet2.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                  <img width="2008" height="1506" src="pic/posnet2.webp" alt="Kasa fiskalna Posnet" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/posnet3.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                  <img width="2005" height="1504" src="pic/posnet3.webp" alt="Kasa fiskalna Posnet" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/posnet4.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                  <img width="2050" height="1538" src="pic/posnet4.webp" alt="Kasa fiskalna Posnet" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/satis1.webp" alt="Kasa fiskalna Satis" loading="lazy">
+                  <img width="1891" height="1418" src="pic/satis1.webp" alt="Kasa fiskalna Satis" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/sensorWag1.webp" alt="Waga Sensor" loading="lazy">
+                  <img width="2108" height="1581" src="pic/sensorWag1.webp" alt="Waga Sensor" loading="lazy">
                 </div>
                 <div class="hero__slide">
-                  <img src="pic/sensorwag2.webp" alt="Waga Sensor" loading="lazy">
+                  <img width="1739" height="1304" src="pic/sensorwag2.webp" alt="Waga Sensor" loading="lazy">
                 </div>
 
                 <div class="hero__slide-dots" id="heroSlideDots"></div>
@@ -2131,7 +2191,7 @@
           <!-- Kasy i drukarki fiskalne -->
           <article class="card" data-open-products-modal style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz katalog kas i drukarek fiskalnych">
             <div class="card__img-wrap">
-              <img src="pic/mpa0oymt-datecs_przod.png" alt="Kasa fiskalna Datecs" loading="lazy">
+              <img width="900" height="900" src="pic/mpa0oymt-datecs_przod.png" alt="Kasa fiskalna Datecs" loading="lazy">
             </div>
             <div class="card__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><rect width="4" height="4" x="7" y="13" rx="1"/><path d="M8 21h8M12 17v4"/></svg>
@@ -2144,7 +2204,7 @@
           <!-- Systemy POS -->
           <article class="card" data-open-pos-modal style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz katalog systemów POS">
             <div class="card__img-wrap">
-              <img src="pic/mpa0oyl0-vero.webp" alt="System POS Vero" loading="lazy">
+              <img width="1080" height="1080" src="pic/mpa0oyl0-vero.webp" alt="System POS Vero" loading="lazy">
             </div>
             <div class="card__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="12" x="3" y="4" rx="2"/><line x1="2" x2="22" y1="20" y2="20"/><path d="M7 20h10"/><rect width="4" height="3" x="10" y="14" rx="1"/></svg>
@@ -2156,7 +2216,7 @@
           <!-- Wagi -->
           <article class="card" data-open-wagi-modal style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz katalog wag">
             <div class="card__img-wrap">
-              <img src="pic/mpa0oyky-sensorwag.webp" alt="Waga handlowa" loading="lazy">
+              <img width="959" height="768" src="pic/mpa0oyky-sensorwag.webp" alt="Waga handlowa" loading="lazy">
             </div>
             <div class="card__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg>
@@ -2168,7 +2228,7 @@
           <!-- Terminale płatnicze -->
           <article class="card" data-open-terminal-form style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz formularz – Terminale płatnicze">
             <div class="card__img-wrap">
-              <img src="pic/mpa0oyjm-paxa920.webp" alt="Terminal płatniczy PAX A920" loading="lazy">
+              <img width="640" height="480" src="pic/mpa0oyjm-paxa920.webp" alt="Terminal płatniczy PAX A920" loading="lazy">
             </div>
             <div class="card__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 15h.01M10 15h.01M6 19h.01"/></svg>
@@ -2180,7 +2240,7 @@
           <!-- Serwis i instalacje -->
           <article class="card" data-open-serwis-modal style="cursor:pointer;" role="button" tabindex="0" aria-label="Otwórz mapę obsługiwanych miejscowości">
             <div class="card__img-wrap">
-              <img src="pic/mpa0oym3-01_WP25.webp" alt="Posnet WP-25 - serwis kas fiskalnych" loading="lazy">
+              <img width="750" height="731" src="pic/mpa0oym3-01_WP25.webp" alt="Posnet WP-25 - serwis kas fiskalnych" loading="lazy">
             </div>
             <div class="card__icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
@@ -2192,7 +2252,7 @@
           <!-- Punkt DPD -->
           <article class="card" style="border-color: rgba(220,0,46,0.2); background: linear-gradient(135deg, #fff8f8 0%, #fff 100%); cursor:pointer;" role="button" tabindex="0" aria-label="Przejdź do serwisu Moja Paczka DPD" onclick="window.open('https://mojapaczka.dpd.com.pl/login','_blank','noopener')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('https://mojapaczka.dpd.com.pl/login','_blank','noopener')}">
             <div class="card__img-wrap">
-              <img src="pic/mpa0oykx-przesylka.webp" alt="Nadawanie paczek DPD" loading="lazy">
+              <img width="267" height="189" src="pic/mpa0oykx-przesylka.webp" alt="Nadawanie paczek DPD" loading="lazy">
             </div>
             <div class="card__icon" style="background: rgba(220,0,46,0.08);">
               <svg viewBox="0 0 24 24" fill="none" stroke="#dc002e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -2214,13 +2274,13 @@
         <div class="marki__inner">
           <div class="section-header" style="margin-bottom: 0;">
             <span class="label-upper">Obsługiwane marki</span>
-            <h2 class="section-heading" id="marki-heading">Autoryzowany serwis<br>wiodących marek</h2>
+            <h2 class="section-heading" id="marki-heading">Autoryzowany serwis <br>wiodących marek</h2>
           </div>
 
           <div class="marki__grid">
             <a class="brand-card" href="https://www.posnet.com.pl" target="_blank" rel="noopener noreferrer" aria-label="Posnet - strona producenta (otwiera się w nowej karcie)">
               <div class="brand-card__img-wrap">
-                <img src="pic/mpa0oyjm-posnetfawag.webp" alt="Kasa fiskalna Posnet" loading="lazy">
+                <img width="1536" height="1024" src="pic/mpa0oyjm-posnetfawag.webp" alt="Kasa fiskalna Posnet" loading="lazy">
               </div>
               <div class="brand-card__body">
                 <span class="brand-card__name">Posnet</span>
@@ -2229,7 +2289,7 @@
             </a>
             <a class="brand-card" href="https://www.novitus.pl" target="_blank" rel="noopener noreferrer" aria-label="Novitus - strona producenta (otwiera się w nowej karcie)">
               <div class="brand-card__img-wrap">
-                <img src="pic/mpa0oyjk-novitus-next-pro-online-01.webp" alt="Kasa fiskalna Novitus Next Pro Online" loading="lazy">
+                <img width="900" height="900" src="pic/mpa0oyjk-novitus-next-pro-online-01.webp" alt="Kasa fiskalna Novitus Next Pro Online" loading="lazy">
               </div>
               <div class="brand-card__body">
                 <span class="brand-card__name">Novitus</span>
@@ -2238,7 +2298,7 @@
             </a>
             <a class="brand-card" href="https://www.datecs-polska.pl" target="_blank" rel="noopener noreferrer" aria-label="Datecs - strona producenta (otwiera się w nowej karcie)">
               <div class="brand-card__img-wrap">
-                <img src="pic/mpa0oyl9-wp-50-kasa-datecs.webp" alt="Kasa fiskalna Datecs WP-50" loading="lazy">
+                <img width="600" height="398" src="pic/mpa0oyl9-wp-50-kasa-datecs.webp" alt="Kasa fiskalna Datecs WP-50" loading="lazy">
               </div>
               <div class="brand-card__body">
                 <span class="brand-card__name">Datecs</span>
@@ -2247,7 +2307,7 @@
             </a>
             <a class="brand-card" href="https://aclas-polska.pl" target="_blank" rel="noopener noreferrer" aria-label="Aclas - strona producenta (otwiera się w nowej karcie)">
               <div class="brand-card__img-wrap">
-                <img src="pic/mpa0oypr-i-aclas-online-kos-on-lan-wifi.webp" alt="Kasa fiskalna Aclas Online" loading="lazy">
+                <img width="519" height="432" src="pic/mpa0oypr-i-aclas-online-kos-on-lan-wifi.webp" alt="Kasa fiskalna Aclas Online" loading="lazy">
               </div>
               <div class="brand-card__body">
                 <span class="brand-card__name">Aclas</span>
@@ -2256,7 +2316,7 @@
             </a>
             <a class="brand-card" href="https://satispolska.pl" target="_blank" rel="noopener noreferrer" aria-label="Satis - strona producenta (otwiera się w nowej karcie)">
               <div class="brand-card__img-wrap">
-                <img src="pic/modele/satis/satisK.png" alt="Kasa fiskalna Satis" loading="lazy">
+                <img width="1000" height="1000" src="pic/modele/satis/satisK.png" alt="Kasa fiskalna Satis" loading="lazy">
               </div>
               <div class="brand-card__body">
                 <span class="brand-card__name">Satis</span>
@@ -2265,7 +2325,7 @@
             </a>
             <a class="brand-card" href="https://www.axis.pl/pl/" target="_blank" rel="noopener noreferrer" aria-label="Axis - strona producenta (otwiera się w nowej karcie)">
               <div class="brand-card__img-wrap">
-                <img src="pic/modele/axis.png" alt="Waga Axis" loading="lazy">
+                <img width="554" height="554" src="pic/modele/axis.png" alt="Waga Axis" loading="lazy">
               </div>
               <div class="brand-card__body">
                 <span class="brand-card__name">Axis</span>
@@ -2286,7 +2346,7 @@
       <div class="container">
         <div class="section-header">
           <span class="label-upper">Dlaczego INFOKASY?</span>
-          <h2 class="section-heading" id="dlaczego-heading">Lokalny partner,<br>któremu możesz zaufać</h2>
+          <h2 class="section-heading" id="dlaczego-heading">Lokalny partner, <br>któremu możesz zaufać</h2>
           <p class="sub-heading">Kompleksowa obsługa w jednym miejscu - od zakupu, przez instalację, aż po serwis.</p>
         </div>
 
@@ -2382,14 +2442,14 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               Punkt DPD
             </span>
-            <h2 class="dpd__heading" id="dpd-heading">Nadaj lub odbierz paczkę<br>w naszym punkcie</h2>
+            <h2 class="dpd__heading" id="dpd-heading">Nadaj lub odbierz paczkę <br>w naszym punkcie</h2>
             <p class="dpd__desc">
               Na miejscu nadasz i odbierzesz swoją przesyłkę - jesteśmy autoryzowanym punktem DPD. Szybko, wygodnie i blisko Ciebie. Przy okazji zajmij się kasą fiskalną lub serwisem.
             </p>
           </div>
 
           <div class="dpd__cta-wrap">
-            <img src="pic/mpa0oynp-dpd.webp" alt="Logo DPD - autoryzowany punkt nadawania i odbioru paczek" class="dpd__logo" loading="lazy">
+            <img width="311" height="162" src="pic/mpa0oynp-dpd.webp" alt="Logo DPD - autoryzowany punkt nadawania i odbioru paczek" class="dpd__logo" loading="lazy">
             <a href="#kontakt" class="btn-dpd" aria-label="Znajdź nasz punkt DPD">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               Znajdź nas

@@ -1,0 +1,5 @@
+# INFOKASY - zasady dla robotów wyszukiwarek
+User-agent: *
+Allow: /
+
+Sitemap: https://kkrysztofik.github.io/infokasy/sitemap.xml

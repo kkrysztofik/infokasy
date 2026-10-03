@@ -307,3 +307,36 @@ Po publikacji:
 
 ---
 
+
+## 13. SEO – widoczność w Google
+
+Co jest na stronie:
+
+| Element | Gdzie | Do czego służy |
+|---|---|---|
+| Tytuł i opis | `<title>` i `<meta name="description">` w `index.html` | Tekst wyświetlany w wynikach Google; zawierają miejscowość „Ełk” |
+| Link kanoniczny | `<link rel="canonical">` | Wskazuje Google główny adres strony |
+| Open Graph i karta X | `og:*`, `twitter:*` | Podgląd linku na Facebooku, Messengerze, WhatsAppie, LinkedIn i X |
+| Grafika do udostępnień | `pic/og-image.jpg` (1200×630) | Obrazek pokazywany przy udostępnieniu linku |
+| Dane strukturalne | `<script type="application/ld+json">` w `index.html` | Dane firmy dla Google: adres, telefony, godziny, mapa |
+| Mapa witryny | `sitemap.xml` | Lista podstron do zgłoszenia w Google Search Console |
+| Zasady dla robotów | `robots.txt` | Pozwala indeksować stronę i wskazuje mapę witryny |
+| Wymiary obrazów | atrybuty `width`/`height` w `<img>` | Strona nie „skacze” podczas ładowania zdjęć |
+
+**Zmiana danych firmy** (telefon, godziny, adres): popraw je w treści strony **i** w bloku `application/ld+json` w `<head>`.
+
+**Przejście na własną domenę** (np. `infokasy.pl`): zamień adres `https://kkrysztofik.github.io/infokasy/` na nowy we wszystkich miejscach:
+- `index.html`: `canonical`, `og:url`, `og:image`, `twitter:image` i adresy w bloku `application/ld+json`,
+- `mpa0rk8f-datecs-wp25-v0.2.html`: `canonical`,
+- `sitemap.xml` i `robots.txt`.
+
+Najprościej wyszukać w tych plikach `kkrysztofik.github.io/infokasy` i zamienić wszystkie wystąpienia.
+
+**Po publikacji:**
+- zgłoś stronę i `sitemap.xml` w [Google Search Console](https://search.google.com/search-console),
+- sprawdź dane strukturalne w [teście wyników z elementami rozszerzonymi](https://search.google.com/test/rich-results),
+- sprawdź podgląd linku w [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/).
+
+**Ograniczenia GitHub Pages:**
+- `robots.txt` działa tylko w katalogu głównym domeny. Pod adresem `kkrysztofik.github.io/infokasy/` Google go nie czyta, więc mapę witryny trzeba zgłosić ręcznie w Search Console. Zacznie działać po przejściu na własną domenę.
+- Nagłówków bezpieczeństwa (np. HSTS) nie da się ustawić na GitHub Pages. Strona i tak działa wyłącznie po HTTPS.
